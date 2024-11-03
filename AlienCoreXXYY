@@ -1,0 +1,47 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>ALIEN.X</title> 
+    <style> 
+        #canvas { 
+            border: 1px solid black; 
+        } 
+    </style> 
+</head> 
+<body> 
+    <h1>Welcome to My GitHub Page</h1> 
+    <p>###-\###-\###-\###-\###-\</p> 
+    <canvas id="canvas" width="800" height="200"></canvas> 
+    <script> 
+        const data = { 
+            '169 Rabbi Levi': 169, 
+            '180 Schiller': 180, 
+            '71 Copernicus': 71, 
+            '179km': 179, 
+            '93km': 93
+        }; 
+        
+        const canvas = document.getElementById('canvas'); 
+        const ctx = canvas.getContext('2d'); 
+        const min_val = Math.min(...Object.values(data)) - 10; 
+        const max_val = Math.max(...Object.values(data)) + 10; 
+        const range = max_val - min_val; 
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        ctx.beginPath(); 
+        ctx.moveTo(0, canvas.height / 2); 
+        ctx.lineTo(canvas.width, canvas.height / 2); 
+        ctx.stroke(); 
+        
+        Object.entries(data).forEach(([label, value]) => { 
+            const x = ((value - min_val) / range) * canvas.width; 
+            ctx.beginPath(); 
+            ctx.arc(x, canvas.height / 2, 5, 0, 2 * Math.PI); 
+            ctx.fill(); 
+            ctx.fillText(label, x, canvas.height / 2 - 10); 
+        }); 
+    </script> 
+</body>
+</html>
