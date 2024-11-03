@@ -1,1 +1,19 @@
+import matplotlib.pyplot as plt 
 
+# Data points 
+data = { '169 Rabbi Levi': 169, '180 Schiller': 180, '71 Copernicus': 71, '179km': 179, '93km': 93 
+} 
+
+# Number line range min_val = min(data.values()) - 10 max_val = max(data.values()) + 10 # 
+Plot number line fig, ax = plt.subplots(figsize=(10, 2)) 
+
+# Draw the number line ax.hlines(1, min_val, max_val, color='black') ax.set_xlim(min_val, max_val) 
+
+# Plot data points for label, value in data.items(): ax.plot(value, 1, 'ro') # red circle for each point ax.text(value, 1.02, label, horizontalalignment='center') 
+
+# Hide y-axis 
+ax.get_yaxis().set_visible(False) 
+
+# Remove ticks ax.tick_params(left=False, labelleft=False) 
+
+plt.show()
