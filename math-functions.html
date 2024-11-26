@@ -20,6 +20,10 @@
             width: 300px;
             text-align: center;
         }
+        .unicode {
+            font-size: 2em;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -28,6 +32,7 @@
         <p id="equation1"></p>
         <p id="equation2"></p>
         <p id="equation3"></p>
+        <div class="unicode" id="unicode"></div>
     </div>
 
     <script>
@@ -35,6 +40,10 @@
         const a1 = 1, b1 = 2, c1 = 3;
         const a2 = 4, b2 = 5, c2 = 6;
         const a3 = 7, b3 = 8, c3 = 9;
+
+        // Unicode characters 
+        const unicodeChars = ['\u2023', '\u2043', '\u00B0', '\u221E']; 
+        let unicodeIndex = 0;
 
         // Function to update equations live on the page
         function updateEquations() {
@@ -47,8 +56,15 @@
             document.getElementById('equation3').innerText = equation3;
         }
 
+        function updateUnicode() { 
+            document.getElementById('unicode').innerText = unicodeChars[unicodeIndex]; 
+            unicodeIndex = (unicodeIndex + 1) % unicodeChars.length;
+
         // Initial call to display the equations
         updateEquations();
+        updateUnicode();
+
+        setInterval(updateUnicode, 1000); //UPDATE PER.00.00.000
         
         // Optionally, if you want to update the equations dynamically, you can set an interval
         setInterval(updateEquations, 1000); // Updates every second
