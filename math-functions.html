@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Mathematical Functions</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            justify-content: center; /* Center vertically */
+            min-height: 100vh;
+            margin: 0;
+            text-align: center; /* Center text */
+        }
+        .container {
+            border: 1px solid black;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Live Mathematical Functions</h1>
+    <div class="container" id="math-container">
+        <p id="equation1"></p>
+        <p id="equation2"></p>
+        <p id="equation3"></p>
+    </div>
 
+    <script>
+        // Coefficients
+        const a1 = 1, b1 = 2, c1 = 3;
+        const a2 = 4, b2 = 5, c2 = 6;
+        const a3 = 7, b3 = 8, c3 = 9;
+
+        // Function to update equations live on the page
+        function updateEquations() {
+            const equation1 = `${a1}x + ${b1}y + ${c1} = 0`;
+            const equation2 = `${a2}x + ${b2}y + ${c2} = 0`;
+            const equation3 = `${a3}x + ${b3}y + ${c3} = 0`;
+
+            document.getElementById('equation1').innerText = equation1;
+            document.getElementById('equation2').innerText = equation2;
+            document.getElementById('equation3').innerText = equation3;
+        }
+
+        // Initial call to display the equations
+        updateEquations();
+        
+        // Optionally, if you want to update the equations dynamically, you can set an interval
+        setInterval(updateEquations, 1000); // Updates every second
+    </script>
+</body>
+</html>
