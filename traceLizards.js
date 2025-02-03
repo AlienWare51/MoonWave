@@ -1,8 +1,8 @@
 function onOpenCvReady() {
     const images = [
-        'lizard1.jpg',  // Replace with actual image paths
-        'lizard2.jpg',  // Replace with actual image paths
-        'lizard3.jpg'   // Replace with actual image paths
+        'https://www.worldatlas.com/r/w1200/upload/50/de/fe/shutterstock-117998215.jpg',  // Replace with actual image paths
+        'https://good-nature-blog-uploads.s3.amazonaws.com/uploads/2023/08/1920x910-Blog-Header-1-1.jpg',  // Replace with actual image paths
+        'https://th.bing.com/th/id/R.1f47a179c2e05a05333a7f69aaf6957a?rik=QI5jx2AEcOgnyg&riu=http%3a%2f%2fwww.chameleonwebservices.co.uk%2fwp-content%2fuploads%2f2015%2f05%2fchameleon-image-7.jpg&ehk=tJlhQBhZfR%2bzIMxyvinl%2fsmX1eb16loPg72oZ%2bo8Zdk%3d&risl=&pid=ImgRaw&r=0'   // Replace with actual image paths
     ];
 
     const canvas = document.getElementById('canvas');
