@@ -9,6 +9,7 @@ function onOpenCvReady() {
 
     images.forEach((imageSrc, index) => {
         let img = new Image();
+        img.crossOrigin = "Anonymous";  // Add this line
         img.src = imageSrc;
         img.onload = () => {
             const canvas = document.getElementById(canvasIds[index]);
@@ -42,6 +43,9 @@ function onOpenCvReady() {
             edges.delete();
             contours.delete();
             hierarchy.delete();
+        };
+        img.onerror = (error) => {
+            console.error(`Failed to load image: ${imageSrc}`, error);
         };
     });
 }
