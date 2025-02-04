@@ -32,41 +32,44 @@
             <p>###-\###-\###-\###-\###-\</p>
         </div>
         <div class="images-section">
-            <canvas id="canvas1" width="200" height="200"></canvas>
-            <canvas id="canvas-splinter" width="200" height="200"></canvas>
-            <canvas id="canvas3" width="200" height="200"></canvas>
+            <canvas id="canvas" width="200" height="200"></canvas>
         </div>
     </div>
     <iframe src="math-functions.html" width="100%" height="400px" style="border:none;"></iframe>
     <script src="traceLizards.js"></script>
-    <script> 
-        const data = { 
-            '169 Rabbi Levi': 169, 
-            '180 Schiller': 180, 
-            '71 Copernicus': 71, 
-            '179km': 179, 
-            '93km': 93
-        }; 
-        
-        const canvas = document.getElementById('canvas'); 
-        const ctx = canvas.getContext('2d'); 
-        const min_val = Math.min(...Object.values(data)) - 10; 
-        const max_val = Math.max(...Object.values(data)) + 10; 
-        const range = max_val - min_val; 
-        
-        ctx.clearRect(0, 0, canvas.width, canvas.height); 
-        ctx.beginPath(); 
-        ctx.moveTo(0, canvas.height / 2); 
-        ctx.lineTo(canvas.width, canvas.height / 2); 
-        ctx.stroke(); 
-        
-        Object.entries(data).forEach(([label, value]) => { 
-            const x = ((value - min_val) / range) * canvas.width; 
-            ctx.beginPath(); 
-            ctx.arc(x, canvas.height / 2, 5, 0, 2 * Math.PI); 
-            ctx.fill(); 
-            ctx.fillText(label, x, canvas.height / 2 - 10); 
-        }); 
+    <script>
+        window.onload = function() {
+            const data = { 
+                '169 Rabbi Levi': 169, 
+                '180 Schiller': 180, 
+                '71 Copernicus': 71, 
+                '179km': 179, 
+                '93km': 93 
+            }; 
+
+            const canvas = document.getElementById('canvas'); 
+            if (canvas) {
+                const ctx = canvas.getContext('2d'); 
+                const min_val = Math.min(...Object.values(data)) - 10; 
+                const max_val = Math.max(...Object.values(data)) + 10; 
+                const range = max_val - min_val; 
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height); 
+                ctx.beginPath(); 
+                ctx.moveTo(0, canvas.height / 2); 
+                ctx.lineTo(canvas.width, canvas.height / 2); 
+                ctx.stroke(); 
+
+                Object.entries(data).forEach(([label, value]) => { 
+                    const x = ((value - min_val) / range) * canvas.width; 
+                    ctx.beginPath(); 
+                    ctx.arc(x, canvas.height / 2, 5, 0, 2 * Math.PI); 
+                    ctx.fill(); 
+                    ctx.fillText(label, x, canvas.height / 2 - 10); 
+                }); 
+            }
+        };
     </script>
 </body>
 </html>
+
