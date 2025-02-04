@@ -7,12 +7,6 @@ function onOpenCvReady() {
 
     const canvasIds = ['canvas1', 'canvas2', 'canvas3'];
 
-    // Check if OpenCV.js is ready
-    if (typeof cv === 'undefined') {
-        console.error('OpenCV.js is not loaded.');
-        return;
-    }
-
     images.forEach((imageSrc, index) => {
         let img = new Image();
         img.crossOrigin = "Anonymous";  // Add this line
@@ -22,49 +16,36 @@ function onOpenCvReady() {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            // Ensure OpenCV.js functions are available
-            if (typeof cv.Mat === 'undefined') {
-                console.error('cv.Mat is not available.');
-                return;
-            }
-
-            let imgElement = cv.imread(canvas);
-            let gray = new cv.Mat();
-            cv.cvtColor(imgElement, gray, cv.COLOR_RGBA2GRAY, 0);
-            let edges = new cv.Mat();
-            cv.Canny(gray, edges, 50, 150, 3, false);
-
-            let contours = new cv.MatVector();
-            let hierarchy = new cv.Mat();
-            cv.findContours(edges, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+            // Simulate tracing
+            const dotRadius = 5;
+            let angle = 0;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const traceRadius = Math.min(canvas.width, canvas.height) / 2 - dotRadius;
 
             function trace() {
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                for (let i = 0; i < contours.size(); ++i) {
-                    let color = new cv.Scalar(255, 0, 0);
-                    cv.drawContours(imgElement, contours, i, color, 2, cv.LINE_8, hierarchy, 0);
-                }
-                cv.imshow(canvas, imgElement);
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Redraw the image
+
+                // Calculate dot position
+                const x = centerX + traceRadius * Math.cos(angle);
+                const y = centerY + traceRadius * Math.sin(angle);
+
+                // Draw the tracing dot
+                ctx.beginPath();
+                ctx.arc(x, y, dotRadius, 0, 2 * Math.PI);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+
+                angle += 0.01; // Increment the angle for the next frame
+
                 requestAnimationFrame(trace);
             }
 
             trace();
-
-            imgElement.delete();
-            gray.delete();
-            edges.delete();
-            contours.delete();
-            hierarchy.delete();
         };
         img.onerror = (error) => {
             console.error(`Failed to load image: ${imageSrc}`, error);
         };
     });
-}
-
-// Ensure the function is executed only after OpenCV.js is ready
-if (typeof cv === 'undefined') {
-    console.error('OpenCV.js is not loaded.');
-} else {
-    onOpenCvReady();
 }
