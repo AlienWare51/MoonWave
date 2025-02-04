@@ -7,6 +7,12 @@ function onOpenCvReady() {
 
     const canvasIds = ['canvas1', 'canvas2', 'canvas3'];
 
+    // Check if OpenCV.js is ready
+    if (typeof cv === 'undefined') {
+        console.error('OpenCV.js is not loaded.');
+        return;
+    }
+
     images.forEach((imageSrc, index) => {
         let img = new Image();
         img.crossOrigin = "Anonymous";  // Add this line
@@ -15,6 +21,12 @@ function onOpenCvReady() {
             const canvas = document.getElementById(canvasIds[index]);
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // Ensure OpenCV.js functions are available
+            if (typeof cv.Mat === 'undefined') {
+                console.error('cv.Mat is not available.');
+                return;
+            }
 
             let imgElement = cv.imread(canvas);
             let gray = new cv.Mat();
@@ -48,4 +60,11 @@ function onOpenCvReady() {
             console.error(`Failed to load image: ${imageSrc}`, error);
         };
     });
+}
+
+// Ensure the function is executed only after OpenCV.js is ready
+if (typeof cv === 'undefined') {
+    console.error('OpenCV.js is not loaded.');
+} else {
+    onOpenCvReady();
 }
