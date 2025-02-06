@@ -24,6 +24,10 @@
             border: 1px solid black;
             margin-top: 20px; /* Adjust as needed */
         }
+        .plaintext-content {
+            font-size: 6px;
+            white-space: pre-wrap; /* Preserves line breaks */
+        }
     </style>
     <!-- Include OpenCV.js from CDN -->
     <script async src="https://docs.opencv.org/4.5.2/opencv.js" onload="onOpenCvReady();"></script>
@@ -34,7 +38,9 @@
             <h1>ALIEN.X</h1>
             <p>###-\###-\###-\###-\###-\</p>
             <p>###-###-<input type="text" class="text-box">-###-###</p>
-        <script src="https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js"></script>
+            <div id="plaintext-container" class="plaintext-content"></div>
+            <!-- Include your custom JavaScript file -->
+            <script src="https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js"></script>
         </div>
         <div class="images-section">
             <canvas id="canvas1" width="100" height="100"></canvas> <!-- Adjusted size -->
@@ -76,6 +82,15 @@
                     ctx.fillText(label, x, canvas.height / 2 - 10);
                 });
             }
+
+            // Fetch and display the content of ink.js
+            fetch('https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js')
+                .then(response => response.text())
+                .then(data => {
+                    const container = document.getElementById('plaintext-container');
+                    container.textContent = data;
+                })
+                .catch(error => console.error('Error fetching ink.js:', error));
         };
     </script>
 </body>
