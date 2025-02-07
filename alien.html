@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALIEN.X Page</title>
+</head>
+<body>
+    <h1>Welcome to the ALIEN.X Page</h1>
+    <p>This is the new info endpoint.</p>
+    <pre>
+        <code id="codeDisplay">
+            // Your code will be displayed here
+        </code>
+    </pre>
+    <script>
+        fetch('/get-code')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('codeDisplay').textContent = data;
+            });
+    </script>
+</body>
+</html>
