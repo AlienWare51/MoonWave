@@ -18,18 +18,14 @@
         .images-section canvas {
             margin-right: 10px;
         }
-        #timeline {
-            width: 100%;
-            height: 30px; /* Adjust this value to change the vertical size */
-            border: 1px solid black;
-            margin-top: 20px; /* Adjust as needed */
-        }
-        .plaintext-content {
-            font-size: 6px;
-            white-space: pre-wrap; /* Preserves line breaks */
+        .red-dot {
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            display: none; /* Initially hidden */
         }
     </style>
-    <!-- Include OpenCV.js from CDN -->
     <script async src="https://docs.opencv.org/4.5.2/opencv.js" onload="onOpenCvReady();"></script>
 </head>
 <body>
@@ -37,64 +33,31 @@
         <div class="text-section">
             <h1>ALIEN.X</h1>
             <p>###-\###-\###-\###-\###-\</p>
-            <p>###-###-<input type="text" class="text-box">-###-###</p>
-            <div id="plaintext-container" class="plaintext-content"></div>
-            <!-- Include your custom JavaScript file -->
-            <script src="https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js"></script>
-            <div id="MASTER-SPLINTER"></div>
+            <p>###-###-<input type="text" id="text-box" class="text-box">-###-###</p>
+            <div id="json-output"></div>
+            <div class="red-dot" id="red-dot"></div>
         </div>
         <div class="images-section">
-            <canvas id="canvas1" width="100" height="100"></canvas> <!-- Adjusted size -->
-            <canvas id="canvas-splinter" width="100" height="100"></canvas> <!-- Adjusted size -->
-            <canvas id="canvas3" width="100" height="100"></canvas> <!-- Adjusted size -->
-            <img id="matplotlib-plot" src="https://www.bing.com/th/id/OGC.a2c983b59ade48b50ff037e350072694?pid=1.7&rurl=https%3a%2f%2fmedia0.giphy.com%2fmedia%2fo9wTZ9k2NgWu4%2fgiphy.gif&ehk=HXerLrWihIXKGG5MdYpH84jBx7Zx2qeOMSi98kQ44S4%3d" alt="GIF Plot" width="50" height="50" /> <!-- Smaller GIF -->
+            <canvas id="canvas1" width="100" height="100"></canvas>
+            <canvas id="canvas-splinter" width="100" height="100"></canvas>
+            <canvas id="canvas3" width="100" height="100"></canvas>
+            <img id="matplotlib-plot" alt="GIF Plot" width="50" height="50" />
         </div>
     </div>
     <iframe src="math-functions.html" width="100%" height="400px" style="border:none;"></iframe>
     <canvas id="timeline"></canvas>
-    <script src="traceLizards.js"></script>
     <script>
-        window.onload = function() {
-            const data = {
-                '169 Rabbi Levi': 169,
-                '180 Schiller': 180,
-                '71 Copernicus': 71,
-                '179km': 179,
-                '93km': 93
-            };
-
-            const canvas = document.getElementById('timeline');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const min_val = Math.min(...Object.values(data)) - 10;
-                const max_val = Math.max(...Object.values(data)) + 10;
-                const range = max_val - min_val;
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.beginPath();
-                ctx.moveTo(0, canvas.height / 2);
-                ctx.lineTo(canvas.width, canvas.height / 2);
-                ctx.stroke();
-
-                Object.entries(data).forEach(([label, value]) => {
-                    const x = ((value - min_val) / range) * canvas.width;
-                    ctx.beginPath();
-                    ctx.arc(x, canvas.height / 2, 5, 0, 2 * Math.PI);
-                    ctx.fill();
-                    ctx.fillText(label, x, canvas.height / 2 - 10);
-                });
+        function updateRedDot(counter) {
+            const redDot = document.getElementById('red-dot');
+            if (counter <= 100 && counter > 0) {
+                redDot.style.display = 'block'; // Show red dot
+            } else {
+                redDot.style.display = 'none'; // Hide red dot
             }
+        }
 
-            // Fetch and display the content of ink.js
-            fetch('https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js')
-                .then(response => response.text())
-                .then(data => {
-                    const container = document.getElementById('plaintext-container');
-                    container.textContent = data;
-                })
-                .catch(error => console.error('Error fetching ink.js:', error));
-
-            // Fetch and display "MASTER-SPLINTER" from the Python server
+        window.onload = function() {
+            // Fetch and display "Hello, World!" from the server
             fetch('http://localhost:5000/hello')
                 .then(response => response.text())
                 .then(data => {
@@ -102,6 +65,16 @@
                     helloWorldDiv.textContent = data;
                 })
                 .catch(error => console.error('Error fetching Hello, World:', error));
+
+            // Fetch and display initial counter value
+            fetch('http://localhost:5000/counter')
+                .then(response => response.json())
+                .then(data => {
+                    const jsonOutputDiv = document.getElementById('json-output');
+                    jsonOutputDiv.textContent = `Counter: ${data.counter}`;
+                    updateRedDot(data.counter);
+                })
+                .catch(error => console.error('Error fetching counter:', error));
         };
 
         // Event listener for keyboard inputs
@@ -116,6 +89,16 @@
                         img.src = url;
                     })
                     .catch(error => console.error('Error fetching plot:', error));
+
+                // Increment counter and update JSON output and red dot
+                fetch('http://localhost:5000/increment_counter')
+                    .then(response => response.json())
+                    .then(data => {
+                        const jsonOutputDiv = document.getElementById('json-output');
+                        jsonOutputDiv.textContent = `Counter: ${data.counter}`;
+                        updateRedDot(data.counter);
+                    })
+                    .catch(error => console.error('Error incrementing counter:', error));
             }
         });
     </script>
