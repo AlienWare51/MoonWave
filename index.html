@@ -28,6 +28,13 @@
             font-size: 6px;
             white-space: pre-wrap; /* Preserves line breaks */
         }
+        .red-dot {
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            display: none; /* Initially hidden */
+        }
     </style>
     <!-- Include OpenCV.js from CDN -->
     <script async src="https://docs.opencv.org/4.5.2/opencv.js" onload="onOpenCvReady();"></script>
@@ -42,6 +49,8 @@
             <!-- Include your custom JavaScript file -->
             <script src="https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js"></script>
             <div id="MASTER-SPLINTER"></div>
+            <div id="json-output"></div>
+            <div class="red-dot" id="red-dot"></div>
         </div>
         <div class="images-section">
             <canvas id="canvas1" width="100" height="100"></canvas> <!-- Adjusted size -->
@@ -54,6 +63,15 @@
     <canvas id="timeline"></canvas>
     <script src="traceLizards.js"></script>
     <script>
+        function updateRedDot(counter) {
+            const redDot = document.getElementById('red-dot');
+            if (counter <= 100 && counter > 0) {
+                redDot.style.display = 'block'; // Show red dot
+            } else {
+                redDot.style.display = 'none'; // Hide red dot
+            }
+        }
+
         window.onload = function() {
             const data = {
                 '169 Rabbi Levi': 169,
@@ -102,6 +120,16 @@
                     helloWorldDiv.textContent = data;
                 })
                 .catch(error => console.error('Error fetching Hello, World:', error));
+
+            // Fetch and display initial counter value
+            fetch('http://localhost:5000/counter')
+                .then(response => response.json())
+                .then(data => {
+                    const jsonOutputDiv = document.getElementById('json-output');
+                    jsonOutputDiv.textContent = `Counter: ${data.counter}`;
+                    updateRedDot(data.counter);
+                })
+                .catch(error => console.error('Error fetching counter:', error));
         };
 
         // Event listener for keyboard inputs
@@ -116,6 +144,16 @@
                         img.src = url;
                     })
                     .catch(error => console.error('Error fetching plot:', error));
+
+                // Increment counter and update JSON output and red dot
+                fetch('http://localhost:5000/increment_counter')
+                    .then(response => response.json())
+                    .then(data => {
+                        const jsonOutputDiv = document.getElementById('json-output');
+                        jsonOutputDiv.textContent = `Counter: ${data.counter}`;
+                        updateRedDot(data.counter);
+                    })
+                    .catch(error => console.error('Error incrementing counter:', error));
             }
         });
     </script>
