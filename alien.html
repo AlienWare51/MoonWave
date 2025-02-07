@@ -14,7 +14,7 @@
         </code>
     </pre>
     <script>
-        fetch('/get-code')
+        fetch('/get-permissions')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('codeDisplay').textContent = data;
