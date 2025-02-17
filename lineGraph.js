@@ -1,10 +1,3 @@
-// lineGraph.js
-
-<head>
-    <!-- Other head content -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-</head>
-
 // Sample data
 const data = [
     { x: 0, y: 0 },
@@ -36,8 +29,6 @@ const line = d3.line()
 // Append the path element
 svg.innerHTML = `<path class="line" d="${line(data)}"></path>`;
 
-// lineGraph.js (continued)
-
 // Create a tooltip
 const tooltip = document.createElement('div');
 tooltip.style.position = 'absolute';
@@ -67,4 +58,3 @@ data.forEach(d => {
     });
     svg.appendChild(circle);
 });
-
