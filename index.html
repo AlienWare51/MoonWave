@@ -7,6 +7,13 @@
     <!-- Include D3.js Library -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
+        .graph-container {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            background: url('https://media0.giphy.com/media/o9wTZ9k2NgWu4/giphy.gif') no-repeat center center;
+            background-size: cover;
+        }
         .container {
             display: flex;
             align-items: flex-start;
@@ -42,9 +49,9 @@
         }
         /* Styles for the line graph */
         svg#lineGraph {
-            border: 1px solid #ccc;
-            width: 400px;
-            height: 300px;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
         .line {
             fill: none;
@@ -56,6 +63,9 @@
     <script async src="https://docs.opencv.org/4.5.2/opencv.js"></script>
 </head>
 <body>
+    <div class="graph-container">
+        <svg id="lineGraph" width="400" height="300"></svg>
+    </div>
     <div class="container">
         <div class="text-section">
             <h1>ALIEN.X</h1>
