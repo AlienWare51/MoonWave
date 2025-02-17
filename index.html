@@ -15,30 +15,41 @@
         }
         .images-section {
             display: flex;
+            flex-wrap: wrap; /* Allow wrapping if necessary */
         }
-        .images-section canvas {
-            margin-right: 10px;
+        .images-section canvas, .images-section svg, .images-section img {
+            margin: 10px;
         }
         #timeline {
             width: 100%;
-            height: 30px; /* Adjust this value to change the vertical size */
+            height: 30px;
             border: 1px solid black;
-            margin-top: 20px; /* Adjust as needed */
+            margin-top: 20px;
         }
         .plaintext-content {
             font-size: 6px;
-            white-space: pre-wrap; /* Preserves line breaks */
+            white-space: pre-wrap;
         }
         .red-dot {
             width: 10px;
             height: 10px;
             background-color: red;
             border-radius: 50%;
-            display: none; /* Initially hidden */
+            display: none;
+        }
+        svg {
+            border: 1px solid #ccc;
+            width: 400px;
+            height: 300px;
+        }
+        .line {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 2px;
         }
     </style>
     <!-- Include OpenCV.js from CDN -->
-    <script async src="https://docs.opencv.org/4.5.2/opencv.js" onload="onOpenCvReady();"></script>
+    <script async src="https://docs.opencv.org/4.5.2/opencv.js"></script>
 </head>
 <body>
     <div class="container">
@@ -47,7 +58,7 @@
             <p>###-\###-\###-\###-\###-\</p>
             <p>###-###-<input type="text" class="text-box">-###-###</p>
             <div id="plaintext-container" class="plaintext-content"></div>
-            <a href="http://localhost:5000/alien.x" target="_blank">Access Alien.X</a> <!-- This is the link -->
+            <a href="http://localhost:5000/alien.x" target="_blank">Access Alien.X</a>
             <!-- Include your custom JavaScript file -->
             <script src="https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js"></script>
             <div id="MASTER-SPLINTER"></div>
@@ -55,10 +66,12 @@
             <div class="red-dot" id="red-dot"></div>
         </div>
         <div class="images-section">
-            <canvas id="canvas1" width="100" height="100"></canvas> <!-- Adjusted size -->
-            <canvas id="canvas-splinter" width="100" height="100"></canvas> <!-- Adjusted size -->
-            <canvas id="canvas3" width="100" height="100"></canvas> <!-- Adjusted size -->
-            <img id="matplotlib-plot" src="https://www.bing.com/th/id/OGC.a2c983b59ade48b50ff037e350072694?pid=1.7&rurl=https%3a%2f%2fmedia0.giphy.com%2fmedia%2fo9wTZ9k2NgWu4%2fgiphy.gif&ehk=HXerLrWihIXKGG5MdYpH84jBx7Zx2qeOMSi98kQ44S4%3d" alt="GIF Plot" width="50" height="50" /> <!-- Smaller GIF -->
+            <canvas id="canvas1" width="100" height="100"></canvas>
+            <canvas id="canvas-splinter" width="100" height="100"></canvas>
+            <canvas id="canvas3" width="100" height="100"></canvas>
+            <img id="matplotlib-plot" src="https://media0.giphy.com/media/o9wTZ9k2NgWu4/giphy.gif" alt="GIF Plot" width="50" height="50" />
+            <!-- Line graph SVG element -->
+            <svg id="lineGraph"></svg>
         </div>
     </div>
     <iframe src="math-functions.html" width="100%" height="400px" style="border:none;"></iframe>
@@ -76,6 +89,9 @@
         }
 
         window.onload = function() {
+            // Existing code...
+
+            // Timeline data and rendering
             const data = {
                 '169 Rabbi Levi': 169,
                 '180 Schiller': 180,
@@ -133,6 +149,81 @@
                     updateRedDot(data.counter);
                 })
                 .catch(error => console.error('Error fetching counter:', error));
+
+            // *** Line graph code starts here ***
+
+            // Set up SVG for the line graph
+            const lineGraphSvg = document.getElementById('lineGraph');
+            const width = lineGraphSvg.clientWidth || 400; // Default width
+            const height = lineGraphSvg.clientHeight || 300; // Default height
+
+            // Sample data for the line graph
+            const lineGraphData = [
+                { x: 0, y: 0 },
+                { x: 1, y: 3 },
+                { x: 2, y: 6 },
+                { x: 3, y: 8 },
+                { x: 4, y: 10 },
+                { x: 5, y: 7 },
+                { x: 6, y: 5 },
+                { x: 7, y: 2 },
+                { x: 8, y: 1 },
+                { x: 9, y: 4 }
+            ];
+
+            // Set up scales for the line graph
+            const xScale = d3.scaleLinear()
+                .domain([0, d3.max(lineGraphData, d => d.x)])
+                .range([0, width]);
+            const yScale = d3.scaleLinear()
+                .domain([0, d3.max(lineGraphData, d => d.y)])
+                .range([height, 0]);
+
+            // Create line generator
+            const line = d3.line()
+                .x(d => xScale(d.x))
+                .y(d => yScale(d.y));
+
+            // Create the path element for the line graph
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("class", "line");
+            path.setAttribute("d", line(lineGraphData));
+            lineGraphSvg.appendChild(path);
+
+            // Create a tooltip
+            const tooltip = document.createElement('div');
+            tooltip.style.position = 'absolute';
+            tooltip.style.padding = '5px';
+            tooltip.style.background = '#fff';
+            tooltip.style.border = '1px solid #ccc';
+            tooltip.style.display = 'none';
+            document.body.appendChild(tooltip);
+
+            // Add circles for data points in the line graph
+            lineGraphData.forEach(d => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute('cx', xScale(d.x));
+                circle.setAttribute('cy', yScale(d.y));
+                circle.setAttribute('r', 5);
+                circle.setAttribute('fill', 'steelblue');
+
+                // Mouse events for tooltip
+                circle.addEventListener('mouseover', () => {
+                    tooltip.style.display = 'block';
+                    tooltip.innerHTML = `x: ${d.x}, y: ${d.y}`;
+                });
+                circle.addEventListener('mousemove', (event) => {
+                    tooltip.style.left = event.pageX + 'px';
+                    tooltip.style.top = event.pageY + 'px';
+                });
+                circle.addEventListener('mouseout', () => {
+                    tooltip.style.display = 'none';
+                });
+
+                lineGraphSvg.appendChild(circle);
+            });
+
+            // *** Line graph code ends here ***
         };
 
         // Event listener for keyboard inputs
