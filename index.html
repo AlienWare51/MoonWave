@@ -4,45 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALIEN.X</title>
+    <!-- Include D3.js Library -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         .container {
             display: flex;
-            flex-wrap: wrap;
             align-items: flex-start;
         }
         .text-section {
-            flex: 1 1 300px;
-            margin: 10px;
+            margin-right: 20px;
         }
         .images-section {
-            flex: 1 1 300px;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 10px;
+            align-items: center;
         }
-        .images-section canvas, .images-section svg, .images-section img {
-            margin: 10px;
+        .images-section canvas,
+        .images-section img,
+        .images-section svg {
+            margin-right: 10px;
         }
         #timeline {
             width: 100%;
-            height: 50px;
+            height: 30px; /* Adjust this value to change the vertical size */
             border: 1px solid black;
-            margin-top: 20px;
+            margin-top: 20px; /* Adjust as needed */
         }
         .plaintext-content {
-            font-size: 12px;
-            white-space: pre-wrap;
+            font-size: 6px;
+            white-space: pre-wrap; /* Preserves line breaks */
         }
         .red-dot {
             width: 10px;
             height: 10px;
             background-color: red;
             border-radius: 50%;
-            display: none;
+            display: none; /* Initially hidden */
         }
-        svg {
+        /* Styles for the line graph */
+        svg#lineGraph {
             border: 1px solid #ccc;
             width: 400px;
             height: 300px;
@@ -71,13 +70,11 @@
             <div class="red-dot" id="red-dot"></div>
         </div>
         <div class="images-section">
-            <!-- Adjusted sizes for the three lizards and Master Splinter -->
-            <canvas id="canvas1" width="150" height="150"></canvas>
-            <canvas id="canvas-splinter" width="150" height="150"></canvas>
-            <canvas id="canvas3" width="150" height="150"></canvas>
-            <!-- Master Splinter image or canvas -->
-            <img id="master-splinter" src="master_splinter_image.png" alt="Master Splinter" width="150" height="150" />
-            <!-- Line graph SVG element -->
+            <canvas id="canvas1" width="100" height="100"></canvas>
+            <canvas id="canvas-splinter" width="100" height="100"></canvas>
+            <canvas id="canvas3" width="100" height="100"></canvas>
+            <img id="matplotlib-plot" src="https://media0.giphy.com/media/o9wTZ9k2NgWu4/giphy.gif" alt="GIF Plot" width="50" height="50" />
+            <!-- Line graph SVG element added here -->
             <svg id="lineGraph"></svg>
         </div>
     </div>
@@ -96,9 +93,6 @@
         }
 
         window.onload = function() {
-            // Existing code...
-
-            // Timeline data and rendering
             const data = {
                 '169 Rabbi Levi': 169,
                 '180 Schiller': 180,
@@ -158,11 +152,10 @@
                 .catch(error => console.error('Error fetching counter:', error));
 
             // *** Line graph code starts here ***
-
             // Set up SVG for the line graph
             const lineGraphSvg = document.getElementById('lineGraph');
-            const width = lineGraphSvg.clientWidth || 400; // Default width
-            const height = lineGraphSvg.clientHeight || 300; // Default height
+            const svgWidth = lineGraphSvg.clientWidth || 400;
+            const svgHeight = lineGraphSvg.clientHeight || 300;
 
             // Sample data for the line graph
             const lineGraphData = [
@@ -181,17 +174,17 @@
             // Set up scales for the line graph
             const xScale = d3.scaleLinear()
                 .domain([0, d3.max(lineGraphData, d => d.x)])
-                .range([0, width]);
+                .range([0, svgWidth]);
             const yScale = d3.scaleLinear()
                 .domain([0, d3.max(lineGraphData, d => d.y)])
-                .range([height, 0]);
+                .range([svgHeight, 0]);
 
             // Create line generator
             const line = d3.line()
                 .x(d => xScale(d.x))
                 .y(d => yScale(d.y));
 
-            // Create the path element for the line graph
+            // Append the path element for the line graph
             const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
             path.setAttribute("class", "line");
             path.setAttribute("d", line(lineGraphData));
@@ -229,7 +222,6 @@
 
                 lineGraphSvg.appendChild(circle);
             });
-
             // *** Line graph code ends here ***
         };
 
