@@ -100,19 +100,30 @@
         function loadRandomImages(imageDataArray, rx, ry, rw, rh) {
             const availableHeight = canvas.node().height;
             const availableWidth = canvas.node().width;
-            const imageSize = 100; // Size of the random images
+
+            let remainingSpace = availableHeight * availableWidth - rw * rh;
+            const imageSize = Math.sqrt(remainingSpace / imageDataArray.length); // Size to collectively fill the remaining space
+
+            let currentX = 0;
+            let currentY = 0;
 
             imageDataArray.forEach((imageData, index) => {
                 const img = new Image();
                 img.src = imageData;
                 img.onload = () => {
-                    let randomX, randomY;
-                    do {
-                        randomX = Math.random() * (availableWidth - imageSize);
-                        randomY = Math.random() * (availableHeight - imageSize);
-                    } while (isOverlappingWithRocketLizard(randomX, randomY, imageSize, rx, ry, rw, rh));
+                    if (currentX + imageSize > availableWidth) {
+                        currentX = 0;
+                        currentY += imageSize;
+                    }
 
-                    context.drawImage(img, randomX, randomY, imageSize, imageSize);
+                    if (!isOverlappingWithRocketLizard(currentX, currentY, imageSize, rx, ry, rw, rh)) {
+                        context.drawImage(img, currentX, currentY, imageSize, imageSize);
+                        currentX += imageSize;
+                    } else {
+                        // Try next position
+                        index--;
+                        currentX += imageSize;
+                    }
                 };
             });
         }
