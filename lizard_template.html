@@ -17,5 +17,58 @@
     <h1>Welcome to ALIEN.X</h1>
     <div class="lizard"></div>
     <!-- Additional content here -->
+    
+    <!-- Lizard Form -->
+    <h2>Create Your Lizard</h2>
+    <form id="lizardForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required><br>
+        <label for="length">Length:</label>
+        <input type="number" id="length" name="length" required><br>
+        <label for="species">Species:</label>
+        <input type="text" id="species" name="species"><br>
+        <button type="submit">Create Lizard</button>
+    </form>
+    <h2>Lizard Description</h2>
+    <div id="lizardDescription"></div>
+
+    <!-- JavaScript code -->
+    <script>
+        document.getElementById('lizardForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const age = parseInt(document.getElementById('age').value);
+            const length = parseInt(document.getElementById('length').value);
+            const species = document.getElementById('species').value || 'Reptilia';
+
+            // Create the Lizard object
+            const lizard = {
+                name: name,
+                age: age,
+                length: length,
+                species: species,
+                bask_in_sun: function () {
+                    return `${this.name} the ${this.species} is basking in the sun.`;
+                },
+                shed_skin: function () {
+                    return `${this.name} is shedding its skin.`;
+                },
+                eat: function (food) {
+                    return `${this.name} is eating ${food}.`;
+                },
+                describe: function () {
+                    return `Meet ${this.name}, a ${this.age}-year-old ${this.species} lizard that is ${this.length} inches long.`;
+                }
+            };
+
+            // Display the compact lizard description
+            const description = lizard.describe();
+            document.getElementById('lizardDescription').innerText = description;
+        });
+    </script>
 </body>
 </html>
