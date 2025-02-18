@@ -68,18 +68,6 @@
             .catch(error => console.error('Error:', error));
         });
 
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const lines = e.target.result.split('\n').filter(line => line.trim());
-                    loadRandomImages(lines);
-                };
-                reader.readAsText(file);
-            }
-        });
-
         const canvas = d3.select("#rocketCanvas");
         const context = canvas.node().getContext("2d");
 
@@ -88,6 +76,13 @@
 
         const lizardImg = new Image();
         lizardImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/lizard.png';
+
+        const planetImages = [
+            'https://4kwallpapers.com/images/wallpapers/planet-earth-orbit-outer-space-cosmos-1920x1200-8769.jpg',
+            'https://th.bing.com/th/id/OIP.aBxMsTDueJ0OEYpqcoZb7wHaEK?w=326&h=183&c=7&r=0&o=5&dpr=1.5&pid=1.7',
+            'https://th.bing.com/th/id/OIP.fI3DWs_H0Z6Man0THeWe6wHaEK?rs=1&pid=ImgDetMain',
+            'https://th.bing.com/th/id/OIP.0nwjv9AEh1uLPs4RHKQu3QHaHa?rs=1&pid=ImgDetMain'
+        ];
 
         rocketImg.onload = () => {
             const rocketSize = parseFloat(document.getElementById('rocketSize').value);
@@ -98,11 +93,11 @@
             lizardImg.onload = () => {
                 context.globalAlpha = 0.5; // Set opacity for transparency
                 context.drawImage(lizardImg, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
-                loadRandomImages(imageDataArray);
+                loadRandomImages(planetImages, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
             };
         };
 
-        function loadRandomImages(imageDataArray) {
+        function loadRandomImages(imageDataArray, rx, ry, rw, rh) {
             const availableHeight = canvas.node().height;
             const availableWidth = canvas.node().width;
             const imageSize = 100; // Size of the random images
@@ -115,7 +110,7 @@
                     do {
                         randomX = Math.random() * (availableWidth - imageSize);
                         randomY = Math.random() * (availableHeight - imageSize);
-                    } while (isOverlappingWithRocketLizard(randomX, randomY, imageSize, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize));
+                    } while (isOverlappingWithRocketLizard(randomX, randomY, imageSize, rx, ry, rw, rh));
 
                     context.drawImage(img, randomX, randomY, imageSize, imageSize);
                 };
