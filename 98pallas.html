@@ -76,11 +76,11 @@
             context.drawImage(rocketImg, 0, 0, rocketImg.width, rocketImg.height);
             
             lizardImg.onload = () => {
-                const lizardX = canvas.node().width / 2 - lizardImg.width * 0.3 / 2;
-                const lizardY = canvas.node().height / 2 - lizardImg.height * 0.3 / 2;
+                const lizardX = canvas.node().width / 2 - lizardImg.width * 0.1 / 2;
+                const lizardY = canvas.node().height / 2 - lizardImg.height * 0.1 / 2;
                 
                 context.globalAlpha = 0.5; // Set opacity for transparency
-                context.drawImage(lizardImg, lizardX, lizardY, lizardImg.width * 0.3, lizardImg.height * 0.3);
+                context.drawImage(lizardImg, lizardX, lizardY, lizardImg.width * 0.1, lizardImg.height * 0.1);
             };
         };
     </script>
