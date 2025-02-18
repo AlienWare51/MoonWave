@@ -99,23 +99,36 @@
 
         function startInterchangingImages(imageDataArray, rx, ry, rw, rh) {
             let currentIndex = 0;
+            const canvasWidth = canvas.node().width;
+            const canvasHeight = canvas.node().height;
 
             function drawNextImage() {
-                const img = new Image();
-                img.src = imageDataArray[currentIndex];
-                img.onload = () => {
-                    context.clearRect(0, 0, canvas.node().width, canvas.node().height); // Clear the canvas
-                    context.drawImage(img, 0, 0, canvas.node().width, canvas.node().height); // Draw the background image
-                    context.drawImage(rocketImg, rx, ry, rw, rh); // Redraw the rocket
-                    context.globalAlpha = 0.5; // Set opacity for transparency
-                    context.drawImage(lizardImg, rx, ry, rw, rh); // Redraw the lizard
-                    currentIndex = (currentIndex + 1) % imageDataArray.length; // Update the index for the next image
-                };
+                context.clearRect(0, 0, canvasWidth, canvasHeight); // Clear the canvas
+                const quadrants = [
+                    { x: 0, y: 0, w: canvasWidth / 2, h: canvasHeight / 2 },
+                    { x: canvasWidth / 2, y: 0, w: canvasWidth / 2, h: canvasHeight / 2 },
+                    { x: 0, y: canvasHeight / 2, w: canvasWidth / 2, h: canvasHeight / 2 },
+                    { x: canvasWidth / 2, y: canvasHeight / 2, w: canvasWidth / 2, h: canvasHeight / 2 }
+                ];
+
+                quadrants.forEach((quadrant, index) => {
+                    const img = new Image();
+                    img.src = imageDataArray[(currentIndex + index) % imageDataArray.length];
+                    img.onload = () => {
+                        context.drawImage(img, quadrant.x, quadrant.y, quadrant.w, quadrant.h);
+                    };
+                });
+
+                currentIndex = (currentIndex + 1) % imageDataArray.length;
+
+                context.drawImage(rocketImg, rx, ry, rw, rh); // Redraw the rocket
+                context.globalAlpha = 0.5; // Set opacity for transparency
+                context.drawImage(lizardImg, rx, ry, rw, rh); // Redraw the lizard
             }
 
-            drawNextImage(); // Draw the first image immediately
+            drawNextImage(); // Draw the first set of images immediately
 
-            setInterval(drawNextImage, 1000); // Change the image every 1 second
+            setInterval(drawNextImage, 1000); // Change the image set every 1 second
         }
     </script>
 </body>
