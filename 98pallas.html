@@ -10,8 +10,8 @@
     <form id="modifierForm">
         <label for="image_select">Select Image:</label>
         <select id="image_select" name="image_select" required>
-            <option value="1">Image 1</option>
-            <option value="2">Image 2</option>
+            <option value="1">'https://www.worldatlas.com/r/w1200/upload/50/de/fe/shutterstock-117998215.jpg'</option>
+            <option value="2">'https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png'</option>
         </select><br>
         
         <label for="brightness">Brightness:</label>
@@ -32,7 +32,7 @@
         document.getElementById('modifierForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const formData = new FormData(event.target);
-            fetch('/modify_image', {
+            fetch('http://127.0.0.1:5000/modify_image', {
                 method: 'POST',
                 body: formData
             })
