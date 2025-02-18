@@ -68,25 +68,21 @@
 
         const rocketImg = new Image();
         rocketImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/rocket.png';
+
+        const lizardImg = new Image();
+        lizardImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/lizard.png';
         
         rocketImg.onload = () => {
             context.drawImage(rocketImg, 0, 0, rocketImg.width, rocketImg.height);
+            
+            lizardImg.onload = () => {
+                const lizardX = canvas.node().width / 2 - lizardImg.width * 0.5 / 2;
+                const lizardY = canvas.node().height / 2 - lizardImg.height * 0.5 / 2;
+                
+                context.globalAlpha = 0.5; // Set opacity for transparency
+                context.drawImage(lizardImg, lizardX, lizardY, lizardImg.width * 0.5, lizardImg.height * 0.5);
+            };
         };
-
-        const svg = d3.select("body").append("svg")
-            .attr("width", 800)
-            .attr("height", 600)
-            .style("position", "absolute")
-            .style("top", d3.select("#rocketCanvas").node().getBoundingClientRect().top + "px")
-            .style("left", d3.select("#rocketCanvas").node().getBoundingClientRect().left + "px");
-
-        svg.append("image")
-            .attr("xlink:href", "https://github.com/AlienWare51/MoonWave/raw/main/lizard.png")
-            .attr("x", 400 - 150 / 2)
-            .attr("y", 300 - 150 / 2)
-            .attr("width", 150)
-            .attr("height", 150)
-            .attr("opacity", 0.5);
     </script>
 </body>
 </html>
