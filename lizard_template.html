@@ -8,9 +8,22 @@
         .lizard {
             width: 100px;
             height: 50px;
-            background-color: #228B22; /* ForestGreen */
             border-radius: 50px;
             margin: 10px;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .lizard1 {
+            background-image: url('lizard1.gif'); /* Path to your first GIF file */
+        }
+
+        .lizard2 {
+            background-image: url('lizard2.gif'); /* Path to your second GIF file */
+        }
+
+        .lizard3 {
+            background-image: url('lizard3.gif'); /* Path to your third GIF file */
         }
 
         .container {
@@ -21,9 +34,11 @@
 </head>
 <body>
     <h1>Welcome to ALIEN.X</h1>
-    <div class="lizard"></div>
-    <div class="lizard"></div>
-    <div class="lizard"></div>
+    <div class="container">
+        <div class="lizard lizard1"></div>
+        <div class="lizard lizard2"></div>
+        <div class="lizard lizard3"></div>
+    </div>
     <!-- Additional content here -->
     
     <!-- Lizard Form -->
