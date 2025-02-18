@@ -44,6 +44,8 @@
         
         <button type="submit">Apply Modifications</button>
     </form>
+    <input type="file" id="fileInput" accept=".txt"><br><br>
+
     <h2>Modified Image</h2>
     <img id="modifiedImage" src="" alt="Your modified image will appear here">
 
@@ -66,6 +68,18 @@
             .catch(error => console.error('Error:', error));
         });
 
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const lines = e.target.result.split('\n').filter(line => line.trim());
+                    loadRandomImages(lines);
+                };
+                reader.readAsText(file);
+            }
+        });
+
         const canvas = d3.select("#rocketCanvas");
         const context = canvas.node().getContext("2d");
 
@@ -80,12 +94,40 @@
             const xPos = canvas.node().width / 2 - rocketImg.width * rocketSize / 2;
             const yPos = canvas.node().height / 2 - rocketImg.height * rocketSize / 2;
             context.drawImage(rocketImg, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
-            
+
             lizardImg.onload = () => {
                 context.globalAlpha = 0.5; // Set opacity for transparency
                 context.drawImage(lizardImg, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
+                loadRandomImages(imageDataArray);
             };
         };
+
+        function loadRandomImages(imageDataArray) {
+            const availableHeight = canvas.node().height;
+            const availableWidth = canvas.node().width;
+            const imageSize = 100; // Size of the random images
+
+            imageDataArray.forEach((imageData, index) => {
+                const img = new Image();
+                img.src = imageData;
+                img.onload = () => {
+                    let randomX, randomY;
+                    do {
+                        randomX = Math.random() * (availableWidth - imageSize);
+                        randomY = Math.random() * (availableHeight - imageSize);
+                    } while (isOverlappingWithRocketLizard(randomX, randomY, imageSize, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize));
+
+                    context.drawImage(img, randomX, randomY, imageSize, imageSize);
+                };
+            });
+        }
+
+        function isOverlappingWithRocketLizard(x, y, size, rx, ry, rw, rh) {
+            return (
+                x < rx + rw && x + size > rx &&
+                y < ry + rh && y + size > ry
+            );
+        }
     </script>
 </body>
 </html>
