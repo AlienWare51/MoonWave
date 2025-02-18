@@ -93,46 +93,29 @@
             lizardImg.onload = () => {
                 context.globalAlpha = 0.5; // Set opacity for transparency
                 context.drawImage(lizardImg, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
-                loadRandomImages(planetImages, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
+                startInterchangingImages(planetImages, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
             };
         };
 
-        function loadRandomImages(imageDataArray, rx, ry, rw, rh) {
-            const availableHeight = canvas.node().height;
-            const availableWidth = canvas.node().width;
+        function startInterchangingImages(imageDataArray, rx, ry, rw, rh) {
+            let currentIndex = 0;
 
-            let remainingSpace = availableHeight * availableWidth - rw * rh;
-            const imageSize = Math.sqrt(remainingSpace / imageDataArray.length); // Size to collectively fill the remaining space
-
-            let currentX = 0;
-            let currentY = 0;
-
-            imageDataArray.forEach((imageData, index) => {
+            function drawNextImage() {
                 const img = new Image();
-                img.src = imageData;
+                img.src = imageDataArray[currentIndex];
                 img.onload = () => {
-                    if (currentX + imageSize > availableWidth) {
-                        currentX = 0;
-                        currentY += imageSize;
-                    }
-
-                    if (!isOverlappingWithRocketLizard(currentX, currentY, imageSize, rx, ry, rw, rh)) {
-                        context.drawImage(img, currentX, currentY, imageSize, imageSize);
-                        currentX += imageSize;
-                    } else {
-                        // Try next position
-                        index--;
-                        currentX += imageSize;
-                    }
+                    context.clearRect(0, 0, canvas.node().width, canvas.node().height); // Clear the canvas
+                    context.drawImage(img, 0, 0, canvas.node().width, canvas.node().height); // Draw the background image
+                    context.drawImage(rocketImg, rx, ry, rw, rh); // Redraw the rocket
+                    context.globalAlpha = 0.5; // Set opacity for transparency
+                    context.drawImage(lizardImg, rx, ry, rw, rh); // Redraw the lizard
+                    currentIndex = (currentIndex + 1) % imageDataArray.length; // Update the index for the next image
                 };
-            });
-        }
+            }
 
-        function isOverlappingWithRocketLizard(x, y, size, rx, ry, rw, rh) {
-            return (
-                x < rx + rw && x + size > rx &&
-                y < ry + rh && y + size > ry
-            );
+            drawNextImage(); // Draw the first image immediately
+
+            setInterval(drawNextImage, 1000); // Change the image every 1 second
         }
     </script>
 </body>
