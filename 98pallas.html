@@ -25,10 +25,10 @@
         </select><br>
         
         <div class="image-preview">
-            <img id="image1" src="https://th.bing.com/th/id/R.2b4091611a6491b420d2330140d61e5d?rik=feGqFOesFL8sTw&riu=http%3a%2f%2fwallsdesk.com%2fwp-content%2fuploads%2f2018%2f03%2flizard-Pictures.jpg&ehk=YxWCMRrb8o5tX0ssFBAcw6ePj54as7tAL1aq42fuhG4%3d&risl=&pid=ImgRaw&r=0" alt="Image 1">
+            <img id="image1" src="path/to/your/image1.jpg" alt="Image 1">
         </div>
         <div class="image-preview">
-            <img id="image2" src="https://www.worldatlas.com/r/w1200/upload/50/de/fe/shutterstock-117998215.jpg" alt="Image 2">
+            <img id="image2" src="path/to/your/image2.jpg" alt="Image 2">
         </div><br>
 
         <label for="brightness">Brightness:</label>
@@ -44,6 +44,48 @@
     </form>
     <h2>Modified Image</h2>
     <img id="modifiedImage" src="" alt="Your modified image will appear here">
+    
+    <h2>Rocket and Lizard Animation</h2>
+    <canvas id="animationCanvas" width="800" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const rocketImg = new Image();
+        rocketImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/rocket.png';
+
+        const lizardImg = new Image();
+        lizardImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/lizard.png';
+
+        let frame = 0;
+        const totalFrames = 60;
+
+        rocketImg.onload = () => {
+            lizardImg.onload = () => {
+                requestAnimationFrame(animate);
+            };
+        };
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Calculate positions
+            const rocketPosY = canvas.height - (frame / totalFrames) * canvas.height; // Rocket moves up
+            const lizardPosX = (frame / totalFrames) * canvas.width; // Lizard moves right
+
+            // Draw rocket
+            ctx.drawImage(rocketImg, canvas.width / 2 - rocketImg.width / 2, rocketPosY);
+
+            // Draw lizard
+            ctx.drawImage(lizardImg, lizardPosX, canvas.height - lizardImg.height);
+
+            frame++;
+            if (frame < totalFrames) {
+                requestAnimationFrame(animate);
+            }
+        }
+    </script>
 
     <script>
         document.getElementById('modifierForm').addEventListener('submit', function (event) {
