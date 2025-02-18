@@ -72,6 +72,21 @@
         rocketImg.onload = () => {
             context.drawImage(rocketImg, 0, 0, rocketImg.width, rocketImg.height);
         };
+
+        const svg = d3.select("body").append("svg")
+            .attr("width", 800)
+            .attr("height", 600)
+            .style("position", "absolute")
+            .style("top", d3.select("#rocketCanvas").node().getBoundingClientRect().top + "px")
+            .style("left", d3.select("#rocketCanvas").node().getBoundingClientRect().left + "px");
+
+        svg.append("image")
+            .attr("xlink:href", "https://github.com/AlienWare51/MoonWave/raw/main/lizard.png")
+            .attr("x", 400 - 150 / 2)
+            .attr("y", 300 - 150 / 2)
+            .attr("width", 150)
+            .attr("height", 150)
+            .attr("opacity", 0.5);
     </script>
 </body>
 </html>
