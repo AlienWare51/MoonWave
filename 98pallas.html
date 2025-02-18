@@ -20,7 +20,7 @@
         <label for="image_select">Select Image:</label>
         <select id="image_select" name="image_select" required>
             <option value="1">Image 1</option>
-            <option value="2">Image 2</</option>
+            <option value="2">Image 2</option>
         </select><br>
         
         <div class="image-preview">
@@ -76,11 +76,11 @@
             context.drawImage(rocketImg, 0, 0, rocketImg.width, rocketImg.height);
             
             lizardImg.onload = () => {
-                const lizardX = canvas.node().width / 2 - lizardImg.width * 0.5 / 2;
-                const lizardY = canvas.node().height / 2 - lizardImg.height * 0.5 / 2;
+                const lizardX = canvas.node().width / 2 - lizardImg.width * 0.25 / 2;
+                const lizardY = canvas.node().height / 2 - lizardImg.height * 0.25 / 2;
                 
                 context.globalAlpha = 0.5; // Set opacity for transparency
-                context.drawImage(lizardImg, lizardX, lizardY, lizardImg.width * 0.5, lizardImg.height * 0.5);
+                context.drawImage(lizardImg, lizardX, lizardY, lizardImg.width * 0.25, lizardImg.height * 0.25);
             };
         };
     </script>
