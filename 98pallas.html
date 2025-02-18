@@ -77,14 +77,13 @@
 
         rocketImg.onload = () => {
             const rocketSize = parseFloat(document.getElementById('rocketSize').value);
-            context.drawImage(rocketImg, 0, 0, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
+            const xPos = canvas.node().width / 2 - rocketImg.width * rocketSize / 2;
+            const yPos = canvas.node().height / 2 - rocketImg.height * rocketSize / 2;
+            context.drawImage(rocketImg, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
             
             lizardImg.onload = () => {
-                const lizardX = canvas.node().width / 2 - lizardImg.width * 100 / 2;
-                const lizardY = canvas.node().height / 2 - lizardImg.height * 100 / 2;
-                
                 context.globalAlpha = 0.5; // Set opacity for transparency
-                context.drawImage(lizardImg, lizardX, lizardY, lizardImg.width * 100, lizardImg.height * 0.1);
+                context.drawImage(lizardImg, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
             };
         };
     </script>
