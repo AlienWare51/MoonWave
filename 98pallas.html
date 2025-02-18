@@ -2,52 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Modifier</title>
+    <title>Rocket and Lizard Animation</title>
     <style>
-        .image-preview {
-            display: inline-block;
-            margin: 10px;
-        }
-        .image-preview img {
-            width: 150px;
-            height: auto;
-        }
         canvas {
             border: 1px solid black;
         }
     </style>
 </head>
 <body>
-    <h1>Image Modifier</h1>
-    <form id="modifierForm">
-        <label for="image_select">Select Image:</label>
-        <select id="image_select" name="image_select" required>
-            <option value="1">Image 1</option>
-            <option value="2">Image 2</option>
-        </select><br>
-        
-        <div class="image-preview">
-            <img id="image1" src="path/to/your/image1.jpg" alt="Image 1">
-        </div>
-        <div class="image-preview">
-            <img id="image2" src="path/to/your/image2.jpg" alt="Image 2">
-        </div><br>
-
-        <label for="brightness">Brightness:</label>
-        <input type="number" id="brightness" name="brightness" step="0.1" value="1.0" required><br>
-        
-        <label for="contrast">Contrast:</label>
-        <input type="number" id="contrast" name="contrast" step="0.1" value="1.0" required><br>
-        
-        <label for="rotation">Rotation (degrees):</label>
-        <input type="number" id="rotation" name="rotation" step="1" value="0" required><br>
-        
-        <button type="submit">Apply Modifications</button>
-    </form>
-    <h2>Modified Image</h2>
-    <img id="modifiedImage" src="" alt="Your modified image will appear here">
-    
     <h2>Rocket and Lizard Animation</h2>
     <canvas id="animationCanvas" width="800" height="600"></canvas>
 
@@ -55,15 +17,19 @@
         const canvas = document.getElementById('animationCanvas');
         const ctx = canvas.getContext('2d');
 
+        // Create Image objects for the rocket and lizard
         const rocketImg = new Image();
+        rocketImg.crossOrigin = 'Anonymous'; // Handle CORS
         rocketImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/rocket.png';
 
         const lizardImg = new Image();
+        lizardImg.crossOrigin = 'Anonymous';
         lizardImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/lizard.png';
 
         let frame = 0;
-        const totalFrames = 60;
+        const totalFrames = 60; // Total number of frames in the animation
 
+        // Wait for both images to load before starting the animation
         rocketImg.onload = () => {
             lizardImg.onload = () => {
                 requestAnimationFrame(animate);
@@ -71,46 +37,37 @@
         };
 
         function animate() {
+            // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Calculate positions
-            const rocketPosY = canvas.height - (frame / totalFrames) * canvas.height; // Rocket moves up
-            const lizardPosX = canvas.width / 2 - lizardImg.width * 0.25; // Center the lizard on the rocket horizontally
-            const lizardPosY = rocketPosY + rocketImg.height / 2 - lizardImg.height * 0.25; // Center the lizard on the rocket vertically
+            // Calculate the vertical position of the rocket (moving up)
+            const rocketPosY = canvas.height - (frame / totalFrames) * (canvas.height + rocketImg.height);
 
-            // Draw rocket
-            ctx.drawImage(rocketImg, canvas.width / 2 - rocketImg.width / 2, rocketPosY);
+            // Calculate the horizontal position of the lizard (moving right)
+            const lizardPosX = (frame / totalFrames) * (canvas.width - lizardImg.width);
 
-            // Draw lizard with reduced size (50%)
-            ctx.drawImage(lizardImg, lizardPosX, lizardPosY, lizardImg.width * 0.5, lizardImg.height * 0.5);
+            // Draw the rocket at its calculated position
+            ctx.drawImage(
+                rocketImg,
+                canvas.width / 2 - rocketImg.width / 2, // Center horizontally
+                rocketPosY
+            );
 
+            // Draw the lizard at its calculated position
+            ctx.drawImage(
+                lizardImg,
+                lizardPosX,
+                canvas.height - lizardImg.height // Positioned at the bottom
+            );
+
+            // Increment the frame counter
             frame++;
-            if (frame < totalFrames) {
+
+            // Continue the animation if we haven't reached the total frames
+            if (frame <= totalFrames) {
                 requestAnimationFrame(animate);
             }
         }
-    </script>
-
-    <script>
-        document.getElementById('modifierForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            fetch('http://127.0.0.1:5000/modify_image', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.blob();
-            })
-            .then(blob => {
-                const url = URL.createObjectURL(blob);
-                document.getElementById('modifiedImage').src = url;
-            })
-            .catch(error => console.error('Error:', error));
-        });
     </script>
 </body>
 </html>
