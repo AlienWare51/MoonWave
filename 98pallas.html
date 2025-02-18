@@ -20,7 +20,7 @@
         <label for="image_select">Select Image:</label>
         <select id="image_select" name="image_select" required>
             <option value="1">Image 1</option>
-            <option value="2">Image 2</option>
+            <option value="2">Image 2</</option>
         </select><br>
         
         <div class="image-preview">
@@ -71,7 +71,7 @@
 
         const lizardImg = new Image();
         lizardImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/lizard.png';
-        
+
         rocketImg.onload = () => {
             context.drawImage(rocketImg, 0, 0, rocketImg.width, rocketImg.height);
             
