@@ -75,14 +75,14 @@
 
             // Calculate positions
             const rocketPosY = canvas.height - (frame / totalFrames) * canvas.height; // Rocket moves up
-            const lizardPosX = canvas.width / 2 - lizardImg.width * 0.45 / 2; // Center the lizard on the rocket horizontally
-            const lizardPosY = rocketPosY + rocketImg.height / 2 - lizardImg.height * 0.45 / 2; // Center the lizard on the rocket vertically
+            const lizardPosX = canvas.width / 2 - lizardImg.width * 0.25; // Center the lizard on the rocket horizontally
+            const lizardPosY = rocketPosY + rocketImg.height / 2 - lizardImg.height * 0.25; // Center the lizard on the rocket vertically
 
             // Draw rocket
             ctx.drawImage(rocketImg, canvas.width / 2 - rocketImg.width / 2, rocketPosY);
 
-            // Draw lizard with reduced size
-            ctx.drawImage(lizardImg, lizardPosX, lizardPosY, lizardImg.width * 0.45, lizardImg.height * 0.45);
+            // Draw lizard with reduced size (50%)
+            ctx.drawImage(lizardImg, lizardPosX, lizardPosY, lizardImg.width * 0.5, lizardImg.height * 0.5);
 
             frame++;
             if (frame < totalFrames) {
