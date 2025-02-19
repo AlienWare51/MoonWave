@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EaselJS Game</title>
+    <title>EaselJS Talking Lizard</title>
     <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
 </head>
 <body>
@@ -52,6 +52,32 @@
                 stage.update();
             }
         }
+
+        // Function to create a cloud shape and animate it
+        function createCloud() {
+            const cloud = new createjs.Shape();
+            cloud.graphics.beginFill("white").drawEllipse(0, 0, 80, 40);
+            cloud.x = 150; // X position of lizard's mouth
+            cloud.y = 87;  // Y position of lizard's mouth
+            stage.addChild(cloud);
+
+            createjs.Tween.get(cloud)
+                .to({y: cloud.y - 100, alpha: 0}, 2000, createjs.Ease.getPowOut(2))
+                .call(() => stage.removeChild(cloud));
+
+            stage.update();
+        }
+
+        // Event listener for pressing the Enter key
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                createCloud();
+            }
+        });
+
+        // Start the EaselJS ticker
+        createjs.Ticker.framerate = 60;
+        createjs.Ticker.addEventListener("tick", stage);
     </script>
 </body>
 </html>
