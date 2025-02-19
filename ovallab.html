@@ -13,30 +13,32 @@
         const stage = new createjs.Stage("gameCanvas");
 
         // Load the images
-        const lizardManImg = new Image();
         const deskPhotoImg = new Image();
-        lizardManImg.src = 'https://thumbs.dreamstime.com/z/lizard-man-government-person-conspiracy-theory-concept-generative-ai-lizard-man-government-person-conspiracy-theory-concept-277117312.jpg';
+        const lizardManImg = new Image();
         deskPhotoImg.src = 'https://www.thoughtco.com/thmb/bhWbOYCyztO_QuIvPai7k7MRUZw=/2299x1541/filters:fill(auto,1)/Kennedy-Resolute-desk-TV-2300-3x2gty-5867f6775f9b586e025d8e82.jpg';
+        lizardManImg.src = 'https://thumbs.dreamstime.com/z/lizard-man-government-person-conspiracy-theory-concept-generative-ai-lizard-man-government-person-conspiracy-theory-concept-277117312.jpg';
 
-        lizardManImg.onload = handleImageLoad;
         deskPhotoImg.onload = handleImageLoad;
+        lizardManImg.onload = handleImageLoad;
 
-        let lizardManBitmap;
         let deskPhotoBitmap;
+        let lizardManBitmap;
 
         function handleImageLoad() {
+            if (!deskPhotoBitmap && deskPhotoImg.complete) {
+                deskPhotoBitmap = new createjs.Bitmap(deskPhotoImg);
+                deskPhotoBitmap.scaleX = stage.canvas.width / deskPhotoImg.width;
+                deskPhotoBitmap.scaleY = stage.canvas.height / deskPhotoImg.height;
+            }
+
             if (!lizardManBitmap && lizardManImg.complete) {
                 lizardManBitmap = new createjs.Bitmap(lizardManImg);
             }
 
-            if (!deskPhotoBitmap && deskPhotoImg.complete) {
-                deskPhotoBitmap = new createjs.Bitmap(deskPhotoImg);
-            }
-
-            if (lizardManBitmap && deskPhotoBitmap) {
+            if (deskPhotoBitmap && lizardManBitmap) {
                 stage.addChild(deskPhotoBitmap);
-                lizardManBitmap.x = 150; // Set x position
-                lizardManBitmap.y = 200; // Set y position
+                lizardManBitmap.x = 300; // Set x position
+                lizardManBitmap.y = 250; // Set y position
                 stage.addChild(lizardManBitmap);
                 
                 stage.update();
