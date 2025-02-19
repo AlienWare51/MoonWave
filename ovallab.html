@@ -27,28 +27,9 @@
 
         let deskPhotoBitmap;
         let lizardManBitmap;
+        let newImageBitmap;
         let pointer;
-        let minion; // Minion object
         const coordsDisplay = document.getElementById('coords');
-
-        // Minion object definition
-        const Minion = {
-            bitmap: null,
-            init: function(image, scale, startX, startY) {
-                this.bitmap = new createjs.Bitmap(image);
-                this.bitmap.scaleX = scale;
-                this.bitmap.scaleY = scale;
-                this.bitmap.x = startX;
-                this.bitmap.y = startY;
-                stage.addChild(this.bitmap);
-            },
-            animate: function() {
-                createjs.Tween.get(this.bitmap, { loop: true })
-                    .to({ x: 280, y: 312 }, 1500, createjs.Ease.getPowInOut(2))
-                    .to({ x: 722, y: 466 }, 1500, createjs.Ease.getPowInOut(2))
-                    .to({ x: 428, y: 163 }, 1500, createjs.Ease.getPowInOut(2));
-            }
-        };
 
         function handleImageLoad() {
             if (!deskPhotoBitmap && deskPhotoImg.complete) {
@@ -71,17 +52,28 @@
                 lizardManBitmap.y = 87;
             }
 
-            if (!minion && newImage.complete) {
-                // Initialize and animate the minion
-                minion = Object.create(Minion);
-                const lizardScale = lizardManBitmap.scaleX; // Use the same scale as lizard
-                minion.init(newImage, lizardScale, 428, 163);
-                minion.animate();
+            if (!newImageBitmap && newImage.complete) {
+                newImageBitmap = new createjs.Bitmap(newImage);
+
+                // Scale the new image to match the size of the lizard image
+                newImageBitmap.scaleX = lizardManBitmap.scaleX;
+                newImageBitmap.scaleY = lizardManBitmap.scaleY;
+
+                // Position the new image at the exact coordinates (428, 163)
+                newImageBitmap.x = 428;
+                newImageBitmap.y = 163;
+
+                // Add an animation to move the new image between coordinates
+                createjs.Tween.get(newImageBitmap, { loop: true })
+                    .to({ x: 280, y: 312 }, 1500, createjs.Ease.getPowInOut(2))
+                    .to({ x: 722, y: 466 }, 1500, createjs.Ease.getPowInOut(2))
+                    .to({ x: 428, y: 163 }, 1500, createjs.Ease.getPowInOut(2));
             }
 
-            if (deskPhotoBitmap && lizardManBitmap && minion && minion.bitmap) {
+            if (deskPhotoBitmap && lizardManBitmap && newImageBitmap) {
                 stage.addChild(deskPhotoBitmap);
                 stage.addChild(lizardManBitmap);
+                stage.addChild(newImageBitmap);
 
                 // Create a pointer circle
                 pointer = new createjs.Shape();
