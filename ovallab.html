@@ -116,6 +116,16 @@
             }
         });
 
+        // Ensure animation starts on page load
+        window.addEventListener("load", function() {
+            if (newImage.complete && newImageBitmap) {
+                createjs.Tween.get(newImageBitmap, { loop: true })
+                    .to({ x: 280, y: 312 }, 1500, createjs.Ease.getPowInOut(2))
+                    .to({ x: 722, y: 466 }, 1500, createjs.Ease.getPowInOut(2))
+                    .to({ x: 428, y: 163 }, 1500, createjs.Ease.getPowInOut(2));
+            }
+        });
+
     </script>
 </body>
 </html>
