@@ -23,7 +23,6 @@
 
     <script>
         const stage = new createjs.Stage("gameCanvas");
-        const stewieStage = new createjs.Stage("stewieCanvas");
 
         // Load the images for the main EaselJS stage
         const deskPhotoImg = new Image();
@@ -33,9 +32,9 @@
         lizardManImg.src = 'https://thumbs.dreamstime.com/z/lizard-man-government-person-conspiracy-theory-concept-generative-ai-lizard-man-government-person-conspiracy-theory-concept-277117312.jpg';
         newImage.src = 'https://th.bing.com/th/id/OIP.Tl9okheF9keH4XhtqgagDQHaL9?rs=1&pid=ImgDetMain';
 
-        deskPhotoImg.onload = handleImageLoad;
-        lizardManImg.onload = handleImageLoad;
-        newImage.onload = handleImageLoad;
+        deskPhotoImg.onload = handleMainImageLoad;
+        lizardManImg.onload = handleMainImageLoad;
+        newImage.onload = handleMainImageLoad;
 
         let deskPhotoBitmap;
         let lizardManBitmap;
@@ -43,7 +42,7 @@
         let pointer;
         const coordsDisplay = document.getElementById('coords');
 
-        function handleImageLoad() {
+        function handleMainImageLoad() {
             if (!deskPhotoBitmap && deskPhotoImg.complete) {
                 deskPhotoBitmap = new createjs.Bitmap(deskPhotoImg);
                 deskPhotoBitmap.scaleX = stage.canvas.width / deskPhotoImg.width;
