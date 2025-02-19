@@ -2,25 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EaselJS Game</title>
     <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        #coords {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255,255,255,0.8);
+            padding: 5px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (x, y)</div>
+    <div id="coords">Coordinates: (x, y)</div>
 
     <script>
         const stage = new createjs.Stage("gameCanvas");
 
-        // Load the images
+        // Load the images with crossOrigin set
         const deskPhotoImg = new Image();
         const lizardManImg = new Image();
         const newImage = new Image();
-        deskPhotoImg.src = 'https://www.thoughtco.com/thmb/bhWbOYCyztO_QuIvPai7k7MRUZw=/2299x1541/filters:fill(auto,1)/Kennedy-Resolute-desk-TV-2300-3x2gty-5867f6775f9b586e025d8e82.jpg';
-        lizardManImg.src = 'https://thumbs.dreamstime.com/z/lizard-man-government-person-conspiracy-theory-concept-generative-ai-lizard-man-government-person-conspiracy-theory-concept-277117312.jpg';
-        newImage.src = 'https://th.bing.com/th/id/OIP.Tl9okheF9keH4XhtqgagDQHaL9?rs=1&pid=ImgDetMain';
 
+        deskPhotoImg.crossOrigin = 'Anonymous';
+        lizardManImg.crossOrigin = 'Anonymous';
+        newImage.crossOrigin = 'Anonymous';
+
+        deskPhotoImg.src = 'https://example.com/deskPhoto.jpg'; // Replace with valid URLs
+        lizardManImg.src = 'https://example.com/lizardMan.jpg';
+        newImage.src = 'https://example.com/minion.png';
+
+        let imagesLoaded = 0;
         deskPhotoImg.onload = handleImageLoad;
         lizardManImg.onload = handleImageLoad;
         newImage.onload = handleImageLoad;
@@ -51,55 +69,51 @@
         };
 
         function handleImageLoad() {
-            if (!deskPhotoBitmap && deskPhotoImg.complete) {
-                deskPhotoBitmap = new createjs.Bitmap(deskPhotoImg);
-                deskPhotoBitmap.scaleX = stage.canvas.width / deskPhotoImg.width;
-                deskPhotoBitmap.scaleY = stage.canvas.height / deskPhotoImg.height;
-            }
+            imagesLoaded++;
+            if (imagesLoaded < 3) return; // Wait until all images are loaded
 
-            if (!lizardManBitmap && lizardManImg.complete) {
-                lizardManBitmap = new createjs.Bitmap(lizardManImg);
+            // Initialize and add the background image
+            deskPhotoBitmap = new createjs.Bitmap(deskPhotoImg);
+            deskPhotoBitmap.scaleX = stage.canvas.width / deskPhotoImg.width;
+            deskPhotoBitmap.scaleY = stage.canvas.height / deskPhotoImg.height;
+            stage.addChild(deskPhotoBitmap);
 
-                // Scale the lizard image to match the size of the person's head
-                const headWidth = 100; // Approximate width of the head
-                const headHeight = 120; // Approximate height of the head
-                lizardManBitmap.scaleX = headWidth / lizardManImg.width;
-                lizardManBitmap.scaleY = headHeight / lizardManImg.height;
+            // Initialize and add the lizard man image
+            lizardManBitmap = new createjs.Bitmap(lizardManImg);
+            const headWidth = 100; // Approximate width of the head
+            const headHeight = 120; // Approximate height of the head
+            lizardManBitmap.scaleX = headWidth / lizardManImg.width;
+            lizardManBitmap.scaleY = headHeight / lizardManImg.height;
+            lizardManBitmap.x = 146;
+            lizardManBitmap.y = 87;
+            stage.addChild(lizardManBitmap);
 
-                // Position the lizard image at the exact coordinates (146, 87)
-                lizardManBitmap.x = 146;
-                lizardManBitmap.y = 87;
-            }
+            // Initialize and animate the minion
+            minion = Object.create(Minion);
+            const lizardScale = lizardManBitmap.scaleX; // Use the same scale as lizard
+            minion.init(newImage, lizardScale, 428, 163);
+            minion.animate();
 
-            if (!minion && newImage.complete) {
-                // Initialize and animate the minion
-                minion = Object.create(Minion);
-                const lizardScale = lizardManBitmap.scaleX; // Use the same scale as lizard
-                minion.init(newImage, lizardScale, 428, 163);
-                minion.animate();
-            }
+            // Create a pointer circle
+            pointer = new createjs.Shape();
+            pointer.graphics.beginFill("red").drawCircle(0, 0, 5);
+            stage.addChild(pointer);
 
-            if (deskPhotoBitmap && lizardManBitmap && minion && minion.bitmap) {
-                stage.addChild(deskPhotoBitmap);
-                stage.addChild(lizardManBitmap);
+            // Add an event listener for mouse movement
+            stage.on("stagemousemove", function(event) {
+                pointer.x = event.stageX;
+                pointer.y = event.stageY;
+                coordsDisplay.innerHTML = `Coordinates: (${Math.round(event.stageX)}, ${Math.round(event.stageY)})`;
+            });
 
-                // Create a pointer circle
-                pointer = new createjs.Shape();
-                pointer.graphics.beginFill("red").drawCircle(0, 0, 5);
-                stage.addChild(pointer);
+            // Start the EaselJS ticker
+            createjs.Ticker.framerate = 60;
+            createjs.Ticker.addEventListener("tick", tick);
+        }
 
-                // Add an event listener for mouse movement
-                stage.on("stagemousemove", function(event) {
-                    pointer.x = event.stageX;
-                    pointer.y = event.stageY;
-                    coordsDisplay.innerHTML = `Coordinates: (${event.stageX}, ${event.stageY})`;
-                    stage.update();
-                });
-
-                // Start the EaselJS ticker
-                createjs.Ticker.framerate = 60;
-                createjs.Ticker.addEventListener("tick", tick);
-            }
+        // Tick function to update the stage
+        function tick(event) {
+            stage.update(event);
         }
 
         // Function to create a cloud shape and animate it
@@ -113,8 +127,6 @@
             createjs.Tween.get(cloud)
                 .to({ y: cloud.y - 100, alpha: 0 }, 2000, createjs.Ease.getPowOut(2))
                 .call(() => stage.removeChild(cloud));
-
-            stage.update();
         }
 
         // Event listener for pressing the Enter key
@@ -123,12 +135,6 @@
                 createCloud();
             }
         });
-
-        // Tick function to update the stage
-        function tick(event) {
-            stage.update();
-        }
-
     </script>
 </body>
 </html>
