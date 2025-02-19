@@ -7,11 +7,22 @@
     <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
     <style>
         body { margin: 0; overflow: hidden; }
+        #imageContainer {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            left: 188px;
+            top: 445px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
     <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (x, y)</div>
+    <div id="imageContainer"></div>
 
     <script>
         const stage = new createjs.Stage("gameCanvas");
@@ -19,25 +30,18 @@
         // Load the images for EaselJS stage
         const deskPhotoImg = new Image();
         const lizardManImg = new Image();
-        const stewieImg = new Image();
-        const putinImg = new Image();
-        
+        const newImage = new Image();
         deskPhotoImg.src = 'https://www.thoughtco.com/thmb/bhWbOYCyztO_QuIvPai7k7MRUZw=/2299x1541/filters:fill(auto,1)/Kennedy-Resolute-desk-TV-2300-3x2gty-5867f6775f9b586e025d8e82.jpg';
         lizardManImg.src = 'https://thumbs.dreamstime.com/z/lizard-man-government-person-conspiracy-theory-concept-generative-ai-lizard-man-government-person-conspiracy-theory-concept-277117312.jpg';
-        stewieImg.src = 'https://alienware51.github.io/MoonWave/images/stewie_octopus.png';  // Replace with your local image path
-        putinImg.src = 'https://alienware51.github.io/MoonWave/images/putin_image.jpg';      // Replace with your local image path
+        newImage.src = 'https://th.bing.com/th/id/OIP.Tl9okheF9keH4XhtqgagDQHaL9?rs=1&pid=ImgDetMain';
 
         deskPhotoImg.onload = handleImageLoad;
         lizardManImg.onload = handleImageLoad;
-        stewieImg.onload = handleImageLoad;
-        putinImg.onload = handleImageLoad;
+        newImage.onload = handleImageLoad;
 
         let deskPhotoBitmap;
         let lizardManBitmap;
-        let stewieBitmap;
-        let putinBitmap;
-        let currentBitmap;
-        let isStewie = true;
+        let newImageBitmap;
         let pointer;
         const coordsDisplay = document.getElementById('coords');
 
@@ -46,7 +50,6 @@
                 deskPhotoBitmap = new createjs.Bitmap(deskPhotoImg);
                 deskPhotoBitmap.scaleX = stage.canvas.width / deskPhotoImg.width;
                 deskPhotoBitmap.scaleY = stage.canvas.height / deskPhotoImg.height;
-                stage.addChild(deskPhotoBitmap);
             }
 
             if (!lizardManBitmap && lizardManImg.complete) {
@@ -61,27 +64,35 @@
                 // Position the lizard image at the exact coordinates (146, 87)
                 lizardManBitmap.x = 146;
                 lizardManBitmap.y = 87;
-                stage.addChild(lizardManBitmap);
             }
 
-            if (deskPhotoBitmap && lizardManBitmap && stewieImg.complete && putinImg.complete) {
-                if (!stewieBitmap) {
-                    stewieBitmap = new createjs.Bitmap(stewieImg);
-                    scaleAndPositionBitmap(stewieBitmap, 188, 445);
-                    currentBitmap = stewieBitmap;
-                    stage.addChild(currentBitmap);
-                }
-                if (!putinBitmap) {
-                    putinBitmap = new createjs.Bitmap(putinImg);
-                    scaleAndPositionBitmap(putinBitmap, 188, 445);
-                }
+            if (!newImageBitmap && newImage.complete) {
+                newImageBitmap = new createjs.Bitmap(newImage);
+
+                // Scale the new image to match the size of the lizard image
+                newImageBitmap.scaleX = lizardManBitmap.scaleX;
+                newImageBitmap.scaleY = lizardManBitmap.scaleY;
+
+                // Position the new image at the exact coordinates (428, 163)
+                newImageBitmap.x = 428;
+                newImageBitmap.y = 163;
+
+                // Add an animation to move the new image between coordinates
+                createjs.Tween.get(newImageBitmap, { loop: true })
+                    .to({ x: 280, y: 312 }, 1500, createjs.Ease.getPowInOut(2))
+                    .to({ x: 722, y: 466 }, 1500, createjs.Ease.getPowInOut(2))
+                    .to({ x: 428, y: 163 }, 1500, createjs.Ease.getPowInOut(2));
+            }
+
+            if (deskPhotoBitmap && lizardManBitmap && newImageBitmap) {
+                stage.addChild(deskPhotoBitmap);
+                stage.addChild(lizardManBitmap);
+                stage.addChild(newImageBitmap);
 
                 // Create a pointer circle
-                if (!pointer) {
-                    pointer = new createjs.Shape();
-                    pointer.graphics.beginFill("red").drawCircle(0, 0, 5);
-                    stage.addChild(pointer);
-                }
+                pointer = new createjs.Shape();
+                pointer.graphics.beginFill("red").drawCircle(0, 0, 5);
+                stage.addChild(pointer);
 
                 // Add an event listener for mouse movement
                 stage.on("stagemousemove", function(event) {
@@ -95,14 +106,6 @@
                 createjs.Ticker.framerate = 60;
                 createjs.Ticker.addEventListener("tick", stage);
             }
-        }
-
-        function scaleAndPositionBitmap(bitmap, x, y) {
-            const desiredSize = 100;
-            const scale = desiredSize / bitmap.image.width;
-            bitmap.scaleX = bitmap.scaleY = scale;
-            bitmap.x = x;
-            bitmap.y = y;
         }
 
         // Function to create a cloud shape and animate it
@@ -127,6 +130,17 @@
             }
         });
 
+        // New functionality for Stewie/Putin image
+        // URLs of the images
+        const stewieImgUrl = 'https://alienware51.github.io/MoonWave/images/stewie_octopus.png';  // Replace with your local image path
+        const putinImgUrl = 'https://alienware51.github.io/MoonWave/images/putin_image.jpg';      // Replace with your local image path
+
+        let imageContainer = document.getElementById('imageContainer');
+        let isStewie = true;
+
+        // Set initial image
+        imageContainer.style.backgroundImage = `url(${stewieImgUrl})`;
+
         // Swipe detection variables
         let swipeCount = 0;
         let lastSwipeTime = 0;
@@ -134,13 +148,13 @@
         let touchStartTime = 0;
 
         // Touch event listeners
-        currentBitmap.addEventListener('mousedown', function(event) {
-            touchStartY = event.stageY;
+        imageContainer.addEventListener('touchstart', function(event) {
+            touchStartY = event.touches[0].clientY;
             touchStartTime = event.timeStamp;
         }, false);
 
-        currentBitmap.addEventListener('mouseup', function(event) {
-            let touchEndY = event.stageY;
+        imageContainer.addEventListener('touchend', function(event) {
+            let touchEndY = event.changedTouches[0].clientY;
             let touchEndTime = event.timeStamp;
             let deltaY = touchStartY - touchEndY;
             let deltaTime = touchEndTime - touchStartTime;
@@ -167,15 +181,12 @@
         }, false);
 
         function swapImage() {
-            stage.removeChild(currentBitmap);
             if (isStewie) {
-                currentBitmap = putinBitmap;
+                imageContainer.style.backgroundImage = `url(${putinImgUrl})`;
             } else {
-                currentBitmap = stewieBitmap;
+                imageContainer.style.backgroundImage = `url(${stewieImgUrl})`;
             }
-            stage.addChild(currentBitmap);
             isStewie = !isStewie;
-            stage.update();
         }
     </script>
 </body>
