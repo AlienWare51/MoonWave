@@ -37,7 +37,9 @@
         newImage.onload = handleMainImageLoad;
 
         const imageForCanvas = new Image();
+        const newImageForCanvas = new Image();
         imageForCanvas.src = 'https://i.ytimg.com/vi/Cl1m3lgW18k/hq720_2.jpg?sqp=-oaymwEYCJwEENAFSFryq4qpAwoIARUAAIhC0AEB&rs=AOn4CLBM1jt037xm4YYDIqImMtP0Oq5KgQ';
+        newImageForCanvas.src = 'https://th.bing.com/th/id/OIP._DR7Sg5--1q1kKmpta4VqwHaEK?rs=1&pid=ImgDetMain';
         imageForCanvas.onload = handleCanvasImageLoad;
 
         let deskPhotoBitmap;
@@ -45,6 +47,11 @@
         let newImageBitmap;
         let pointer;
         const coordsDisplay = document.getElementById('coords');
+        let swipeCount = 0;
+        let lastSwipeTime = 0;
+        let touchStartY = null;
+        let touchStartTime = 0;
+        let isFirstImage = true;
 
         function handleMainImageLoad() {
             if (!deskPhotoBitmap && deskPhotoImg.complete) {
@@ -114,6 +121,52 @@
             const ctx = additionalCanvas.getContext('2d');
             ctx.drawImage(imageForCanvas, 0, 0, 100, 100);
         }
+
+        function swapCanvasImage() {
+            const additionalCanvas = document.getElementById('additionalCanvas');
+            const ctx = additionalCanvas.getContext('2d');
+            ctx.clearRect(0, 0, additionalCanvas.width, additionalCanvas.height);
+            if (isFirstImage) {
+                ctx.drawImage(newImageForCanvas, 0, 0, 100, 100);
+            } else {
+                ctx.drawImage(imageForCanvas, 0, 0, 100, 100);
+            }
+            isFirstImage = !isFirstImage;
+        }
+
+        // Touch event listeners for additionalCanvas
+        const additionalCanvas = document.getElementById('additionalCanvas');
+        additionalCanvas.addEventListener('touchstart', function(event) {
+            touchStartY = event.touches[0].clientY;
+            touchStartTime = event.timeStamp;
+        }, false);
+
+        additionalCanvas.addEventListener('touchend', function(event) {
+            let touchEndY = event.changedTouches[0].clientY;
+            let touchEndTime = event.timeStamp;
+            let deltaY = touchStartY - touchEndY;
+            let deltaTime = touchEndTime - touchStartTime;
+
+            // Reset touch start
+            touchStartY = null;
+            touchStartTime = 0;
+
+            // Check for swipe up gesture
+            if (deltaY > 50 && deltaTime < 500) {
+                let currentTime = event.timeStamp;
+                if (currentTime - lastSwipeTime < 600) {
+                    swipeCount++;
+                } else {
+                    swipeCount = 1;
+                }
+                lastSwipeTime = currentTime;
+
+                if (swipeCount >= 2) {
+                    swapCanvasImage();
+                    swipeCount = 0;
+                }
+            }
+        }, false);
 
         // Function to create a cloud shape and animate it
         function createCloud() {
