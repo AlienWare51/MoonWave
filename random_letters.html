@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Letters Generator</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        h1 {
+            font-family: 'Old English Text MT', serif;
+            text-align: center;
+            color: darkred;
+        }
+        #letterOutput {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 20px;
+        }
+        #randomButton {
+            display: block;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Letters Generator</h1>
+    <div style="text-align: center;">
+        <button id="randomButton">
+            <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="50" height="50" alt="Click me!" />
+        </button>
+        <input type="text" id="letterOutput" readonly />
+    </div>
+
+    <script>
+        const words = [
+            "durity", "hardness", "stythe", "choke-damp", "spiraculate", "having air-holes",
+            "lubricious", "slippery; lewd", "pendicle", "pendant, dependency or appendage",
+            "comedogenic", "causing blackheads", "septemfid", "split into seven",
+            "lallation", "childish speech; mispronunciation of speech sounds",
+            "coprophemia", "obscene language", "zonelet", "a little zone",
+            "polyphone", "many-stringed instrument like a lute", "paraphraxis",
+            "inability to perform purposive movements properly", "heyday", "expression of elation or wonder",
+            "downhaul", "rope for holding down or hauling down a sail or spar", "whiffet", "paltry person; little dog",
+            "mattoid", "person on borderline between sanity and insanity", "undeify", "to deprive of the nature of a god",
+            "pantograph", "instrument for copying drawing to a different scale", "oliviform"
+        ];
+
+        function getRandomLetters() {
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            const letters = randomWord.split('');
+            const randomLetters = letters.sort(() => 0.5 - Math.random()).slice(0, 2).join('');
+            return randomLetters;
+        }
+
+        document.getElementById('randomButton').addEventListener('click', () => {
+            document.getElementById('letterOutput').value = getRandomLetters();
+        });
+    </script>
+</body>
+</html>
