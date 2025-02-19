@@ -7,18 +7,10 @@
     <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
     <style>
         body { margin: 0; overflow: hidden; }
-        #stewieCanvas {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            left: 192px;
-            top: 441px;
-        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <canvas id="stewieCanvas" width="100" height="100"></canvas>
     <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (x, y)</div>
 
     <script>
@@ -126,72 +118,6 @@
                 createCloud();
             }
         });
-
-        // Initialize the Stewie/Putin canvas
-        const stewieCanvas = document.getElementById('stewieCanvas');
-        const stewieCtx = stewieCanvas.getContext('2d');
-
-        const stewieImg = new Image();
-        const putinImg = new Image();
-        stewieImg.src = 'https://alienware51.github.io/MoonWave/images/stewie_octopus.png'; // Replace with your local image path
-        putinImg.src = 'https://alienware51.github.io/MoonWave/images/putin_image.jpg';     // Replace with your local image path
-
-        let isStewie = true;
-
-        stewieImg.onload = function() {
-            stewieCtx.drawImage(stewieImg, 0, 0, 100, 100);
-        };
-
-        putinImg.onload = function() {};
-
-        // Swipe detection variables
-        let swipeCount = 0;
-        let lastSwipeTime = 0;
-        let touchStartY = null;
-        let touchStartTime = 0;
-
-        // Touch event listeners for stewieCanvas
-        stewieCanvas.addEventListener('touchstart', function(event) {
-            touchStartY = event.touches[0].clientY;
-            touchStartTime = event.timeStamp;
-        }, false);
-
-        stewieCanvas.addEventListener('touchend', function(event) {
-            let touchEndY = event.changedTouches[0].clientY;
-            let touchEndTime = event.timeStamp;
-            let deltaY = touchStartY - touchEndY;
-            let deltaTime = touchEndTime - touchStartTime;
-
-            // Reset touch start
-            touchStartY = null;
-            touchStartTime = 0;
-
-            // Check for swipe up gesture
-            if (deltaY > 50 && deltaTime < 500) {
-                let currentTime = event.timeStamp;
-                if (currentTime - lastSwipeTime < 600) {
-                    swipeCount++;
-                } else {
-                    swipeCount = 1;
-                }
-                lastSwipeTime = currentTime;
-
-                if (swipeCount >= 2) {
-                    swapImage();
-                    swipeCount = 0;
-                }
-            }
-        }, false);
-
-        function swapImage() {
-            stewieCtx.clearRect(0, 0, stewieCanvas.width, stewieCanvas.height);
-            if (isStewie) {
-                stewieCtx.drawImage(putinImg, 0, 0, 100, 100);
-            } else {
-                stewieCtx.drawImage(stewieImg, 0, 0, 100, 100);
-            }
-            isStewie = !isStewie;
-        }
     </script>
 </body>
 </html>
