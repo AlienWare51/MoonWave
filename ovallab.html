@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EaselJS Game</title>
+    <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+        const stage = new createjs.Stage("gameCanvas");
+
+        // Load the images
+        const lizardManImg = new Image();
+        const deskPhotoImg = new Image();
+        lizardManImg.src = 'https://thumbs.dreamstime.com/z/lizard-man-government-person-conspiracy-theory-concept-generative-ai-lizard-man-government-person-conspiracy-theory-concept-277117312.jpg';
+        deskPhotoImg.src = 'https://www.thoughtco.com/thmb/bhWbOYCyztO_QuIvPai7k7MRUZw=/2299x1541/filters:fill(auto,1)/Kennedy-Resolute-desk-TV-2300-3x2gty-5867f6775f9b586e025d8e82.jpg';
+
+        lizardManImg.onload = handleImageLoad;
+        deskPhotoImg.onload = handleImageLoad;
+
+        let lizardManBitmap;
+        let deskPhotoBitmap;
+
+        function handleImageLoad() {
+            if (!lizardManBitmap && lizardManImg.complete) {
+                lizardManBitmap = new createjs.Bitmap(lizardManImg);
+            }
+
+            if (!deskPhotoBitmap && deskPhotoImg.complete) {
+                deskPhotoBitmap = new createjs.Bitmap(deskPhotoImg);
+            }
+
+            if (lizardManBitmap && deskPhotoBitmap) {
+                stage.addChild(deskPhotoBitmap);
+                lizardManBitmap.x = 150; // Set x position
+                lizardManBitmap.y = 200; // Set y position
+                stage.addChild(lizardManBitmap);
+                
+                stage.update();
+            }
+        }
+    </script>
+</body>
+</html>
