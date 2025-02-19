@@ -62,6 +62,13 @@
                 // Position the new image at the exact coordinates (428, 163)
                 newImageBitmap.x = 428;
                 newImageBitmap.y = 163;
+
+                // Add an animation to move the new image between coordinates
+                createjs.Tween.get(newImageBitmap, { loop: true })
+                    .to({ x: 280, y: 312 }, 1500, createjs.Ease.getPowInOut(2))
+                    .wait(3000)
+                    .to({ x: 722, y: 466 }, 1500, createjs.Ease.getPowInOut(2))
+                    .wait(3000);
             }
 
             if (deskPhotoBitmap && lizardManBitmap && newImageBitmap) {
@@ -97,7 +104,7 @@
             stage.addChild(cloud);
 
             createjs.Tween.get(cloud)
-                .to({y: cloud.y - 100, alpha: 0}, 2000, createjs.Ease.getPowOut(2))
+                .to({ y: cloud.y - 100, alpha: 0 }, 2000, createjs.Ease.getPowOut(2))
                 .call(() => stage.removeChild(cloud));
 
             stage.update();
