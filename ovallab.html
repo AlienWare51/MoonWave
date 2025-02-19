@@ -33,12 +33,20 @@
 
             if (!lizardManBitmap && lizardManImg.complete) {
                 lizardManBitmap = new createjs.Bitmap(lizardManImg);
+
+                // Scale the lizard image to match the size of the person's head
+                const headWidth = 100; // Approximate width of the head
+                const headHeight = 120; // Approximate height of the head
+                lizardManBitmap.scaleX = headWidth / lizardManImg.width;
+                lizardManBitmap.scaleY = headHeight / lizardManImg.height;
+
+                // Position the lizard image at the head of the person sitting at the desk
+                lizardManBitmap.x = 370; // Approximate x position of the head
+                lizardManBitmap.y = 200; // Approximate y position of the head
             }
 
             if (deskPhotoBitmap && lizardManBitmap) {
                 stage.addChild(deskPhotoBitmap);
-                lizardManBitmap.x = 300; // Set x position
-                lizardManBitmap.y = 250; // Set y position
                 stage.addChild(lizardManBitmap);
                 
                 stage.update();
