@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EaselJS Talking Lizard</title>
+    <title>EaselJS Game</title>
     <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (x, y)</div>
 
     <script>
         const stage = new createjs.Stage("gameCanvas");
@@ -23,6 +24,8 @@
 
         let deskPhotoBitmap;
         let lizardManBitmap;
+        let pointer;
+        const coordsDisplay = document.getElementById('coords');
 
         function handleImageLoad() {
             if (!deskPhotoBitmap && deskPhotoImg.complete) {
@@ -48,8 +51,23 @@
             if (deskPhotoBitmap && lizardManBitmap) {
                 stage.addChild(deskPhotoBitmap);
                 stage.addChild(lizardManBitmap);
-                
-                stage.update();
+
+                // Create a pointer circle
+                pointer = new createjs.Shape();
+                pointer.graphics.beginFill("red").drawCircle(0, 0, 5);
+                stage.addChild(pointer);
+
+                // Add an event listener for mouse movement
+                stage.on("stagemousemove", function(event) {
+                    pointer.x = event.stageX;
+                    pointer.y = event.stageY;
+                    coordsDisplay.innerHTML = `Coordinates: (${event.stageX}, ${event.stageY})`;
+                    stage.update();
+                });
+
+                // Start the EaselJS ticker
+                createjs.Ticker.framerate = 60;
+                createjs.Ticker.addEventListener("tick", stage);
             }
         }
 
@@ -75,9 +93,6 @@
             }
         });
 
-        // Start the EaselJS ticker
-        createjs.Ticker.framerate = 60;
-        createjs.Ticker.addEventListener("tick", stage);
     </script>
 </body>
 </html>
