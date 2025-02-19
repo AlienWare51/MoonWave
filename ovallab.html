@@ -13,7 +13,6 @@
             top: 415px;
             width: 100px;
             height: 100px;
-            background-color: rgba(255, 255, 255, 0.5); /* Optional styling */
         }
     </style>
 </head>
@@ -36,6 +35,10 @@
         deskPhotoImg.onload = handleMainImageLoad;
         lizardManImg.onload = handleMainImageLoad;
         newImage.onload = handleMainImageLoad;
+
+        const imageForCanvas = new Image();
+        imageForCanvas.src = 'https://i.ytimg.com/vi/Cl1m3lgW18k/hq720_2.jpg?sqp=-oaymwEYCJwEENAFSFryq4qpAwoIARUAAIhC0AEB&rs=AOn4CLBM1jt037xm4YYDIqImMtP0Oq5KgQ';
+        imageForCanvas.onload = handleCanvasImageLoad;
 
         let deskPhotoBitmap;
         let lizardManBitmap;
@@ -104,6 +107,12 @@
                 createjs.Ticker.framerate = 60;
                 createjs.Ticker.addEventListener("tick", stage);
             }
+        }
+
+        function handleCanvasImageLoad() {
+            const additionalCanvas = document.getElementById('additionalCanvas');
+            const ctx = additionalCanvas.getContext('2d');
+            ctx.drawImage(imageForCanvas, 0, 0, 100, 100);
         }
 
         // Function to create a cloud shape and animate it
