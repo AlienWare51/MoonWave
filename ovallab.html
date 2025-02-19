@@ -2,156 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EaselJS Interactive Animation</title>
-    <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+    <title>Image Swipe Example</title>
     <style>
         body { margin: 0; overflow: hidden; }
-        #gameCanvas {
-            touch-action: none;
+        #imageContainer {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            left: 188px;
+            top: 445px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="imageContainer"></div>
 
     <script>
-        // Initialize the stage
-        const stage = new createjs.Stage("gameCanvas");
-        createjs.Touch.enable(stage);
-        createjs.Ticker.framerate = 60;
-        createjs.Ticker.addEventListener("tick", stage);
+        // URLs of the images
+        const stewieImgUrl = 'https://www.nicepng.com/png/detail/138-1380123_giant-stewie-stewie-as-an-octopus.png';  // Replace with your local image path
+        const putinImgUrl = 'https://th.bing.com/th/id/R.c3548bc7099591015df9264e24226268?rik=1IjUuizdDvxYyg&riu=http%3a%2f%2fupload.wikimedia.org%2fwikipedia%2fcommons%2fd%2fd1%2fVladimir_Putin_12020.jpg&ehk=jTtIePuCvF%2fpROgePBlHzy7G%2b4g2eM3%2btHzt%2bKy%2fuB4%3d&risl=&pid=ImgRaw&r=0';      // Replace with your local image path
 
-        // Call the function to create the interactive image at position (188, 445)
-        createInteractiveImage(stage, 188, 445);
+        let imageContainer = document.getElementById('imageContainer');
+        let isStewie = true;
 
-        // Encapsulated function
-        function createInteractiveImage(stage, posX, posY) {
-            // Variables scoped within the function
-            let stewieImg = new Image();
-            let putinImg = new Image();
-            let currentBitmap;
-            let isStewie = true;
-            let hue = 0;
+        // Set initial image
+        imageContainer.style.backgroundImage = `url(${stewieImgUrl})`;
 
-            // Set crossOrigin to handle cross-origin images
-            stewieImg.crossOrigin = 'Anonymous';
-            putinImg.crossOrigin = 'Anonymous';
+        // Swipe detection variables
+        let swipeCount = 0;
+        let lastSwipeTime = 0;
+        let touchStartY = null;
+        let touchStartTime = 0;
 
-            // URLs of the images
-            stewieImg.src = 'https://www.nicepng.com/png/detail/138-1380123_giant-stewie-stewie-as-an-octopus.png';
-            putinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/d/d1/Vladimir_Putin_12020.jpg';
+        // Touch event listeners
+        imageContainer.addEventListener('touchstart', function(event) {
+            touchStartY = event.touches[0].clientY;
+            touchStartTime = event.timeStamp;
+        }, false);
 
-            // Load images
-            let imagesLoaded = 0;
-            stewieImg.onload = handleImageLoad;
-            putinImg.onload = handleImageLoad;
+        imageContainer.addEventListener('touchend', function(event) {
+            let touchEndY = event.changedTouches[0].clientY;
+            let touchEndTime = event.timeStamp;
+            let deltaY = touchStartY - touchEndY;
+            let deltaTime = touchEndTime - touchStartTime;
 
-            function handleImageLoad() {
-                imagesLoaded++;
-                if (imagesLoaded === 2) {
-                    init();
-                }
-            }
+            // Reset touch start
+            touchStartY = null;
+            touchStartTime = 0;
 
-            function init() {
-                // Create bitmap for Stewie image
-                currentBitmap = new createjs.Bitmap(stewieImg);
-                scaleAndPositionBitmap(currentBitmap);
-                stage.addChild(currentBitmap);
-
-                // Start color-changing animation
-                createjs.Ticker.addEventListener("tick", colorChangeTick);
-
-                // Set up interaction event listeners
-                stage.on('stagemousedown', handleMouseDown);
-                stage.on('stagemouseup', handleMouseUp);
-            }
-
-            function scaleAndPositionBitmap(bitmap) {
-                const desiredSize = 100;
-                const scale = desiredSize / bitmap.image.width;
-                bitmap.scaleX = bitmap.scaleY = scale;
-                bitmap.x = posX; // Position at the provided x coordinate
-                bitmap.y = posY; // Position at the provided y coordinate
-            }
-
-            // Color-changing animation
-            function colorChangeTick(event) {
-                hue = (hue + 1) % 360;
-                const colorFilter = new createjs.ColorFilter();
-                colorFilter.adjustHue(hue);
-                currentBitmap.filters = [colorFilter];
-                currentBitmap.cache(0, 0, currentBitmap.image.width, currentBitmap.image.height);
-            }
-
-            // Swipe detection variables
-            let swipeCount = 0;
-            let lastSwipeTime = 0;
-            let touchStartY = null;
-            let touchStartTime = 0;
-
-            // Touch event handlers
-            function handleMouseDown(event) {
-                if (isOverBitmap(event.stageX, event.stageY)) {
-                    touchStartY = event.stageY;
-                    touchStartTime = event.timeStamp;
-                }
-            }
-
-            function handleMouseUp(event) {
-                if (touchStartY === null) return;
-
-                const touchEndY = event.stageY;
-                const touchEndTime = event.timeStamp;
-                const deltaY = touchStartY - touchEndY;
-                const deltaTime = touchEndTime - touchStartTime;
-
-                // Reset touch start
-                touchStartY = null;
-                touchStartTime = 0;
-
-                // Check for swipe up gesture
-                if (deltaY > 50 && deltaTime < 500) {
-                    const currentTime = event.timeStamp;
-                    if (currentTime - lastSwipeTime < 600) {
-                        swipeCount++;
-                    } else {
-                        swipeCount = 1;
-                    }
-                    lastSwipeTime = currentTime;
-
-                    if (swipeCount >= 2) {
-                        swapImage();
-                        swipeCount = 0;
-                    }
-                }
-            }
-
-            function isOverBitmap(x, y) {
-                const bounds = currentBitmap.getBounds();
-                const localPoint = currentBitmap.globalToLocal(x, y);
-                return localPoint.x >= 0 && localPoint.x <= bounds.width && localPoint.y >= 0 && localPoint.y <= bounds.height;
-            }
-
-            function swapImage() {
-                // Remove current bitmap and clear cache
-                stage.removeChild(currentBitmap);
-                currentBitmap.uncache();
-                createjs.Ticker.removeEventListener("tick", colorChangeTick);
-
-                if (isStewie) {
-                    // Switch to Putin image
-                    currentBitmap = new createjs.Bitmap(putinImg);
+            // Check for swipe up gesture
+            if (deltaY > 50 && deltaTime < 500) {
+                let currentTime = event.timeStamp;
+                if (currentTime - lastSwipeTime < 600) {
+                    swipeCount++;
                 } else {
-                    // Switch back to Stewie image
-                    currentBitmap = new createjs.Bitmap(stewieImg);
-                    createjs.Ticker.addEventListener("tick", colorChangeTick);
+                    swipeCount = 1;
                 }
+                lastSwipeTime = currentTime;
 
-                scaleAndPositionBitmap(currentBitmap);
-                stage.addChild(currentBitmap);
-                isStewie = !isStewie;
+                if (swipeCount >= 2) {
+                    swapImage();
+                    swipeCount = 0;
+                }
             }
+        }, false);
+
+        function swapImage() {
+            if (isStewie) {
+                imageContainer.style.backgroundImage = `url(${putinImgUrl})`;
+            } else {
+                imageContainer.style.backgroundImage = `url(${stewieImgUrl})`;
+            }
+            isStewie = !isStewie;
         }
     </script>
 </body>
