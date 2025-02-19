@@ -5,15 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EaselJS Game</title>
     <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        #imageContainer {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            left: 188px;
+            top: 445px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
     <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (x, y)</div>
+    <div id="imageContainer"></div>
 
     <script>
         const stage = new createjs.Stage("gameCanvas");
 
-        // Load the images
+        // Load the images for EaselJS stage
         const deskPhotoImg = new Image();
         const lizardManImg = new Image();
         const newImage = new Image();
@@ -116,6 +130,64 @@
             }
         });
 
+        // New functionality for Stewie/Putin image
+        // URLs of the images
+        const stewieImgUrl = 'https://alienware51.github.io/MoonWave/images/stewie_octopus.png';  // Replace with your local image path
+        const putinImgUrl = 'https://alienware51.github.io/MoonWave/images/putin_image.jpg';      // Replace with your local image path
+
+        let imageContainer = document.getElementById('imageContainer');
+        let isStewie = true;
+
+        // Set initial image
+        imageContainer.style.backgroundImage = `url(${stewieImgUrl})`;
+
+        // Swipe detection variables
+        let swipeCount = 0;
+        let lastSwipeTime = 0;
+        let touchStartY = null;
+        let touchStartTime = 0;
+
+        // Touch event listeners
+        imageContainer.addEventListener('touchstart', function(event) {
+            touchStartY = event.touches[0].clientY;
+            touchStartTime = event.timeStamp;
+        }, false);
+
+        imageContainer.addEventListener('touchend', function(event) {
+            let touchEndY = event.changedTouches[0].clientY;
+            let touchEndTime = event.timeStamp;
+            let deltaY = touchStartY - touchEndY;
+            let deltaTime = touchEndTime - touchStartTime;
+
+            // Reset touch start
+            touchStartY = null;
+            touchStartTime = 0;
+
+            // Check for swipe up gesture
+            if (deltaY > 50 && deltaTime < 500) {
+                let currentTime = event.timeStamp;
+                if (currentTime - lastSwipeTime < 600) {
+                    swipeCount++;
+                } else {
+                    swipeCount = 1;
+                }
+                lastSwipeTime = currentTime;
+
+                if (swipeCount >= 2) {
+                    swapImage();
+                    swipeCount = 0;
+                }
+            }
+        }, false);
+
+        function swapImage() {
+            if (isStewie) {
+                imageContainer.style.backgroundImage = `url(${putinImgUrl})`;
+            } else {
+                imageContainer.style.backgroundImage = `url(${stewieImgUrl})`;
+            }
+            isStewie = !isStewie;
+        }
     </script>
 </body>
 </html>
