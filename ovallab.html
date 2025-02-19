@@ -8,7 +8,7 @@
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (x, y)</div>
+    <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (150, 83)</div>
 
     <script>
         const stage = new createjs.Stage("gameCanvas");
@@ -24,8 +24,6 @@
 
         let deskPhotoBitmap;
         let lizardManBitmap;
-        let pointer;
-        const coordsDisplay = document.getElementById('coords');
 
         function handleImageLoad() {
             if (!deskPhotoBitmap && deskPhotoImg.complete) {
@@ -42,36 +40,16 @@
                 const headHeight = 120; // Approximate height of the head
                 lizardManBitmap.scaleX = headWidth / lizardManImg.width;
                 lizardManBitmap.scaleY = headHeight / lizardManImg.height;
+
+                // Position the lizard image at the exact coordinates (150, 83)
+                lizardManBitmap.x = 150;
+                lizardManBitmap.y = 83;
             }
 
             if (deskPhotoBitmap && lizardManBitmap) {
                 stage.addChild(deskPhotoBitmap);
-
-                // Create a pointer circle
-                pointer = new createjs.Shape();
-                pointer.graphics.beginFill("red").drawCircle(0, 0, 5);
-                stage.addChild(pointer);
-
-                // Add an event listener for mouse movement
-                stage.on("stagemousemove", function(event) {
-                    pointer.x = event.stageX;
-                    pointer.y = event.stageY;
-                    coordsDisplay.innerHTML = `Coordinates: (${event.stageX}, ${event.stageY})`;
-                    stage.update();
-                });
-
-                // Start the EaselJS ticker
-                createjs.Ticker.framerate = 60;
-                createjs.Ticker.addEventListener("tick", stage);
-            }
-        }
-
-        // Function to set the lizard image to the exact position of the pointer
-        function setLizardPosition(x, y) {
-            if (lizardManBitmap) {
-                lizardManBitmap.x = x;
-                lizardManBitmap.y = y;
                 stage.addChild(lizardManBitmap);
+                
                 stage.update();
             }
         }
