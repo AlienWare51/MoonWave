@@ -66,9 +66,8 @@
                 // Add an animation to move the new image between coordinates
                 createjs.Tween.get(newImageBitmap, { loop: true })
                     .to({ x: 280, y: 312 }, 1500, createjs.Ease.getPowInOut(2))
-                    .wait(3000)
                     .to({ x: 722, y: 466 }, 1500, createjs.Ease.getPowInOut(2))
-                    .wait(3000);
+                    .to({ x: 428, y: 163 }, 1500, createjs.Ease.getPowInOut(2));
             }
 
             if (deskPhotoBitmap && lizardManBitmap && newImageBitmap) {
