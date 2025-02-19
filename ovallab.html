@@ -8,7 +8,7 @@
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (x, y)</div>
+    <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (327, 121)</div>
 
     <script>
         const stage = new createjs.Stage("gameCanvas");
@@ -75,8 +75,8 @@
         function createCloud() {
             const cloud = new createjs.Shape();
             cloud.graphics.beginFill("white").drawEllipse(0, 0, 80, 40);
-            cloud.x = 180; // X position of lizard's mouth, moved to the right
-            cloud.y = 87;  // Y position of lizard's mouth
+            cloud.x = 327; // X position of lizard's mouth
+            cloud.y = 121; // Y position of lizard's mouth
             stage.addChild(cloud);
 
             createjs.Tween.get(cloud)
