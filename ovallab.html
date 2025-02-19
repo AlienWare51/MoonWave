@@ -2,82 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Swipe Example</title>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        #imageContainer {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            left: 188px;
-            top: 445px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EaselJS Game</title>
+    <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
 </head>
 <body>
-    <div id="imageContainer"></div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="coords" style="position: absolute; top: 10px; left: 10px; background-color: white; padding: 5px;">Coordinates: (x, y)</div>
 
     <script>
-        // URLs of the images
-        const stewieImgUrl = 'https://www.nicepng.com/png/detail/138-1380123_giant-stewie-stewie-as-an-octopus.png';  // Replace with your local image path
-        const putinImgUrl = 'https://th.bing.com/th/id/R.c3548bc7099591015df9264e24226268?rik=1IjUuizdDvxYyg&riu=http%3a%2f%2fupload.wikimedia.org%2fwikipedia%2fcommons%2fd%2fd1%2fVladimir_Putin_12020.jpg&ehk=jTtIePuCvF%2fpROgePBlHzy7G%2b4g2eM3%2btHzt%2bKy%2fuB4%3d&risl=&pid=ImgRaw&r=0';      // Replace with your local image path
+        const stage = new createjs.Stage("gameCanvas");
 
-        let imageContainer = document.getElementById('imageContainer');
-        let isStewie = true;
+        // Load the images
+        const deskPhotoImg = new Image();
+        const lizardManImg = new Image();
+        const newImage = new Image();
+        deskPhotoImg.src = 'https://www.thoughtco.com/thmb/bhWbOYCyztO_QuIvPai7k7MRUZw=/2299x1541/filters:fill(auto,1)/Kennedy-Resolute-desk-TV-2300-3x2gty-5867f6775f9b586e025d8e82.jpg';
+        lizardManImg.src = 'https://thumbs.dreamstime.com/z/lizard-man-government-person-conspiracy-theory-concept-generative-ai-lizard-man-government-person-conspiracy-theory-concept-277117312.jpg';
+        newImage.src = 'https://th.bing.com/th/id/OIP.Tl9okheF9keH4XhtqgagDQHaL9?rs=1&pid=ImgDetMain';
 
-        // Set initial image
-        imageContainer.style.backgroundImage = `url(${stewieImgUrl})`;
+        deskPhotoImg.onload = handleImageLoad;
+        lizardManImg.onload = handleImageLoad;
+        newImage.onload = handleImageLoad;
 
-        // Swipe detection variables
-        let swipeCount = 0;
-        let lastSwipeTime = 0;
-        let touchStartY = null;
-        let touchStartTime = 0;
+        let deskPhotoBitmap;
+        let lizardManBitmap;
+        let newImageBitmap;
+        let pointer;
+        const coordsDisplay = document.getElementById('coords');
 
-        // Touch event listeners
-        imageContainer.addEventListener('touchstart', function(event) {
-            touchStartY = event.touches[0].clientY;
-            touchStartTime = event.timeStamp;
-        }, false);
-
-        imageContainer.addEventListener('touchend', function(event) {
-            let touchEndY = event.changedTouches[0].clientY;
-            let touchEndTime = event.timeStamp;
-            let deltaY = touchStartY - touchEndY;
-            let deltaTime = touchEndTime - touchStartTime;
-
-            // Reset touch start
-            touchStartY = null;
-            touchStartTime = 0;
-
-            // Check for swipe up gesture
-            if (deltaY > 50 && deltaTime < 500) {
-                let currentTime = event.timeStamp;
-                if (currentTime - lastSwipeTime < 600) {
-                    swipeCount++;
-                } else {
-                    swipeCount = 1;
-                }
-                lastSwipeTime = currentTime;
-
-                if (swipeCount >= 2) {
-                    swapImage();
-                    swipeCount = 0;
-                }
+        function handleImageLoad() {
+            if (!deskPhotoBitmap && deskPhotoImg.complete) {
+                deskPhotoBitmap = new createjs.Bitmap(deskPhotoImg);
+                deskPhotoBitmap.scaleX = stage.canvas.width / deskPhotoImg.width;
+                deskPhotoBitmap.scaleY = stage.canvas.height / deskPhotoImg.height;
             }
-        }, false);
 
-        function swapImage() {
-            if (isStewie) {
-                imageContainer.style.backgroundImage = `url(${putinImgUrl})`;
-            } else {
-                imageContainer.style.backgroundImage = `url(${stewieImgUrl})`;
+            if (!lizardManBitmap && lizardManImg.complete) {
+                lizardManBitmap = new createjs.Bitmap(lizardManImg);
+
+                // Scale the lizard image to match the size of the person's head
+                const headWidth = 100; // Approximate width of the head
+                const headHeight = 120; // Approximate height of the head
+                lizardManBitmap.scaleX = headWidth / lizardManImg.width;
+                lizardManBitmap.scaleY = headHeight / lizardManImg.height;
+
+                // Position the lizard image at the exact coordinates (146, 87)
+                lizardManBitmap.x = 146;
+                lizardManBitmap.y = 87;
             }
-            isStewie = !isStewie;
+
+            if (!newImageBitmap && newImage.complete) {
+                newImageBitmap = new createjs.Bitmap(newImage);
+
+                // Scale the new image to match the size of the lizard image
+                newImageBitmap.scaleX = lizardManBitmap.scaleX;
+                newImageBitmap.scaleY = lizardManBitmap.scaleY;
+
+                // Position the new image at the exact coordinates (428, 163)
+                newImageBitmap.x = 428;
+                newImageBitmap.y = 163;
+
+                // Add an animation to move the new image between coordinates
+                createjs.Tween.get(newImageBitmap, { loop: true })
+                    .to({ x: 280, y: 312 }, 1500, createjs.Ease.getPowInOut(2))
+                    .to({ x: 722, y: 466 }, 1500, createjs.Ease.getPowInOut(2))
+                    .to({ x: 428, y: 163 }, 1500, createjs.Ease.getPowInOut(2));
+            }
+
+            if (deskPhotoBitmap && lizardManBitmap && newImageBitmap) {
+                stage.addChild(deskPhotoBitmap);
+                stage.addChild(lizardManBitmap);
+                stage.addChild(newImageBitmap);
+
+                // Create a pointer circle
+                pointer = new createjs.Shape();
+                pointer.graphics.beginFill("red").drawCircle(0, 0, 5);
+                stage.addChild(pointer);
+
+                // Add an event listener for mouse movement
+                stage.on("stagemousemove", function(event) {
+                    pointer.x = event.stageX;
+                    pointer.y = event.stageY;
+                    coordsDisplay.innerHTML = `Coordinates: (${event.stageX}, ${event.stageY})`;
+                    stage.update();
+                });
+
+                // Start the EaselJS ticker
+                createjs.Ticker.framerate = 60;
+                createjs.Ticker.addEventListener("tick", stage);
+            }
         }
+
+        // Function to create a cloud shape and animate it
+        function createCloud() {
+            const cloud = new createjs.Shape();
+            cloud.graphics.beginFill("white").drawEllipse(0, 0, 80, 40);
+            cloud.x = 268; // X position of lizard's mouth
+            cloud.y = 117; // Y position of lizard's mouth
+            stage.addChild(cloud);
+
+            createjs.Tween.get(cloud)
+                .to({ y: cloud.y - 100, alpha: 0 }, 2000, createjs.Ease.getPowOut(2))
+                .call(() => stage.removeChild(cloud));
+
+            stage.update();
+        }
+
+        // Event listener for pressing the Enter key
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                createCloud();
+            }
+        });
+
     </script>
 </body>
 </html>
