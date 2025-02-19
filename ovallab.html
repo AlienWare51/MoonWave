@@ -16,14 +16,18 @@
         // Load the images
         const deskPhotoImg = new Image();
         const lizardManImg = new Image();
+        const newImage = new Image();
         deskPhotoImg.src = 'https://www.thoughtco.com/thmb/bhWbOYCyztO_QuIvPai7k7MRUZw=/2299x1541/filters:fill(auto,1)/Kennedy-Resolute-desk-TV-2300-3x2gty-5867f6775f9b586e025d8e82.jpg';
         lizardManImg.src = 'https://thumbs.dreamstime.com/z/lizard-man-government-person-conspiracy-theory-concept-generative-ai-lizard-man-government-person-conspiracy-theory-concept-277117312.jpg';
+        newImage.src = 'https://th.bing.com/th/id/OIP.Tl9okheF9keH4XhtqgagDQHaL9?rs=1&pid=ImgDetMain';
 
         deskPhotoImg.onload = handleImageLoad;
         lizardManImg.onload = handleImageLoad;
+        newImage.onload = handleImageLoad;
 
         let deskPhotoBitmap;
         let lizardManBitmap;
+        let newImageBitmap;
         let pointer;
         const coordsDisplay = document.getElementById('coords');
 
@@ -48,9 +52,22 @@
                 lizardManBitmap.y = 87;
             }
 
-            if (deskPhotoBitmap && lizardManBitmap) {
+            if (!newImageBitmap && newImage.complete) {
+                newImageBitmap = new createjs.Bitmap(newImage);
+
+                // Scale the new image to match the size of the lizard image
+                newImageBitmap.scaleX = lizardManBitmap.scaleX;
+                newImageBitmap.scaleY = lizardManBitmap.scaleY;
+
+                // Position the new image at the exact coordinates (460, 210)
+                newImageBitmap.x = 460;
+                newImageBitmap.y = 210;
+            }
+
+            if (deskPhotoBitmap && lizardManBitmap && newImageBitmap) {
                 stage.addChild(deskPhotoBitmap);
                 stage.addChild(lizardManBitmap);
+                stage.addChild(newImageBitmap);
 
                 // Create a pointer circle
                 pointer = new createjs.Shape();
