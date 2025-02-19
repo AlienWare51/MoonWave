@@ -128,6 +128,10 @@
             ctx.clearRect(0, 0, additionalCanvas.width, additionalCanvas.height);
             if (isFirstImage) {
                 ctx.drawImage(newImageForCanvas, 0, 0, 100, 100);
+                // Check if the new image is Putin's image
+                if (newImageForCanvas.src.includes('OIP._DR7Sg5--1q1kKmpta4VqwHaEK')) {
+                window.location.href = 'https://en.wikipedia.org/wiki/Special:Random';
+                }
             } else {
                 ctx.drawImage(imageForCanvas, 0, 0, 100, 100);
             }
