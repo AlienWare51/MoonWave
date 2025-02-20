@@ -15,10 +15,20 @@
             background: url('https://www.haosenfurniture.com/wp-content/uploads/2021/07/11.jpg') no-repeat center center fixed;
             background-size: cover;
         }
+        #coordinates {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <canvas id="canvas" width="800" height="600"></canvas>
+    <div id="coordinates">X: 0, Y: 0</div>
     <script>
         window.onload = function() {
             var stage = new createjs.Stage("canvas");
@@ -29,12 +39,19 @@
                 var bitmap = new createjs.Bitmap(img);
                 stage.addChild(bitmap);
 
-                // Add red dot for highlighting pixel locations
                 var redDot = new createjs.Shape();
                 redDot.graphics.beginFill("red").drawCircle(0, 0, 5);
-                redDot.x = 100; // Change this value to move the dot
-                redDot.y = 100; // Change this value to move the dot
                 stage.addChild(redDot);
+
+                // Update red dot position and show coordinates on mouse move
+                stage.on("stagemousemove", function(event) {
+                    redDot.x = event.stageX;
+                    redDot.y = event.stageY;
+                    stage.update();
+
+                    var coords = document.getElementById("coordinates");
+                    coords.textContent = "X: " + event.stageX + ", Y: " + event.stageY;
+                });
 
                 stage.update();
             };
