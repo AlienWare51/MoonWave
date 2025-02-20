@@ -19,5 +19,29 @@
 </head>
 <body>
     <canvas id="canvas" width="800" height="600"></canvas>
+    <script>
+        window.onload = function() {
+            var stage = new createjs.Stage("canvas");
+
+            var img = new Image();
+            img.src = "https://www.haosenfurniture.com/wp-content/uploads/2021/07/11.jpg";
+            img.onload = function() {
+                var bitmap = new createjs.Bitmap(img);
+                stage.addChild(bitmap);
+
+                // Add red dot for highlighting pixel locations
+                var redDot = new createjs.Shape();
+                redDot.graphics.beginFill("red").drawCircle(0, 0, 5);
+                redDot.x = 100; // Change this value to move the dot
+                redDot.y = 100; // Change this value to move the dot
+                stage.addChild(redDot);
+
+                stage.update();
+            };
+
+            createjs.Ticker.setFPS(60);
+            createjs.Ticker.addEventListener("tick", stage);
+        };
+    </script>
 </body>
 </html>
