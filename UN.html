@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EaselJS Project</title>
     <script src="node_modules/@createjs/easeljs/lib/easeljs.min.js"></script>
-    <script src="main.js" defer></script>
     <style>
         body {
             margin: 0;
@@ -43,7 +42,7 @@
                 redDot.graphics.beginFill("red").drawCircle(0, 0, 5);
                 stage.addChild(redDot);
 
-                // Update red dot position and show coordinates on mouse move
+                // Add event listener for mouse move to update red dot position and show coordinates
                 stage.on("stagemousemove", function(event) {
                     redDot.x = event.stageX;
                     redDot.y = event.stageY;
