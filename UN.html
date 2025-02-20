@@ -55,6 +55,27 @@
                 stage.update();
             };
 
+            // Create two vibrating circles at specified positions
+            var createVibratingCircle = function(x, y) {
+                var circle = new createjs.Shape();
+                circle.graphics.beginFill("red").drawCircle(0, 0, 50);
+                circle.x = x;
+                circle.y = y;
+                stage.addChild(circle);
+
+                createjs.Ticker.addEventListener("tick", function() {
+                    // Calculate random small offsets to create a vibration effect
+                    var offsetX = Math.random() * 4 - 2;
+                    var offsetY = Math.random() * 4 - 2;
+                    circle.x = x + offsetX;
+                    circle.y = y + offsetY;
+                    stage.update();
+                });
+            };
+
+            createVibratingCircle(176, 484);
+            createVibratingCircle(634, 480);
+
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
         };
