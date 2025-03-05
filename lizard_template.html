@@ -12,6 +12,7 @@
             margin: 10px;
             background-size: cover;
             background-repeat: no-repeat;
+            cursor: pointer;
         }
 
         .lizard1 {
@@ -30,18 +31,44 @@
             display: flex;
             justify-content: space-between;
         }
+
+        /* Magnifier Styles */
+        #magnifier {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        #magnified-img {
+            max-width: 90vw;
+            max-height: 90vh;
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>Welcome to ALIEN.X</h1>
     <div class="container">
-        <div class="lizard lizard1"></div>
-        <div class="lizard lizard2"></div>
-        <div class="lizard lizard3"></div>
+        <div class="lizard lizard1" onclick="magnify('https://image.shutterstock.com/image-vector/seamless-red-black-white-camo-260nw-1058189987.jpg')"></div>
+        <div class="lizard lizard2" onclick="magnify('https://as2.ftcdn.net/v2/jpg/02/15/35/31/1000_F_215353173_pjxrHPjN6nFQ775Qve0t9h5coKzxxLsd.jpg')"></div>
+        <div class="lizard lizard3" onclick="magnify('https://static.vecteezy.com/system/resources/previews/004/983/249/original/digital-camouflage-army-seamless-pattern-free-vector.jpg')"></div>
     </div>
+
+    <!-- Magnifier -->
+    <div id="magnifier" class="hidden">
+        <img id="magnified-img" src="" alt="Magnified">
+    </div>
+
     <!-- Additional content here -->
-    
-    <!-- Lizard Form -->
     <h2>Create Your Lizard</h2>
     <form id="lizardForm">
         <label for="name">Name:</label>
@@ -57,8 +84,23 @@
     <h2>Lizard Description</h2>
     <div id="lizardDescription"></div>
 
-    <!-- JavaScript code -->
     <script>
+        // Magnifier Functionality
+        function magnify(imageUrl) {
+            const magnifier = document.getElementById("magnifier");
+            const magnifiedImg = document.getElementById("magnified-img");
+            magnifiedImg.src = imageUrl;
+            magnifier.style.display = "block";
+        }
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                const magnifier = document.getElementById("magnifier");
+                magnifier.style.display = "none";
+            }
+        });
+
+        // Lizard Form Functionality
         document.getElementById('lizardForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the form from submitting
 
@@ -88,7 +130,7 @@
                 }
             };
 
-            // Display the compact lizard description
+            // Display the lizard description
             const description = lizard.describe();
             document.getElementById('lizardDescription').innerText = description;
         });
