@@ -16,15 +16,15 @@
         }
 
         .lizard1 {
-            background-image: url('https://image.shutterstock.com/image-vector/seamless-red-black-white-camo-260nw-1058189987.jpg'); /* Path to your first GIF file */
+            background-image: url('https://image.shutterstock.com/image-vector/seamless-red-black-white-camo-260nw-1058189987.jpg');
         }
 
         .lizard2 {
-            background-image: url('https://as2.ftcdn.net/v2/jpg/02/15/35/31/1000_F_215353173_pjxrHPjN6nFQ775Qve0t9h5coKzxxLsd.jpg'); /* Path to your second GIF file */
+            background-image: url('https://as2.ftcdn.net/v2/jpg/02/15/35/31/1000_F_215353173_pjxrHPjN6nFQ775Qve0t9h5coKzxxLsd.jpg');
         }
 
         .lizard3 {
-            background-image: url('https://static.vecteezy.com/system/resources/previews/004/983/249/original/digital-camouflage-army-seamless-pattern-free-vector.jpg'); /* Path to your third GIF file */
+            background-image: url('https://static.vecteezy.com/system/resources/previews/004/983/249/original/digital-camouflage-army-seamless-pattern-free-vector.jpg');
         }
 
         .container {
@@ -50,8 +50,24 @@
             display: block;
         }
 
-        .hidden {
-            display: none;
+        /* Signal Box Styles */
+        #signal-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: red;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .blip {
+            opacity: 1 !important;
         }
     </style>
 </head>
@@ -68,7 +84,10 @@
         <img id="magnified-img" src="" alt="Magnified">
     </div>
 
-    <!-- Additional content here -->
+    <!-- Signal Box -->
+    <div id="signal-box">Magnify in Progress...</div>
+
+    <!-- Lizard Form -->
     <h2>Create Your Lizard</h2>
     <form id="lizardForm">
         <label for="name">Name:</label>
@@ -89,10 +108,18 @@
         function magnify(imageUrl) {
             const magnifier = document.getElementById("magnifier");
             const magnifiedImg = document.getElementById("magnified-img");
+            const signalBox = document.getElementById("signal-box");
+
+            // Show the signal box with a blip effect
+            signalBox.classList.add("blip");
+            setTimeout(() => signalBox.classList.remove("blip"), 500); // Remove after 500ms
+
+            // Display the magnified image
             magnifiedImg.src = imageUrl;
             magnifier.style.display = "block";
         }
 
+        // Close magnifier on 'Escape' key press
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape") {
                 const magnifier = document.getElementById("magnifier");
@@ -102,7 +129,7 @@
 
         // Lizard Form Functionality
         document.getElementById('lizardForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the form from submitting
+            event.preventDefault();
 
             // Get form values
             const name = document.getElementById('name').value;
@@ -116,15 +143,6 @@
                 age: age,
                 length: length,
                 species: species,
-                bask_in_sun: function () {
-                    return `${this.name} the ${this.species} is basking in the sun.`;
-                },
-                shed_skin: function () {
-                    return `${this.name} is shedding its skin.`;
-                },
-                eat: function (food) {
-                    return `${this.name} is eating ${food}.`;
-                },
                 describe: function () {
                     return `Meet ${this.name}, a ${this.age}-year-old ${this.species} lizard that is ${this.length} inches long.`;
                 }
