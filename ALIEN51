@@ -1,0 +1,62 @@
+CREATE TABLE MissionLog (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    missionName VARCHAR(255) NOT NULL,
+    missionStart TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modelAddress VARCHAR(255) NOT NULL,
+    serverLog VARCHAR(255)
+);
+function startMissionLog(missionName, modelAddress, serverLog) {
+    const missionData = {
+        missionName: missionName,
+        modelAddress: modelAddress,
+        serverLog: serverLog
+    };
+
+    fetch('/addMissionLog', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(missionData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Mission log added:', data);
+    })
+    .catch(error => {
+        console.error('Error adding mission log:', error);
+    });
+}
+
+// Example usage:
+startMissionLog('Mission Alpha', 'Model123', 'ServerLog001');
+const express = require('express');
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+
+const app = express();
+app.use(bodyParser.json());
+
+const db = mysql.createConnection({
+    host: 'your-database-host',
+    user: 'your-username',
+    password: 'your-password',
+    database: 'your-database-name'
+});
+
+app.post('/addMissionLog', (req, res) => {
+    const { missionName, modelAddress, serverLog } = req.body;
+
+    const sql = 'INSERT INTO MissionLog (missionName, modelAddress, serverLog) VALUES (?, ?, ?)';
+    db.query(sql, [missionName, modelAddress, serverLog], (err, result) => {
+        if (err) {
+            console.error('Error inserting mission log:', err);
+            res.status(500).send('Error inserting mission log');
+        } else {
+            res.send({ message: 'Mission log added successfully!', logId: result.insertId });
+        }
+    });
+});
+
+app.listen(3000, () => console.log('Server started on port 3000'));
+
