@@ -1,145 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALIEN.X</title>
-    <style>
-        .graph-container {
-            position: relative;
-            width: 400px;
-            height: 300px;
-            background: url('https://www.lovethispic.com/uploaded_images/166008-Lizard-Tongue.gif') no-repeat center center;
-            background-size: cover;
-        }
-        .container {
-            display: flex;
-            align-items: flex-start;
-        }
-        .text-section {
-            margin-right: 20px;
-        }
-        .images-section {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .images-section canvas,
-        .images-section img,
-        .images-section svg {
-            margin-right: 10px;
-        }
-        #timeline {
-            width: 100%;
-            height: 30px;
-            border: 1px solid black;
-            margin-top: 20px;
-        }
-        .plaintext-content {
-            font-size: 6px;
-            white-space: pre-wrap;
-        }
-        .red-dot {
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            border-radius: 50%;
-            display: none;
-        }
-        svg#lineGraph {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .line {
-            fill: none;
-            stroke: steelblue;
-            stroke-width: 2px;
-        }
-        .clickable-image {
-            width: 100px;
-            height: 100px;
-            margin-right: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ALIEN.X</title>
+  <style>
+    .graph-container {
+      position: relative;
+      width: 400px;
+      height: 300px;
+      background: url('https://www.lovethispic.com/uploaded_images/166008-Lizard-Tongue.gif') no-repeat center center;
+      background-size: cover;
+    }
+    .container {
+      display: flex;
+      align-items: flex-start;
+    }
+    .text-section {
+      margin-right: 20px;
+    }
+    .images-section {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .images-section canvas,
+    .images-section img,
+    .images-section svg {
+      margin-right: 10px;
+    }
+    #timeline {
+      width: 100%;
+      height: 30px;
+      border: 1px solid black;
+      margin-top: 20px;
+    }
+    .plaintext-content {
+      font-size: 6px;
+      white-space: pre-wrap;
+    }
+    .red-dot {
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      border-radius: 50%;
+      display: none;
+    }
+    svg#lineGraph {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 2px;
+    }
+    .clickable-image {
+      width: 100px;
+      height: 100px;
+      margin-right: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div class="graph-container">
-        <svg id="lineGraph" width="400" height="300"></svg>
+  <div class="graph-container">
+    <svg id="lineGraph" width="400" height="300"></svg>
+  </div>
+  <div class="container">
+    <div class="text-section">
+      <h1>ALIEN.X</h1>
+      <p>###-\###-\###-\###-\###-\</p>
+      <p>###-###-<input type="text" class="text-box">-###-###</p>
+      <p>###-\###-\###-\###-\###-\</p>
+      <p>###-###-<input type="text" class="text-box">-###-###</p>
     </div>
-    <div class="container">
-        <div class="text-section">
-            <h1>ALIEN.X</h1>
-            <p>###-\###-\###-\###-\###-\</p>
-            <p>###-###-<input type="text" class="text-box">-###-###</p>
-            <p>###-\###-\###-\###-\###-\</p>
-            <p>###-###-<input type="text" class="text-box">-###-###</p>
-        </div>
-        <div class="images-section">
-            <img src="https://th.bing.com/th/id/OIP.YOVxhIVQki_pK7Jz5JHyLwHaLV?rs=1&pid=ImgDetMain" alt="Image 1" width="100" height="100"/>
-            <img src="https://i.pinimg.com/originals/a4/a7/72/a4a77263fd707ffcee1ec4a90be7af11.jpg" alt="Image 2" width="100" height="100"/>
-            <canvas id="canvas1" width="100" height="100"></canvas>
-            <canvas id="canvas-splinter" width="100" height="100"></canvas>
-            <canvas id="canvas3" width="100" height="100"></canvas>
-            <img id="matplotlib-plot" src="https://media0.giphy.com/media/o9wTZ9k2NgWu4/giphy.gif" alt="GIF Plot" width="50" height="50" />
-            <svg id="lineGraph"></svg>
-            <a href="https://alienware51.github.io/MoonWave/98pallas.html" target="_blank">
-                <img class="clickable-image" src="https://th.bing.com/th/id/R.3d69b3500e6e0803811ebdf3dee1b9f6?rik=atQdFd8opQ1Z0w&riu=http%3a%2f%2fpluspng.com%2fimg-png%2falien-logo-vector-png-alien-head-design-svg-dxf-eps-png-cdr-ai-pdf-690.jpg&ehk=IAkVHUL9Q%2bGymmMARoJ6Lo7ark%2bbGjk0NViacLjuTmQ%3d&risl=&pid=ImgRaw&r=0" alt="Alien Logo" width="100" height="100"/>
-            </a>
-            <a href="https://alienware51.github.io/MoonWave/lizard_template.html" target="_blank">
-                <img class="clickable-image" src="https://th.bing.com/th/id/R.3d69b3500e6e0803811ebdf3dee1b9f6?rik=atQdFd8opQ1Z0w&riu=http%3a%2f%2fpluspng.com%2fimg-png%2falien-logo-vector-png-alien-head-design-svg-dxf-eps-png-cdr-ai-pdf-690.jpg&ehk=IAkVHUL9Q%2bGymmMARoJ6Lo7ark%2bbGjk0NViacLjuTmQ%3d&risl=&pid=ImgRaw&r=0" alt="Alien Logo" width="100" height="100"/>
-            </a>
-        </div>
+    <div class="images-section">
+      <img src="https://th.bing.com/th/id/OIP.YOVxhIVQki_pK7Jz5JHyLwHaLV?rs=1&pid=ImgDetMain" alt="Image 1" width="100" height="100"/>
+      <img src="https://i.pinimg.com/originals/a4/a7/72/a4a77263fd707ffcee1ec4a90be7af11.jpg" alt="Image 2" width="100" height="100"/>
+      <canvas id="canvas1" width="100" height="100"></canvas>
+      <canvas id="canvas-splinter" width="100" height="100"></canvas>
+      <canvas id="canvas3" width="100" height="100"></canvas>
+      <img id="matplotlib-plot" src="https://media0.giphy.com/media/o9wTZ9k2NgWu4/giphy.gif" alt="GIF Plot" width="50" height="50"/>
+      <svg id="lineGraph"></svg>
+      <a href="https://alienware51.github.io/MoonWave/98pallas.html" target="_blank">
+        <img class="clickable-image" src="https://th.bing.com/th/id/R.3d69b3500e6e0803811ebdf3dee1b9f6?rik=atQdFd8opQ1Z0w&riu=http%3a%2f%2fpluspng.com%2fimg-png%2falien-logo-vector-png-alien-head-design-svg-dxf-eps-png-cdr-ai-pdf-690.jpg&ehk=IAkVHUL9Q%2bGymmMARoJ6Lo7ark%2bbGjk0NViacLjuTmQ%3d&risl=&pid=ImgRaw&r=0" alt="Alien Logo" width="100" height="100"/>
+      </a>
+      <a href="https://alienware51.github.io/MoonWave/lizard_template.html" target="_blank">
+        <img class="clickable-image" src="https://th.bing.com/th/id/R.3d69b3500e6e0803811ebdf3dee1b9f6?rik=atQdFd8opQ1Z0w&riu=http%3a%2f%2fpluspng.com%2fimg-png%2falien-logo-vector-png-alien-head-design-svg-dxf-eps-png-cdr-ai-pdf-690.jpg&ehk=IAkVHUL9Q%2bGymmMARoJ6Lo7ark%2bbGjk0NViacLjuTmQ%3d&risl=&pid=ImgRaw&r=0" alt="Alien Logo" width="100" height="100"/>
+      </a>
     </div>
+  </div>
 
-    <script>
-        // Dataset of characters with their respective details
-        const characterData = [
-            '丁', '厂', '七', '卜', '八', '人', '入', '儿', '匕', '几', 
-            '九', '刁', '了', '刀', '力', '乃', '又', '三', '干', '于'
-        ];
+  <script>
+    // Define the character dataset
+    const characterData = [
+      '丁', '厂', '七', '卜', '八', '人', '入', '儿', '匕', '几', 
+      '九', '刁', '了', '刀', '力', '乃', '又', '三', '干', '于'
+    ];
 
-        // Function to randomly select 5-8 characters from the dataset
-        function getRandomCharacters() {
-            const min = 5; // Minimum number of characters
-            const max = 8; // Maximum number of characters
-            const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min; // Random between 5 and 8
-            const shuffled = [...characterData].sort(() => 0.5 - Math.random());
-            const selectedCharacters = shuffled.slice(0, numCharacters).join(''); // Combine into a string
-            console.log(`Generated characters: ${selectedCharacters}`); // Debug print function
-            return selectedCharacters; // Return the selected characters
-        }
+    // Function to randomly select between 5 to 8 characters and return them as a string
+    function getRandomCharacters() {
+      const min = 5, max = 8;
+      const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min;
+      const shuffled = [...characterData].sort(() => 0.5 - Math.random());
+      const selectedCharacters = shuffled.slice(0, numCharacters).join('');
+      console.log(`Generated 5-8 characters: ${selectedCharacters}`);
+      return selectedCharacters;
+    }
 
-        // Function to get a single random character from the dataset
-        function getSingleCharacter() {
-            const randomIndex = Math.floor(Math.random() * characterData.length);
-            const randomCharacter = characterData[randomIndex];
-            console.log(`Generated single character: ${randomCharacter}`); // Debug print function
-            return randomCharacter;
-        }
+    // Function to randomly select one character from the dataset
+    function getSingleCharacter() {
+      const randomIndex = Math.floor(Math.random() * characterData.length);
+      const randomCharacter = characterData[randomIndex];
+      console.log(`Generated single character: ${randomCharacter}`);
+      return randomCharacter;
+    }
 
-        // Function to populate the text box on click
-        function setupTextBoxClick() {
-            const textBox = document.querySelector('input.text-box');
-            textBox.addEventListener('click', () => {
-                textBox.value = getSingleCharacter(); // Set single random character on click
-            });
-        }
+    // On page load this function populates the first text box with 5-8 random characters
+    function populateOnLoad() {
+      const textBox = document.querySelector('input.text-box');
+      textBox.value = getRandomCharacters();
+      console.log(`Text box initially populated: ${textBox.value}`);
+    }
 
-        // Automatically populate the text box with 5-8 characters on page load
-        function populateOnLoad() {
-            const textBox = document.querySelector('input.text-box');
-            textBox.value = getRandomCharacters(); // Populate with random characters
-        }
+    // When the user clicks inside the text box, replace its content with one random character
+    function setupTextBoxClick() {
+      const textBox = document.querySelector('input.text-box');
+      textBox.addEventListener('click', () => {
+        textBox.value = getSingleCharacter();
+        console.log(`Text box updated on click: ${textBox.value}`);
+      });
+    }
 
-        // Initialize both features on page load
-        window.onload = () => {
-            populateOnLoad(); // Populate with random characters on page load
-            setupTextBoxClick(); // Set up click functionality
-        };
-    </script>
+    // Ensure initialization runs when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      populateOnLoad();
+      setupTextBoxClick();
+    });
+  </script>
 </body>
 </html>
+
 
     <h1>ALIEN.X</h1>
     <p>###-\###-\###-\###-\###-\</p>
