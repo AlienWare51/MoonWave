@@ -74,7 +74,7 @@
       <p>
         ###-###-
         <input type="text" class="text-box">
-        -###-### 
+        -###-###
         <button id="search-button">Search</button>
       </p>
       <p>###-\###-\###-\###-\###-\</p>
@@ -98,13 +98,13 @@
   </div>
 
   <script>
-    // The character dataset
+    // Define the character dataset
     const characterData = [
       '丁', '厂', '七', '卜', '八', '人', '入', '儿', '匕', '几', 
       '九', '刁', '了', '刀', '力', '乃', '又', '三', '干', '于'
     ];
 
-    // Returns a random string containing 5 to 8 characters from the dataset
+    // Function to randomly select between 5 and 8 characters from the dataset
     function getRandomCharacters() {
       const min = 5, max = 8;
       const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -114,7 +114,7 @@
       return selectedCharacters;
     }
 
-    // Returns a single random character from the dataset
+    // Function to randomly select a single character from the dataset
     function getSingleCharacter() {
       const randomIndex = Math.floor(Math.random() * characterData.length);
       const randomCharacter = characterData[randomIndex];
@@ -122,14 +122,14 @@
       return randomCharacter;
     }
 
-    // On page load, populate the first text box with 5-8 random characters
+    // Populate the first text box with 5-8 random characters on page load
     function populateOnLoad() {
       const textBox = document.querySelector('input.text-box');
       textBox.value = getRandomCharacters();
       console.log(`Text box initially populated: ${textBox.value}`);
     }
 
-    // When the user clicks inside the first text box, replace its content with one random character
+    // When the user clicks inside the text box, replace its content with one random character
     function setupTextBoxClick() {
       const textBox = document.querySelector('input.text-box');
       textBox.addEventListener('click', () => {
@@ -138,32 +138,45 @@
       });
     }
 
-    // Set up search functionality for Enter key and search button click.
+    // Set up search functionality: when user presses Enter or clicks the Search button,
+    // perform a Google search using the text box’s content.
     function setupTextBoxSearch() {
       const textBox = document.querySelector('input.text-box');
       const searchButton = document.getElementById('search-button');
+      // Simple device check: assume desktop if not mobile.
+      const isDesktop = !/Mobi|Android/i.test(navigator.userAgent);
 
+      // Search on pressing Enter
       textBox.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
           event.preventDefault();
           const query = textBox.value;
-          console.log(`Searching for: ${query}`);
-          window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+          console.log(`Searching for (Enter): ${query}`);
+          if (isDesktop) {
+            window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+          } else {
+            window.open('https://www.google.com/search?q=' + encodeURIComponent(query), '_blank');
+          }
         }
       });
 
+      // Search on clicking the Search button
       searchButton.addEventListener('click', () => {
         const query = textBox.value;
-        console.log(`Searching for (via button): ${query}`);
-        window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+        console.log(`Searching for (button): ${query}`);
+        if (isDesktop) {
+          window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+        } else {
+          window.open('https://www.google.com/search?q=' + encodeURIComponent(query), '_blank');
+        }
       });
     }
 
-    // Initialize all event handlers after DOM content loads
+    // Initialize all event handlers when the DOM content is loaded
     document.addEventListener('DOMContentLoaded', () => {
-      populateOnLoad();      // Populate on load with 5-8 random characters
-      setupTextBoxClick();   // Replace contents with one random character on click
-      setupTextBoxSearch();  // Set up search functionality (Enter key or Search button)
+      populateOnLoad();
+      setupTextBoxClick();
+      setupTextBoxSearch();
     });
   </script>
 </body>
