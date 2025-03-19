@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Page with Plots and Mouse Tracker</title>
+    <title>Comprehensive Page with Plots, Tracker, and Image</title>
     <style>
         /* Styling for float containers */
         .float-container {
@@ -41,10 +41,17 @@
             font-family: Arial, sans-serif;
             font-size: 12px;
         }
+
+        /* Style for dynamically appended image */
+        .dynamic-image {
+            position: absolute;
+            width: 50px;
+            height: 30px;
+        }
     </style>
 </head>
 <body>
-    <h1>Comprehensive Page with Mouse Tracker and Plots</h1>
+    <h1>Comprehensive Page with Mouse Tracker, Plots, and Lizard Image</h1>
 
     <!-- Mouse position tracker -->
     <div id="mousePosition">X: 0, Y: 0</div>
@@ -104,6 +111,22 @@
         // Draw content in both float containers
         drawPolyinverseDots('plot1', 'blue'); // Plot 1 with blue dots
         drawPolyinverseDots('plot2', 'red');  // Plot 2 with red dots
+
+        // Function to append an image dynamically
+        function appendImage() {
+            const container = document.body; // Append image to the body
+            const img = document.createElement('img');
+
+            img.src = 'https://img.freepik.com/premium-vector/dot-dot-lizard-puzzle-connect-dots-animals_1138936-8.jpg?w=1380'; // Image URL
+            img.className = 'dynamic-image';
+            img.style.left = '340px'; // X coordinate
+            img.style.top = '575px'; // Y coordinate
+
+            container.appendChild(img);
+        }
+
+        // Call the function to append the lizard image
+        appendImage();
     </script>
 </body>
 </html>
