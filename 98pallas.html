@@ -5,184 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPEC.DEPO01</title>
     <style>
-        .image-preview img {
-            width: 150px;
+        body {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
         }
         #rocketCanvas {
             border: 1px solid black;
         }
+        .stackCanvas {
+            border: 1px solid black;
+        }
     </style>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <h1>LIZARD ROMULUS</h1>
-    
-    <!-- Existing form -->
-    <form id="modifierForm">
-        <label for="image_select">ETE:</label>
-        <select id="image_select" name="image_select" required>
-            <option value="1">AA</option>
-            <option value="2">BB</option>
-        </select><br>
-        
-        <div class="image-preview">
-            <img id="image1" src="path/to/your/image1.jpg" alt="Image 1">
-        </div>
-        <div class="image-preview">
-            <img id="image2" src="path/to/your/image2.jpg" alt="Image 2">
-        </div><br>
 
-        <label for="brightness">Brightness:</label>
-        <input type="number" id="brightness" name="brightness" step="0.1" value="1.0" required><br>
-        
-        <label for="contrast">Contrast:</label>
-        <input type="number" id="contrast" name="contrast" step="0.1" value="1.0" required><br>
-        
-        <label for="rotation">Rotation (degrees):</label>
-        <input type="number" id="rotation" name="rotation" step="1" value="0" required><br>
+    <!-- Left Stack Canvas -->
+    <canvas id="leftStackCanvas" class="stackCanvas" width="300" height="300"></canvas>
 
-        <label for="rocketSize">Rocket Size:</label>
-        <input type="number" id="rocketSize" name="rocketSize" step="0.1" value="1.0" required><br>
-        
-        <button type="submit">HIBERNATION</button>
-    </form>
-    
-    <input type="file" id="fileInput" accept=".txt"><br><br>
-    
-    <!-- New Mission Log Form -->
-    <h2>MISSION LOG</h2>
-    <form id="missionForm">
-        <label for="missionName">Mission Name:</label>
-        <input type="text" id="missionName" name="missionName" required><br><br>
-
-        <label for="modelAddress">Model Address:</label>
-        <input type="text" id="modelAddress" name="modelAddress" required><br><br>
-
-        <label for="serverLog">Server Log:</label>
-        <input type="text" id="serverLog" name="serverLog" required><br><br>
-
-        <button type="submit">Submit Mission Log</button>
-    </form>
-    <div id="responseMessage"></div>
-
-    <h2>WARMING CELL</h2>
-    <img id="ETE" src="" alt="SYSTEM LOAD">
-
-    <h2>IGNITION SEQUENCE</h2>
+    <!-- Rocket Canvas -->
     <canvas id="rocketCanvas" width="800" height="600"></canvas>
 
+    <!-- Right Stack Canvas -->
+    <canvas id="rightStackCanvas" class="stackCanvas" width="300" height="300"></canvas>
+
     <script>
-        // Existing modifier form handling
-        document.getElementById('modifierForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            fetch('http://127.0.0.1:5000/modify_image', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.blob())
-            .then(blob => {
-                const url = URL.createObjectURL(blob);
-                document.getElementById('modifiedImage').src = url;
-            })
-            .catch(error => console.error('Error:', error));
-        });
-
-        // New Mission Log form handling
-        document.getElementById('missionForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const missionName = document.getElementById('missionName').value;
-            const modelAddress = document.getElementById('modelAddress').value;
-            const serverLog = document.getElementById('serverLog').value;
-
-            const missionData = { missionName, modelAddress, serverLog };
-
-            fetch('/addMissionLog', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(missionData)
-            })
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById('responseMessage').textContent = 
-                    `Success: ${data.message}, Log ID: ${data.logId}`;
-            })
-            .catch(error => {
-                document.getElementById('responseMessage').textContent = 
-                    `Error: ${error.message}`;
-            });
-        });
-
         const canvas = d3.select("#rocketCanvas");
         const context = canvas.node().getContext("2d");
 
-        // Rocket and Lizard image handling
+        // Common image source
+        const stackImageSrc = 'https://i5.walmartimages.com/seo/OPTIMA-BlueTop-AGM-Spiralcell-Marine-Battery-Group-Size-D34-12-Volt-750-CCA_15784104-a665-4e41-8a0d-a60570c3620c_1.3ad220b34f48126854d5f5d9e3f93112.jpeg';
+
+        // Load and stack images on the left and right canvases
+        function stackImages(canvasId) {
+            const stackCanvas = document.getElementById(canvasId);
+            const stackContext = stackCanvas.getContext('2d');
+            const img = new Image();
+            img.src = stackImageSrc;
+
+            img.onload = () => {
+                const imgWidth = stackCanvas.width * 0.8; // Scale to fit canvas
+                const imgHeight = stackCanvas.height * 0.8;
+                const x = (stackCanvas.width - imgWidth) / 2;
+                const y = (stackCanvas.height - imgHeight) / 2;
+
+                // Stack the image 4 times with progressive transparency
+                for (let i = 0; i < 4; i++) {
+                    stackContext.globalAlpha = 1 - i * 0.2; // Gradually reduce transparency
+                    stackContext.drawImage(img, x, y, imgWidth, imgHeight);
+                }
+
+                stackContext.globalAlpha = 1.0; // Reset alpha
+            };
+
+            img.onerror = () => {
+                console.error('Failed to load stack image on canvas:', canvasId);
+            };
+        }
+
+        // Call stacking for both canvases
+        stackImages('leftStackCanvas');
+        stackImages('rightStackCanvas');
+
+        // Existing Rocket and Lizard image handling
         const rocketImg = new Image();
         rocketImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/rocket.png';
 
         const lizardImg = new Image();
         lizardImg.src = 'https://github.com/AlienWare51/MoonWave/raw/main/lizard.png';
 
-        const planetImages = [
-            'https://4kwallpapers.com/images/wallpapers/planet-earth-orbit-outer-space-cosmos-1920x1200-8769.jpg',
-            'https://th.bing.com/th/id/OIP.aBxMsTDueJ0OEYpqcoZb7wHaEK?w=326&h=183&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-            'https://th.bing.com/th/id/OIP.fI3DWs_H0Z6Man0THeWe6wHaEK?rs=1&pid=ImgDetMain',
-            'https://th.bing.com/th/id/OIP.0nwjv9AEh1uLPs4RHKQu3QHaHa?rs=1&pid=ImgDetMain'
-        ];
-
         rocketImg.onload = () => {
-            const rocketSize = parseFloat(document.getElementById('rocketSize').value);
-            const xPos = canvas.node().width / 2 - rocketImg.width * rocketSize / 2;
-            const yPos = canvas.node().height / 2 - rocketImg.height * rocketSize / 2;
-            context.drawImage(rocketImg, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
+            const rocketSize = canvas.node().width / 4;
+            const xPos = canvas.node().width / 2 - rocketSize / 2;
+            const yPos = canvas.node().height / 2 - rocketSize / 2;
+
+            context.drawImage(rocketImg, xPos, yPos, rocketSize, rocketSize);
 
             lizardImg.onload = () => {
                 context.globalAlpha = 0.5;
-                context.drawImage(lizardImg, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
-                startInterchangingImages(planetImages, xPos, yPos, rocketImg.width * rocketSize, rocketImg.height * rocketSize);
+                context.drawImage(lizardImg, xPos, yPos, rocketSize, rocketSize);
             };
         };
-
-// Planet image interchanging logic
-function startInterchangingImages(imageDataArray, rx, ry, rw, rh) {
-    let currentIndex = 0;
-    const canvasWidth = canvas.node().width;
-    const canvasHeight = canvas.node().height;
-
-    function drawNextImage() {
-        context.clearRect(0, 0, canvasWidth, canvasHeight); // Clear the canvas
-        const quadrants = [
-            { x: 0, y: 0, w: (canvasWidth / 2) * 0.65, h: (canvasHeight / 2) * 0.65 },
-            { x: canvasWidth / 2, y: 0, w: (canvasWidth / 2) * 0.65, h: (canvasHeight / 2) * 0.65 },
-            { x: 0, y: canvasHeight / 2, w: (canvasWidth / 2) * 0.65, h: (canvasHeight / 2) * 0.65 },
-            { x: canvasWidth / 2, y: canvasHeight / 2, w: (canvasWidth / 2) * 0.65, h: (canvasHeight / 2) * 0.65 }
-        ];
-
-        quadrants.forEach((quadrant, index) => {
-            const img = new Image();
-            img.src = imageDataArray[(currentIndex + index) % imageDataArray.length];
-            img.onload = () => {
-                context.drawImage(img, quadrant.x, quadrant.y, quadrant.w, quadrant.h);
-            };
-        });
-
-        currentIndex = (currentIndex + 1) % imageDataArray.length;
-
-        // Redraw the rocket
-        context.drawImage(rocketImg, rx, ry, rw, rh);
-        context.globalAlpha = 0.5; // Set opacity for transparency
-        context.drawImage(lizardImg, rx, ry, rw, rh); // Redraw the lizard
-    }
-
-    drawNextImage(); // Draw the first set of images immediately
-
-    setInterval(drawNextImage, 1000); // Change the image set every 1 second
-}
-
-</script>
+    </script>
 </body>
 </html>
