@@ -33,22 +33,21 @@
         }
         #timeline {
             width: 100%;
-            height: 30px; /* Adjust this value to change the vertical size */
+            height: 30px;
             border: 1px solid black;
-            margin-top: 20px; /* Adjust as needed */
+            margin-top: 20px;
         }
         .plaintext-content {
             font-size: 6px;
-            white-space: pre-wrap; /* Preserves line breaks */
+            white-space: pre-wrap;
         }
         .red-dot {
             width: 10px;
             height: 10px;
             background-color: red;
             border-radius: 50%;
-            display: none; /* Initially hidden */
+            display: none;
         }
-        /* Styles for the line graph */
         svg#lineGraph {
             position: absolute;
             top: 0;
@@ -79,7 +78,6 @@
             <p>###-###-<input type="text" class="text-box">-###-###</p>
             <div id="plaintext-container" class="plaintext-content"></div>
             <a href="http://localhost:5000/alien.x" target="_blank">Access Alien.X</a>
-            <!-- Include your custom JavaScript file -->
             <script src="https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js"></script>
             <div id="MASTER-SPLINTER"></div>
             <div id="json-output"></div>
@@ -92,10 +90,7 @@
             <canvas id="canvas-splinter" width="100" height="100"></canvas>
             <canvas id="canvas3" width="100" height="100"></canvas>
             <img id="matplotlib-plot" src="https://media0.giphy.com/media/o9wTZ9k2NgWu4/giphy.gif" alt="GIF Plot" width="50" height="50" />
-            <!-- Line graph SVG element added here -->
             <svg id="lineGraph"></svg>
-
-            <!-- Vector images with clickable link buttons -->
             <a href="https://alienware51.github.io/MoonWave/98pallas.html" target="_blank">
                 <img class="clickable-image" src="https://th.bing.com/th/id/R.3d69b3500e6e0803811ebdf3dee1b9f6?rik=atQdFd8opQ1Z0w&riu=http%3a%2f%2fpluspng.com%2fimg-png%2falien-logo-vector-png-alien-head-design-svg-dxf-eps-png-cdr-ai-pdf-690.jpg&ehk=IAkVHUL9Q%2bGymmMARoJ6Lo7ark%2bbGjk0NViacLjuTmQ%3d&risl=&pid=ImgRaw&r=0" alt="Alien Logo" width="100" height="100"/>
             </a>
@@ -104,6 +99,42 @@
             </a>
         </div>
     </div>
+
+    <script>
+        // Function to validate page and detect specific structure
+        function validatePageAndCode() {
+            // Check if the current page URL matches the specified URL
+            const isCorrectPage = window.location.href === "https://alienware51.github.io/MoonWave/";
+
+            // Check if the required elements are present on the page
+            const pElements = document.querySelectorAll('p');
+            const inputElement = document.querySelector('input.text-box');
+
+            // Check for the specific structure
+            const isCodeRecognized = Array.from(pElements).some(p => p.textContent.includes('###-###-')) && inputElement !== null;
+
+            // Allow the rest of the page to process if conditions are true
+            if (isCorrectPage && isCodeRecognized) {
+                console.log("CTRL");
+                return "CTRL";
+            } else {
+                console.error("Page or required code not recognized");
+                return null;
+            }
+        }
+
+        // Call the validation function after the page loads
+        window.onload = () => {
+            const result = validatePageAndCode();
+            if (result === "CTRL") {
+                console.log("Processing allowed");
+            } else {
+                console.error("Processing blocked");
+            }
+        };
+    </script>
+</body>
+</html>
     <iframe src="math-functions.html" width="100%" height="400px" style="border:none;"></iframe>
     <iframe src="alien.html" width="100%" height="400px" style="border:none;"></iframe>
     <canvas id="timeline"></canvas>
