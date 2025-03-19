@@ -71,7 +71,12 @@
     <div class="text-section">
       <h1>ALIEN.X</h1>
       <p>###-\###-\###-\###-\###-\</p>
-      <p>###-###-<input type="text" class="text-box">-###-###</p>
+      <p>
+        ###-###-
+        <input type="text" class="text-box">
+        -###-### 
+        <button id="search-button">Search</button>
+      </p>
       <p>###-\###-\###-\###-\###-\</p>
       <p>###-###-<input type="text" class="text-box">-###-###</p>
     </div>
@@ -93,13 +98,13 @@
   </div>
 
   <script>
-    // Define the character dataset
+    // The character dataset
     const characterData = [
       '丁', '厂', '七', '卜', '八', '人', '入', '儿', '匕', '几', 
       '九', '刁', '了', '刀', '力', '乃', '又', '三', '干', '于'
     ];
 
-    // Function to randomly select between 5 to 8 characters and return them as a string
+    // Returns a random string containing 5 to 8 characters from the dataset
     function getRandomCharacters() {
       const min = 5, max = 8;
       const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -109,7 +114,7 @@
       return selectedCharacters;
     }
 
-    // Function to randomly select one character from the dataset
+    // Returns a single random character from the dataset
     function getSingleCharacter() {
       const randomIndex = Math.floor(Math.random() * characterData.length);
       const randomCharacter = characterData[randomIndex];
@@ -117,14 +122,14 @@
       return randomCharacter;
     }
 
-    // On page load this function populates the first text box with 5-8 random characters
+    // On page load, populate the first text box with 5-8 random characters
     function populateOnLoad() {
       const textBox = document.querySelector('input.text-box');
       textBox.value = getRandomCharacters();
       console.log(`Text box initially populated: ${textBox.value}`);
     }
 
-    // When the user clicks inside the text box, replace its content with one random character
+    // When the user clicks inside the first text box, replace its content with one random character
     function setupTextBoxClick() {
       const textBox = document.querySelector('input.text-box');
       textBox.addEventListener('click', () => {
@@ -133,15 +138,36 @@
       });
     }
 
-    // Ensure initialization runs when the DOM is fully loaded
+    // Set up search functionality for Enter key and search button click.
+    function setupTextBoxSearch() {
+      const textBox = document.querySelector('input.text-box');
+      const searchButton = document.getElementById('search-button');
+
+      textBox.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          const query = textBox.value;
+          console.log(`Searching for: ${query}`);
+          window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+        }
+      });
+
+      searchButton.addEventListener('click', () => {
+        const query = textBox.value;
+        console.log(`Searching for (via button): ${query}`);
+        window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+      });
+    }
+
+    // Initialize all event handlers after DOM content loads
     document.addEventListener('DOMContentLoaded', () => {
-      populateOnLoad();
-      setupTextBoxClick();
+      populateOnLoad();      // Populate on load with 5-8 random characters
+      setupTextBoxClick();   // Replace contents with one random character on click
+      setupTextBoxSearch();  // Set up search functionality (Enter key or Search button)
     });
   </script>
 </body>
 </html>
-
 
     <h1>ALIEN.X</h1>
     <p>###-\###-\###-\###-\###-\</p>
