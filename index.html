@@ -103,19 +103,26 @@
         function getRandomCharacters() {
             const min = 5;
             const max = 8;
-            const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min; // Random number between 5 and 8
+            const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min;
 
-            // Shuffle the array and slice the first 'numCharacters' elements
-            const shuffled = characterData.sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, numCharacters).join(''); // Return as a string
+            const shuffled = [...characterData].sort(() => 0.5 - Math.random());
+            const selectedCharacters = shuffled.slice(0, numCharacters);
+
+            console.log(`Selected ${numCharacters} characters: ${selectedCharacters.join('')}`);
+            return selectedCharacters.join('');
         }
 
         // Function to populate the first text box with random characters
         function populateFirstTextBox() {
-            const firstTextBox = document.querySelector('input.text-box'); // Select the first input field with the class "text-box"
+            const firstTextBox = document.querySelector('input.text-box');
 
             if (firstTextBox) {
-                firstTextBox.value = getRandomCharacters(); // Populate the input field with random characters
+                const randomCharacters = getRandomCharacters();
+                firstTextBox.value = randomCharacters;
+
+                console.log(`Populated text box with: ${randomCharacters}`);
+            } else {
+                console.error('Text box not found. Please ensure an input element with class "text-box" exists.');
             }
         }
 
