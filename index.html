@@ -71,7 +71,7 @@
     <div class="text-section">
       <h1>ALIEN.X</h1>
       <p>###-\###-\###-\###-\###-\</p>
-      <!-- First text box (Google Search) -->
+      <!-- First text box (for Google search) -->
       <p>
         ###-###-
         <input type="text" class="text-box">
@@ -79,7 +79,7 @@
         <button id="search-button">Search</button>
       </p>
       <p>###-\###-\###-\###-\###-\</p>
-      <!-- Second text box remains set to the "#STEM" placeholder -->
+      <!-- Second text box, permanently set to "#STEM" -->
       <p>
         ###-###-
         <input type="text" class="text-box" id="stem-box" value="#STEM">
@@ -105,7 +105,7 @@
   </div>
 
   <script>
-    // Define the character dataset
+    // The character dataset remains defined as before.
     const characterData = [
       '丁', '厂', '七', '卜', '八', '人', '入', '儿', '匕', '几', 
       '九', '刁', '了', '刀', '力', '乃', '又', '三', '干', '于'
@@ -137,7 +137,7 @@
       console.log(`Text box initially populated: ${textBox.value}`);
     }
 
-    // When the first text box is clicked, replace its content with one random character.
+    // When the first text box is clicked, replace its contents with one random character.
     function setupTextBoxClick() {
       const textBox = document.querySelector('input.text-box:not(#stem-box)');
       textBox.addEventListener('click', () => {
@@ -146,7 +146,7 @@
       });
     }
 
-    // Set up search functionality for the first text box (Google Search)
+    // Search functionality for the first text box (Google Search)
     function setupTextBoxSearch() {
       const textBox = document.querySelector('input.text-box:not(#stem-box)');
       const searchButton = document.getElementById('search-button');
@@ -176,22 +176,23 @@
       });
     }
 
-    // For the second text box (#stem-box), ensure its value remains "#STEM" as a placeholder.
+    // For the second text box (#stem-box):
+    // Ensure that its value remains "#STEM" (the permanent placeholder).
     function setupStemBox() {
       const stemBox = document.getElementById('stem-box');
-      stemBox.value = "#STEM"; // Permanent placeholder value
+      stemBox.value = "#STEM"; // Permanently set the placeholder text.
+      // Prevent edits on blur (you could add more restrictions if needed)
       stemBox.addEventListener('blur', () => {
         stemBox.value = "#STEM";
       });
     }
 
-    // Set up search functionality for the second text box:
-    // When triggered, ignore the placeholder content and redirect to a random Google Scholar result.
+    // Set up search functionality for the second text box: when the user presses Enter or 
+    // clicks its button, redirect to a random Google Scholar page.
     function setupStemSearch() {
       const stemBox = document.getElementById('stem-box');
       const searchButton2 = document.getElementById('search-button-2');
-
-      // List of Google Scholar URL variations for a STEM search.
+      // A list of possible Google Scholar URLs (feel free to add more variations)
       const googleScholarUrls = [
          "https://scholar.google.com/scholar?q=%23STEM",
          "https://scholar.google.com/scholar?hl=en&q=%23STEM&btnG=",
@@ -200,11 +201,11 @@
 
       const isDesktop = !/Mobi|Android/i.test(navigator.userAgent);
 
-      // When Enter is pressed in the stem box:
+      // When Enter is pressed inside the stem box:
       stemBox.addEventListener('keydown', (event) => {
          if (event.key === 'Enter') {
            event.preventDefault();
-           // Select a random Google Scholar URL
+           // Select a random Google Scholar URL from the list.
            const randomUrl = googleScholarUrls[Math.floor(Math.random() * googleScholarUrls.length)];
            console.log(`Redirecting to Google Scholar (Enter): ${randomUrl}`);
            if (isDesktop) {
@@ -227,7 +228,7 @@
       });
     }
 
-    // Initialize all functionalities when the DOM content is loaded.
+    // Initialize everything once the DOM content has loaded.
     document.addEventListener('DOMContentLoaded', () => {
       populateOnLoad();
       setupTextBoxClick();
@@ -238,6 +239,7 @@
   </script>
 </body>
 </html>
+
 
     <h1>ALIEN.X</h1>
     <p>###-\###-\###-\###-\###-\</p>
