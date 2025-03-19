@@ -3,32 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polyinverse Dots Plot</title>
+    <title>Two Float Containers with Polyinverse Dots</title>
+    <style>
+        /* Styling for the float container */
+        .float-container {
+            width: 48%;
+            float: left;
+            margin: 1%;
+            border: 2px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Clearfix to ensure containers are enclosed */
+        .clearfix::after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+
+        /* Optional canvas styling */
+        canvas {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Polyinverse Symmetric Plot</h1>
-    <canvas id="xyPlot" width="600" height="600"></canvas>
+    <h1>Two Float Containers: Polyinverse Dots</h1>
+
+    <!-- Float containers -->
+    <div class="clearfix">
+        <div id="floatContainer1" class="float-container">
+            <canvas id="plot1" width="300" height="300"></canvas>
+        </div>
+        <div id="floatContainer2" class="float-container">
+            <canvas id="plot2" width="300" height="300"></canvas>
+        </div>
+    </div>
 
     <script>
-        // Get canvas and context
-        const canvas = document.getElementById('xyPlot');
-        const ctx = canvas.getContext('2d');
+        // Generalized function to draw polyinverse dots on a canvas
+        function drawPolyinverseDots(canvasId, color) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
 
-        // Set up canvas dimensions
-        const width = canvas.width;
-        const height = canvas.height;
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const scale = 50;
 
-        // Center of the canvas
-        const centerX = width / 2;
-        const centerY = height / 2;
+            ctx.fillStyle = color;
 
-        // Generate polyinverse dots
-        function drawPolyinverseDots() {
-            ctx.fillStyle = 'blue';
-
-            const scale = 100; // Scale factor to magnify points
+            // Draw polyinverse dots
             for (let x = -50; x <= 50; x += 0.1) {
-                const y = 1 / x; // Polyinverse function y = 1/x
+                if (x === 0) continue; // Avoid division by zero
+                const y = 1 / x;
 
                 // Transform coordinates to canvas space
                 const canvasX1 = centerX + x * scale;
@@ -38,20 +69,17 @@
 
                 // Draw dots
                 ctx.beginPath();
-                ctx.arc(canvasX1, canvasY1, 2, 0, Math.PI * 2); // Dot on y = 1/x
+                ctx.arc(canvasX1, canvasY1, 2, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.beginPath();
-                ctx.arc(canvasX2, canvasY2, 2, 0, Math.PI * 2); // Dot on symmetric side
+                ctx.arc(canvasX2, canvasY2, 2, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        // Draw the plot
-        function drawPlot() {
-            drawPolyinverseDots();
-        }
-
-        drawPlot();
+        // Draw content in both containers
+        drawPolyinverseDots('plot1', 'blue'); // Plot 1 with blue dots
+        drawPolyinverseDots('plot2', 'red');  // Plot 2 with red dots
     </script>
 </body>
 </html>
