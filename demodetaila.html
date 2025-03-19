@@ -1,0 +1,22 @@
+// Node.js example for POST request handling
+app.post('/addMissionLog', async (req, res) => {
+    const { missionName, modelAddress, serverLog } = req.body;
+
+    try {
+        // Call the PL/SQL procedure
+        await db.execute(`
+            BEGIN
+                AddMissionLog(:missionName, :modelAddress, :serverLog);
+            END;`,
+            {
+                missionName,
+                modelAddress,
+                serverLog
+            }
+        );
+        res.status(200).json({ message: 'Log successfully inserted.', logId: Math.random() }); // Return success response
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: `Database error: ${error.message}` });
+    }
+});
