@@ -22,18 +22,18 @@
             return shuffled.slice(0, numCharacters).join(''); // Return as a string
         }
 
-        // Function to fill only the top text box with random characters
-        function populateTopTextBox() {
-            const textBox = document.querySelector('input.text-box'); // Select the first input field with the class "text-box"
+        // Function to populate the first text box with random characters
+        function populateFirstTextBox() {
+            const firstTextBox = document.querySelector('input.text-box'); // Select the first input field with the class "text-box"
 
-            if (textBox) {
-                textBox.value = getRandomCharacters(); // Populate the top input field with random characters
+            if (firstTextBox) {
+                firstTextBox.value = getRandomCharacters(); // Populate the input field with random characters
             }
         }
 
-        // Call the populateTopTextBox function on page load
+        // Call the populateFirstTextBox function on page load
         window.onload = () => {
-            populateTopTextBox();
+            populateFirstTextBox();
         };
     </script>
 </head>
@@ -43,6 +43,8 @@
     <p>###-###-<input type="text" class="text-box">-###-###</p>
     <p>###-\###-\###-\###-\###-\</p>
     <p>###-###-<input type="text" class="text-box">-###-###</p>
+</body>
+</html>
             <div id="plaintext-container" class="plaintext-content"></div>
             <a href="http://localhost:5000/alien.x" target="_blank">Access Alien.X</a>
             <script src="https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js"></script>
