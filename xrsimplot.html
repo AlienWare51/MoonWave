@@ -3,40 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Append Image Example</title>
+    <title>Comprehensive Page with Alpha Layer</title>
     <style>
-        #imageContainer {
-            position: relative;
-            width: 100%;
-            height: 100vh; /* Full page height */
+        /* Styling for float containers */
+        .float-container {
+            width: 48%;
+            float: left;
+            margin: 1%;
+            border: 2px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
-        .dynamic-image {
+        /* Clearfix to ensure containers are enclosed */
+        .clearfix::after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+
+        /* Optional canvas styling */
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+        }
+
+        /* Styling for mouse position tracker */
+        #mousePosition {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        /* Style for the image container */
+        #staticImageContainer {
             position: absolute;
+            left: 340px; /* X coordinate */
+            top: 575px; /* Y coordinate */
             width: 50px; /* Set width */
             height: 30px; /* Set height */
+            z-index: 5;
+        }
+
+        #staticImageContainer img {
+            width: 100%; /* Make the image fit the container */
+            height: 100%;
+        }
+
+        /* Alpha layer */
+        #alphaLayer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            pointer-events: none; /* Allows interaction with underlying elements */
+            z-index: 0; /* Placed beneath other elements */
         }
     </style>
 </head>
 <body>
-    <div id="imageContainer"></div>
+    <h1>Comprehensive Page with Mouse Tracker, Plots, Static Image, and Alpha Layer</h1>
+
+    <!-- Alpha Layer -->
+    <div id="alphaLayer"></div>
+
+    <!-- Mouse position tracker -->
+    <div id="mousePosition">X: 0, Y: 0</div>
+
+    <!-- Float containers -->
+    <div class="clearfix">
+        <div id="floatContainer1" class="float-container">
+            <canvas id="plot1" width="300" height="300"></canvas>
+        </div>
+        <div id="floatContainer2" class="float-container">
+            <canvas id="plot2" width="300" height="300"></canvas>
+        </div>
+    </div>
+
+    <!-- Static Image Container -->
+    <div id="staticImageContainer">
+        <img src="https://img.freepik.com/premium-vector/dot-dot-lizard-puzzle-connect-dots-animals_1138936-8.jpg?w=1380" alt="Lizard Image">
+    </div>
 
     <script>
-        // Function to append an image dynamically
-        function appendImage() {
-            const container = document.getElementById('imageContainer');
-            const img = document.createElement('img');
+        // Function to display mouse position
+        const mousePositionDiv = document.getElementById('mousePosition');
 
-            img.src = 'https://img.freepik.com/premium-vector/dot-dot-lizard-puzzle-connect-dots-animals_1138936-8.jpg?w=1380'; // Image URL
-            img.className = 'dynamic-image';
-            img.style.left = '340px'; // X coordinate
-            img.style.top = '575px'; // Y coordinate
+        document.addEventListener('mousemove', (event) => {
+            const x = event.pageX; // X coordinate relative to the document
+            const y = event.pageY; // Y coordinate relative to the document
 
-            container.appendChild(img);
+            // Update the display with the current coordinates
+            mousePositionDiv.textContent = `X: ${x}, Y: ${y}`;
+        });
+
+        // Generalized function to draw polyinverse dots on a canvas
+        function drawPolyinverseDots(canvasId, color) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const scale = 50;
+
+            ctx.fillStyle = color;
+
+            for (let x = -50; x <= 50; x += 0.1) {
+                if (x === 0) continue; // Avoid division by zero
+                const y = 1 / x;
+
+                const canvasX1 = centerX + x * scale;
+                const canvasY1 = centerY - y * scale;
+                const canvasX2 = centerX - x * scale;
+                const canvasY2 = centerY - y * scale;
+
+                ctx.beginPath();
+                ctx.arc(canvasX1, canvasY1, 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(canvasX2, canvasY2, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
-        // Call the function to append the image
-        appendImage();
+        // Draw content in both float containers
+        drawPolyinverseDots('plot1', 'blue'); // Plot 1 with blue dots
+        drawPolyinverseDots('plot2', 'red');  // Plot 2 with red dots
     </script>
 </body>
 </html>
