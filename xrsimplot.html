@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reduced Lizard Size in Canvases</title>
+    <title>Alpha Control for Dots and Visible Lizards</title>
     <style>
         /* Styling for float containers */
         .float-container {
@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-    <h1>Reduced Lizard Image with Visible Dots</h1>
+    <h1>Alpha Control for Dots with Visible Lizards</h1>
 
     <!-- Float containers -->
     <div class="clearfix">
@@ -44,8 +44,8 @@
     </div>
 
     <script>
-        // Generalized function to draw polyinverse dots on a canvas
-        function drawPolyinverseDots(canvasId, color) {
+        // Generalized function to draw polyinverse dots with alpha control
+        function drawPolyinverseDotsWithAlpha(canvasId, color, alpha) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             const width = canvas.width;
@@ -55,6 +55,7 @@
             const scale = 50;
 
             ctx.fillStyle = color;
+            ctx.globalAlpha = alpha; // Set alpha transparency for dots
 
             for (let x = -50; x <= 50; x += 0.1) {
                 if (x === 0) continue; // Avoid division by zero
@@ -72,10 +73,12 @@
                 ctx.arc(canvasX2, canvasY2, 2, 0, Math.PI * 2);
                 ctx.fill();
             }
+
+            ctx.globalAlpha = 1.0; // Reset alpha for other elements
         }
 
-        // Function to draw a resized image at the center of a canvas
-        function drawResizedImageInCenter(canvasId, imageUrl) {
+        // Function to draw an opaque image at the center of a canvas
+        function drawLizardImage(canvasId, imageUrl) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             const img = new Image();
@@ -89,7 +92,8 @@
                 const centerX = (canvas.width - scaledWidth) / 2;
                 const centerY = (canvas.height - scaledHeight) / 2;
 
-                // Draw the image at the center
+                // Draw the image at full opacity
+                ctx.globalAlpha = 1.0;
                 ctx.drawImage(img, centerX, centerY, scaledWidth, scaledHeight);
             };
 
@@ -97,5 +101,15 @@
         }
 
         // Draw content in both float containers
-        drawPolyinverseDots('plot1', 'blue'); // Plot 1 with blue dots
-        drawPolyinverseDots('plot
+        const imageUrl = 'https://th.bing.com/th/id/OIP.3VW0YxQ8DvTrLezsCqCLPgHaE7?rs=1&pid=ImgDetMain'; // Replace with your image URL
+
+        // Draw blue dots with alpha control and lizard image in the left canvas
+        drawPolyinverseDotsWithAlpha('plot1', 'blue', 0.5); // 50% transparency for dots
+        drawLizardImage('plot1', imageUrl);
+
+        // Draw red dots with alpha control and lizard image in the right canvas
+        drawPolyinverseDotsWithAlpha('plot2', 'red', 0.5); // 50% transparency for dots
+        drawLizardImage('plot2', imageUrl);
+    </script>
+</body>
+</html>
