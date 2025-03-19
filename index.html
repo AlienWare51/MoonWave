@@ -71,7 +71,7 @@
     <div class="text-section">
       <h1>ALIEN.X</h1>
       <p>###-\###-\###-\###-\###-\</p>
-      <!-- First text box (for Google Search) -->
+      <!-- First text box for Google Search -->
       <p>
         ###-###-
         <input type="text" class="text-box">
@@ -79,12 +79,12 @@
         <button id="search-button">Search</button>
       </p>
       <p>###-\###-\###-\###-\###-\</p>
-      <!-- Second text box (for Google Scholar Search) starts empty -->
+      <!-- Second text box for Google Scholar Search (no placeholder text) -->
       <p>
         ###-###-
         <input type="text" class="text-box" id="stem-box">
         -###-### 
-        <button id="search-button-2">Search STEM</button>
+        <button id="search-button-2">Search</button>
       </p>
     </div>
     <div class="images-section">
@@ -105,13 +105,13 @@
   </div>
 
   <script>
-    // Define the character dataset
+    // Define the character dataset.
     const characterData = [
       '丁', '厂', '七', '卜', '八', '人', '入', '儿', '匕', '几', 
       '九', '刁', '了', '刀', '力', '乃', '又', '三', '干', '于'
     ];
 
-    // Function to randomly select between 5 and 8 characters from the dataset
+    // Function to randomly select between 5 and 8 characters from the dataset.
     function getRandomCharacters() {
       const min = 5, max = 8;
       const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -121,7 +121,7 @@
       return selectedCharacters;
     }
 
-    // Function to randomly select a single character from the dataset
+    // Function to randomly select a single character from the dataset.
     function getSingleCharacter() {
       const randomIndex = Math.floor(Math.random() * characterData.length);
       const randomCharacter = characterData[randomIndex];
@@ -129,15 +129,15 @@
       return randomCharacter;
     }
 
-    // For the first text box (for Google Search):
-    // Populate on page load with 5-8 random characters.
+    // For the first text box (Google Search):
+    // On page load, populate it with a random string of 5-8 characters.
     function populateOnLoad() {
       const textBox = document.querySelector('input.text-box:not(#stem-box)');
       textBox.value = getRandomCharacters();
       console.log(`Text box initially populated: ${textBox.value}`);
     }
 
-    // When the first text box is clicked, update its content with one random character.
+    // When the first text box is clicked, replace its content with one random character.
     function setupTextBoxClick() {
       const textBox = document.querySelector('input.text-box:not(#stem-box)');
       textBox.addEventListener('click', () => {
@@ -146,7 +146,7 @@
       });
     }
 
-    // Set up search functionality for the first text box (Google Search)
+    // Set up search functionality for the first text box (Google Search).
     function setupTextBoxSearch() {
       const textBox = document.querySelector('input.text-box:not(#stem-box)');
       const searchButton = document.getElementById('search-button');
@@ -176,9 +176,8 @@
       });
     }
 
-    // Set up search functionality for the second text box (#stem-box):
-    // When the user presses Enter or clicks the "Search STEM" button,
-    // ignore any text in the box and redirect to a random Google Scholar URL.
+    // Set up search functionality for the second text box (Google Scholar).
+    // Regardless of its content, when triggered it redirects to a random Google Scholar URL.
     function setupStemSearch() {
       const stemBox = document.getElementById('stem-box');
       const searchButton2 = document.getElementById('search-button-2');
@@ -213,7 +212,7 @@
       });
     }
 
-    // Initialize functionalities when the DOM is fully loaded.
+    // Initialize all functionalities when the DOM content is loaded.
     document.addEventListener('DOMContentLoaded', () => {
       populateOnLoad();
       setupTextBoxClick();
@@ -223,6 +222,7 @@
   </script>
 </body>
 </html>
+
 
 
 
