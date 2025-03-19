@@ -3,36 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two Float Containers with Polyinverse Dots</title>
+    <title>Mouse Position Tracker</title>
     <style>
-        /* Styling for the float container */
-        .float-container {
-            width: 48%;
-            float: left;
-            margin: 1%;
-            border: 2px solid #ccc;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        /* Clearfix to ensure containers are enclosed */
-        .clearfix::after {
-            content: '';
-            display: table;
-            clear: both;
-        }
-
-        /* Optional canvas styling */
-        canvas {
-            display: block;
-            margin: 0 auto;
+        /* Styling for mouse position display */
+        #mousePosition {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <h1>Two Float Containers: Polyinverse Dots</h1>
+    <h1>Mouse Position Tracker (Temporary Feature)</h1>
+    <div id="mousePosition">X: 0, Y: 0</div>
 
-    <!-- Float containers -->
+    <!-- Float containers from previous code -->
     <div class="clearfix">
         <div id="floatContainer1" class="float-container">
             <canvas id="plot1" width="300" height="300"></canvas>
@@ -43,11 +34,21 @@
     </div>
 
     <script>
-        // Generalized function to draw polyinverse dots on a canvas
+        // Function to display mouse position
+        const mousePositionDiv = document.getElementById('mousePosition');
+
+        document.addEventListener('mousemove', (event) => {
+            const x = event.clientX; // X position relative to the viewport
+            const y = event.clientY; // Y position relative to the viewport
+
+            // Update the display
+            mousePositionDiv.textContent = `X: ${x}, Y: ${y}`;
+        });
+
+        // Plotting code remains unchanged
         function drawPolyinverseDots(canvasId, color) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
-
             const width = canvas.width;
             const height = canvas.height;
             const centerX = width / 2;
@@ -56,18 +57,15 @@
 
             ctx.fillStyle = color;
 
-            // Draw polyinverse dots
             for (let x = -50; x <= 50; x += 0.1) {
                 if (x === 0) continue; // Avoid division by zero
                 const y = 1 / x;
 
-                // Transform coordinates to canvas space
                 const canvasX1 = centerX + x * scale;
                 const canvasY1 = centerY - y * scale;
-                const canvasX2 = centerX - x * scale; // Symmetric part
+                const canvasX2 = centerX - x * scale;
                 const canvasY2 = centerY - y * scale;
 
-                // Draw dots
                 ctx.beginPath();
                 ctx.arc(canvasX1, canvasY1, 2, 0, Math.PI * 2);
                 ctx.fill();
@@ -77,9 +75,9 @@
             }
         }
 
-        // Draw content in both containers
-        drawPolyinverseDots('plot1', 'blue'); // Plot 1 with blue dots
-        drawPolyinverseDots('plot2', 'red');  // Plot 2 with red dots
+        // Draw plots in both float containers
+        drawPolyinverseDots('plot1', 'blue');
+        drawPolyinverseDots('plot2', 'red');
     </script>
 </body>
 </html>
