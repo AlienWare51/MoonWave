@@ -79,7 +79,7 @@
         <button id="search-button">Search</button>
       </p>
       <p>###-\###-\###-\###-\###-\</p>
-      <!-- Second text box for Google Scholar Search (no placeholder text) -->
+      <!-- Second text box for Google Scholar Search -->
       <p>
         ###-###-
         <input type="text" class="text-box" id="stem-box">
@@ -105,7 +105,7 @@
   </div>
 
   <script>
-    // Define the character dataset.
+    // Define the character dataset (same as before)
     const characterData = [
       '丁', '厂', '七', '卜', '八', '人', '入', '儿', '匕', '几', 
       '九', '刁', '了', '刀', '力', '乃', '又', '三', '干', '于'
@@ -129,7 +129,7 @@
       return randomCharacter;
     }
 
-    // For the first text box (Google Search):
+    // For the first text box (for Google Search):
     // On page load, populate it with a random string of 5-8 characters.
     function populateOnLoad() {
       const textBox = document.querySelector('input.text-box:not(#stem-box)');
@@ -146,7 +146,7 @@
       });
     }
 
-    // Set up search functionality for the first text box (Google Search).
+    // Set up search functionality for the first text box (Google Search)
     function setupTextBoxSearch() {
       const textBox = document.querySelector('input.text-box:not(#stem-box)');
       const searchButton = document.getElementById('search-button');
@@ -177,37 +177,36 @@
     }
 
     // Set up search functionality for the second text box (Google Scholar).
-    // Regardless of its content, when triggered it redirects to a random Google Scholar URL.
+    // When triggered, ignore the text inside and generate a random query.
     function setupStemSearch() {
       const stemBox = document.getElementById('stem-box');
       const searchButton2 = document.getElementById('search-button-2');
-      const googleScholarUrls = [
-         "https://scholar.google.com/scholar?q=%23STEM",
-         "https://scholar.google.com/scholar?hl=en&q=%23STEM&btnG=",
-         "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=%23STEM"
-      ];
       const isDesktop = !/Mobi|Android/i.test(navigator.userAgent);
-
+      
+      // When Enter is pressed in the second text box:
       stemBox.addEventListener('keydown', (event) => {
          if (event.key === 'Enter') {
            event.preventDefault();
-           const randomUrl = googleScholarUrls[Math.floor(Math.random() * googleScholarUrls.length)];
-           console.log(`Redirecting to Google Scholar (Enter): ${randomUrl}`);
+           const randomQuery = getRandomCharacters(); // generate a random query string
+           const scholarURL = "https://scholar.google.com/scholar?q=" + encodeURIComponent(randomQuery);
+           console.log(`Redirecting to Google Scholar (Enter) with query: ${scholarURL}`);
            if (isDesktop) {
-             window.location.href = randomUrl;
+             window.location.href = scholarURL;
            } else {
-             window.open(randomUrl, '_blank');
+             window.open(scholarURL, '_blank');
            }
          }
       });
-
+      
+      // When the second search button is clicked:
       searchButton2.addEventListener('click', () => {
-         const randomUrl = googleScholarUrls[Math.floor(Math.random() * googleScholarUrls.length)];
-         console.log(`Redirecting to Google Scholar (button): ${randomUrl}`);
+         const randomQuery = getRandomCharacters(); // generate a random query string
+         const scholarURL = "https://scholar.google.com/scholar?q=" + encodeURIComponent(randomQuery);
+         console.log(`Redirecting to Google Scholar (button) with query: ${scholarURL}`);
          if (isDesktop) {
-           window.location.href = randomUrl;
+           window.location.href = scholarURL;
          } else {
-           window.open(randomUrl, '_blank');
+           window.open(scholarURL, '_blank');
          }
       });
     }
@@ -223,9 +222,7 @@
 </body>
 </html>
 
-
-
-
+    
     <h1>ALIEN.X</h1>
     <p>###-\###-\###-\###-\###-\</p>
     <p>###-###-<input type="text" class="text-box">-###-###</p>
