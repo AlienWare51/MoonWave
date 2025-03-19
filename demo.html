@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Log</title>
+</head>
+<body>
+    <h1>Mission Log Form</h1>
+    <form id="missionForm">
+        <label for="missionName">Mission Name:</label>
+        <input type="text" id="missionName" name="missionName" required><br><br>
+        <label for="modelAddress">Model Address:</label>
+        <input type="text" id="modelAddress" name="modelAddress" required><br><br>
+        <label for="serverLog">Server Log:</label>
+        <textarea id="serverLog" name="serverLog" required></textarea><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <p id="responseMessage"></p>
+
+    <script>
+        document.getElementById('missionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const missionName = document.getElementById('missionName').value.trim();
+            const modelAddress = document.getElementById('modelAddress').value.trim();
+            const serverLog = document.getElementById('serverLog').value.trim();
+            if (!missionName || !modelAddress || !serverLog) {
+                document.getElementById('responseMessage').textContent = 'Error: All fields are required.';
+                return;
+            }
+            const missionData = { missionName, modelAddress, serverLog };
+            fetch('/addMissionLog', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(missionData)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('responseMessage').textContent = `Success: ${data.message}, Log ID: ${data.logId}`;
+            })
+            .catch(error => {
+                document.getElementById('responseMessage').textContent = `Error: ${error.message}`;
+            });
+        });
+    </script>
+</body>
+</html>
