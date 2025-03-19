@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XY Plot - Symmetric Polyinverse</title>
+    <title>Polyinverse Dots Plot</title>
 </head>
 <body>
-    <h1>XY Plot: Symmetric Line of a Polyinverse</h1>
-    <canvas id="xyPlot" width="600" height="600"></canvas> <!-- Border removed -->
+    <h1>Polyinverse Symmetric Plot</h1>
+    <canvas id="xyPlot" width="600" height="600"></canvas>
 
     <script>
         // Get canvas and context
@@ -21,23 +21,6 @@
         // Center of the canvas
         const centerX = width / 2;
         const centerY = height / 2;
-
-        // Draw axes
-        function drawAxes() {
-            ctx.beginPath();
-            ctx.strokeStyle = 'gray';
-            ctx.lineWidth = 1;
-
-            // X-axis
-            ctx.moveTo(0, centerY);
-            ctx.lineTo(width, centerY);
-
-            // Y-axis
-            ctx.moveTo(centerX, 0);
-            ctx.lineTo(centerX, height);
-
-            ctx.stroke();
-        }
 
         // Generate polyinverse dots
         function drawPolyinverseDots() {
@@ -65,7 +48,6 @@
 
         // Draw the plot
         function drawPlot() {
-            drawAxes();
             drawPolyinverseDots();
         }
 
