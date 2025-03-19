@@ -71,14 +71,21 @@
     <div class="text-section">
       <h1>ALIEN.X</h1>
       <p>###-\###-\###-\###-\###-\</p>
+      <!-- First text box with its search button -->
       <p>
         ###-###-
         <input type="text" class="text-box">
-        -###-###
+        -###-### 
         <button id="search-button">Search</button>
       </p>
       <p>###-\###-\###-\###-\###-\</p>
-      <p>###-###-<input type="text" class="text-box">-###-###</p>
+      <!-- Second text box preset with #STEM and its own search button -->
+      <p>
+        ###-###-
+        <input type="text" class="text-box" id="stem-box" value="#STEM">
+        -###-### 
+        <button id="search-button-2">Search STEM</button>
+      </p>
     </div>
     <div class="images-section">
       <img src="https://th.bing.com/th/id/OIP.YOVxhIVQki_pK7Jz5JHyLwHaLV?rs=1&pid=ImgDetMain" alt="Image 1" width="100" height="100"/>
@@ -122,36 +129,36 @@
       return randomCharacter;
     }
 
-    // Populate the first text box with 5-8 random characters on page load
+    // On page load, populate the first text box (excluding the stem-box) with 5-8 random characters
     function populateOnLoad() {
-      const textBox = document.querySelector('input.text-box');
+      // Using :not(#stem-box) ensures we target the first one only
+      const textBox = document.querySelector('input.text-box:not(#stem-box)');
       textBox.value = getRandomCharacters();
       console.log(`Text box initially populated: ${textBox.value}`);
     }
 
-    // When the user clicks inside the text box, replace its content with one random character
+    // When the user clicks inside the first text box, replace its content with one random character
     function setupTextBoxClick() {
-      const textBox = document.querySelector('input.text-box');
+      const textBox = document.querySelector('input.text-box:not(#stem-box)');
       textBox.addEventListener('click', () => {
         textBox.value = getSingleCharacter();
         console.log(`Text box updated on click: ${textBox.value}`);
       });
     }
 
-    // Set up search functionality: when user presses Enter or clicks the Search button,
-    // perform a Google search using the text box’s content.
+    // Set up search functionality for the first text box (Google Search)
     function setupTextBoxSearch() {
-      const textBox = document.querySelector('input.text-box');
+      const textBox = document.querySelector('input.text-box:not(#stem-box)');
       const searchButton = document.getElementById('search-button');
-      // Simple device check: assume desktop if not mobile.
+      // Determine desktop vs mobile (simple check)
       const isDesktop = !/Mobi|Android/i.test(navigator.userAgent);
 
-      // Search on pressing Enter
+      // When Enter is pressed inside the text box
       textBox.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
           event.preventDefault();
           const query = textBox.value;
-          console.log(`Searching for (Enter): ${query}`);
+          console.log(`Searching Google (Enter) for: ${query}`);
           if (isDesktop) {
             window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
           } else {
@@ -160,10 +167,10 @@
         }
       });
 
-      // Search on clicking the Search button
+      // When the search button is clicked
       searchButton.addEventListener('click', () => {
         const query = textBox.value;
-        console.log(`Searching for (button): ${query}`);
+        console.log(`Searching Google (button) for: ${query}`);
         if (isDesktop) {
           window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
         } else {
@@ -172,11 +179,60 @@
       });
     }
 
-    // Initialize all event handlers when the DOM content is loaded
+    // For the second text box (with id "stem-box"), ensure its value is permanently "#STEM"
+    function setupStemBox() {
+      const stemBox = document.getElementById('stem-box');
+      stemBox.value = "#STEM";
+      // Force the value to remain "#STEM" on blur (if user edits it)
+      stemBox.addEventListener('blur', () => {
+        stemBox.value = "#STEM";
+      });
+    }
+
+    // Set up search functionality for the second text box (Google Scholar)
+    function setupStemSearch() {
+      const stemBox = document.getElementById('stem-box');
+      const searchButton2 = document.getElementById('search-button-2');
+      const googleScholarUrls = [
+         "https://scholar.google.com/scholar?q=%23STEM",
+         "https://scholar.google.com/scholar?hl=en&q=%23STEM&btnG=",
+         "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=%23STEM"
+      ];
+      const isDesktop = !/Mobi|Android/i.test(navigator.userAgent);
+
+      // When Enter is pressed inside the stem box
+      stemBox.addEventListener('keydown', (event) => {
+         if (event.key === 'Enter') {
+           event.preventDefault();
+           const randomUrl = googleScholarUrls[Math.floor(Math.random() * googleScholarUrls.length)];
+           console.log(`Redirecting to Google Scholar (Enter): ${randomUrl}`);
+           if (isDesktop) {
+             window.location.href = randomUrl;
+           } else {
+             window.open(randomUrl, '_blank');
+           }
+         }
+      });
+
+      // When the "Search STEM" button is clicked
+      searchButton2.addEventListener('click', () => {
+         const randomUrl = googleScholarUrls[Math.floor(Math.random() * googleScholarUrls.length)];
+         console.log(`Redirecting to Google Scholar (button): ${randomUrl}`);
+         if (isDesktop) {
+           window.location.href = randomUrl;
+         } else {
+           window.open(randomUrl, '_blank');
+         }
+      });
+    }
+
+    // Initialize all functionalities when the DOM content is loaded
     document.addEventListener('DOMContentLoaded', () => {
       populateOnLoad();
       setupTextBoxClick();
       setupTextBoxSearch();
+      setupStemBox();
+      setupStemSearch();
     });
   </script>
 </body>
