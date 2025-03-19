@@ -104,27 +104,43 @@
             const min = 5; // Minimum number of characters
             const max = 8; // Maximum number of characters
             const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min; // Random between 5 and 8
-
-            // Shuffle the dataset and select the required number of characters
             const shuffled = [...characterData].sort(() => 0.5 - Math.random());
             const selectedCharacters = shuffled.slice(0, numCharacters).join(''); // Combine into a string
-
             console.log(`Generated characters: ${selectedCharacters}`); // Debug print function
             return selectedCharacters; // Return the selected characters
         }
 
-        // Directly set the value of the first text box
-        function populateTextBox() {
-            const textBox = document.querySelector('input.text-box'); // Find the first text box
-            textBox.value = getRandomCharacters(); // Populate it with the random characters
-            console.log(`Text box populated: ${textBox.value}`); // Print confirmation
+        // Function to get a single random character from the dataset
+        function getSingleCharacter() {
+            const randomIndex = Math.floor(Math.random() * characterData.length);
+            const randomCharacter = characterData[randomIndex];
+            console.log(`Generated single character: ${randomCharacter}`); // Debug print function
+            return randomCharacter;
         }
 
-        // Automatically populate the text box when the page loads
-        window.onload = populateTextBox;
+        // Function to populate the text box on click
+        function setupTextBoxClick() {
+            const textBox = document.querySelector('input.text-box');
+            textBox.addEventListener('click', () => {
+                textBox.value = getSingleCharacter(); // Set single random character on click
+            });
+        }
+
+        // Automatically populate the text box with 5-8 characters on page load
+        function populateOnLoad() {
+            const textBox = document.querySelector('input.text-box');
+            textBox.value = getRandomCharacters(); // Populate with random characters
+        }
+
+        // Initialize both features on page load
+        window.onload = () => {
+            populateOnLoad(); // Populate with random characters on page load
+            setupTextBoxClick(); // Set up click functionality
+        };
     </script>
 </body>
 </html>
+
     <h1>ALIEN.X</h1>
     <p>###-\###-\###-\###-\###-\</p>
     <p>###-###-<input type="text" class="text-box">-###-###</p>
