@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image in Canvas Example</title>
+    <title>Reduced Lizard Size in Canvases</title>
     <style>
         /* Styling for float containers */
         .float-container {
@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-    <h1>Image in Canvas Center</h1>
+    <h1>Reduced Lizard Image with Visible Dots</h1>
 
     <!-- Float containers -->
     <div class="clearfix">
@@ -74,17 +74,23 @@
             }
         }
 
-        // Function to draw an image at the center of a canvas
-        function drawImageInCenter(canvasId, imageUrl) {
+        // Function to draw a resized image at the center of a canvas
+        function drawResizedImageInCenter(canvasId, imageUrl) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             const img = new Image();
 
             img.onload = () => {
-                const centerX = (canvas.width - img.width) / 2;
-                const centerY = (canvas.height - img.height) / 2;
+                // Resize the image to 25% of its original size
+                const scaledWidth = img.width * 0.25;
+                const scaledHeight = img.height * 0.25;
 
-                ctx.drawImage(img, centerX, centerY);
+                // Calculate the center position
+                const centerX = (canvas.width - scaledWidth) / 2;
+                const centerY = (canvas.height - scaledHeight) / 2;
+
+                // Draw the image at the center
+                ctx.drawImage(img, centerX, centerY, scaledWidth, scaledHeight);
             };
 
             img.src = imageUrl;
@@ -92,12 +98,4 @@
 
         // Draw content in both float containers
         drawPolyinverseDots('plot1', 'blue'); // Plot 1 with blue dots
-        drawPolyinverseDots('plot2', 'red');  // Plot 2 with red dots
-
-        // Add image to the center of each canvas
-        const imageUrl = 'https://th.bing.com/th/id/OIP.3VW0YxQ8DvTrLezsCqCLPgHaE7?rs=1&pid=ImgDetMain'; // Replace with your downloaded or hosted image URL
-        drawImageInCenter('plot1', imageUrl); // Add image to the blue dots canvas
-        drawImageInCenter('plot2', imageUrl); // Add image to the red dots canvas
-    </script>
-</body>
-</html>
+        drawPolyinverseDots('plot
