@@ -101,35 +101,27 @@
 
         // Function to randomly select 5-8 characters from the dataset
         function getRandomCharacters() {
-            const min = 5;
-            const max = 8;
-            const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min;
+            const min = 5; // Minimum number of characters
+            const max = 8; // Maximum number of characters
+            const numCharacters = Math.floor(Math.random() * (max - min + 1)) + min; // Random between 5 and 8
 
+            // Shuffle the dataset and select the required number of characters
             const shuffled = [...characterData].sort(() => 0.5 - Math.random());
-            const selectedCharacters = shuffled.slice(0, numCharacters);
+            const selectedCharacters = shuffled.slice(0, numCharacters).join(''); // Combine into a string
 
-            console.log(`Selected ${numCharacters} characters: ${selectedCharacters.join('')}`);
-            return selectedCharacters.join('');
+            console.log(`Generated characters: ${selectedCharacters}`); // Debug print function
+            return selectedCharacters; // Return the selected characters
         }
 
-        // Function to populate the first text box with random characters
-        function populateFirstTextBox() {
-            const firstTextBox = document.querySelector('input.text-box');
-
-            if (firstTextBox) {
-                const randomCharacters = getRandomCharacters();
-                firstTextBox.value = randomCharacters;
-
-                console.log(`Populated text box with: ${randomCharacters}`);
-            } else {
-                console.error('Text box not found. Please ensure an input element with class "text-box" exists.');
-            }
+        // Directly set the value of the first text box
+        function populateTextBox() {
+            const textBox = document.querySelector('input.text-box'); // Find the first text box
+            textBox.value = getRandomCharacters(); // Populate it with the random characters
+            console.log(`Text box populated: ${textBox.value}`); // Print confirmation
         }
 
-        // Call the populateFirstTextBox function on page load
-        window.onload = () => {
-            populateFirstTextBox();
-        };
+        // Automatically populate the text box when the page loads
+        window.onload = populateTextBox;
     </script>
 </body>
 </html>
