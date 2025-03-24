@@ -84,6 +84,9 @@ document.getElementById("returnBoxForm").addEventListener("submit", function (e)
         const number = parseInt(input, 10);
         const sequence = AlphaControl.generateSequence(number);
         resultElement.textContent = `Result: ${sequence}`;
+
+        // Redirect to the specified URL after processing the input
+        window.location.href = "https://en.wikipedia.org/wiki/Category:Texas_Instruments";
     } catch (error) {
         resultElement.textContent = `Error: ${error.message}`;
     }
