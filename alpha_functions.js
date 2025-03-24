@@ -54,15 +54,37 @@ class AlphaControl {
 
         img.src = imageUrl;
     }
+
+    // Function to generate a sequence based on user input
+    static generateSequence(number) {
+        if (!Number.isInteger(number) || number < 0) {
+            throw new Error("Please provide a non-negative integer.");
+        }
+        return ".".repeat(number); // Returns a string with 'number' dots
+    }
 }
 
 // Draw content in both float containers
 const imageUrl = 'https://th.bing.com/th/id/OIP.3VW0YxQ8DvTrLezsCqCLPgHaE7?rs=1&pid=ImgDetMain'; // Replace with your image URL
 
-// Draw blue dots with alpha control and lizard image in the left canvas
 AlphaControl.drawPolyinverseDotsWithAlpha('plot1', 'blue', 0.5); // 50% transparency for dots
 AlphaControl.drawLizardImage('plot1', imageUrl);
 
-// Draw red dots with alpha control and lizard image in the right canvas
 AlphaControl.drawPolyinverseDotsWithAlpha('plot2', 'red', 0.5); // 50% transparency for dots
 AlphaControl.drawLizardImage('plot2', imageUrl);
+
+// Form handling for the return box
+document.getElementById("returnBoxForm").addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent form submission from reloading the page
+
+    const input = document.getElementById("numberInput").value;
+    const resultElement = document.getElementById("result");
+
+    try {
+        const number = parseInt(input, 10);
+        const sequence = AlphaControl.generateSequence(number);
+        resultElement.textContent = `Result: ${sequence}`;
+    } catch (error) {
+        resultElement.textContent = `Error: ${error.message}`;
+    }
+});
