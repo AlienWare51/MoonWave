@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Control for Dots and Visible Lizards</title>
+    <style>
+        /* Styling for float containers */
+        .float-container {
+            width: 48%;
+            float: left;
+            margin: 1%;
+            border: 2px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Clearfix to ensure containers are enclosed */
+        .clearfix::after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+
+        /* Optional canvas styling */
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Alpha Control for Dots with Visible Lizards</h1>
+
+    <!-- Float containers -->
+    <div class="clearfix">
+        <div id="floatContainer1" class="float-container">
+            <canvas id="plot1" width="300" height="300"></canvas>
+        </div>
+        <div id="floatContainer2" class="float-container">
+            <canvas id="plot2" width="300" height="300"></canvas>
+        </div>
+    </div>
+
+    <!-- Link the external JavaScript file -->
+    <script src="alpha_functions.js"></script>
+</body>
+</html>
