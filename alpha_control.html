@@ -43,7 +43,17 @@
         </div>
     </div>
 
-    <!-- Link the external JavaScript file -->
+    <!-- Add form for user input -->
+    <div>
+        <h2>Enter a Number to Get a Sequence:</h2>
+        <form id="returnBoxForm">
+            <label for="numberInput">Enter a number:</label>
+            <input type="number" id="numberInput" min="0" required>
+            <button type="submit">Get Sequence</button>
+        </form>
+        <p id="result"></p>
+    </div>
+
     <script src="alpha_functions.js"></script>
 </body>
 </html>
