@@ -37,7 +37,7 @@
             margin: 0 auto;
             width: 100%;
             max-width: 300px;
-            opacity: 0.7; /* Adjust opacity to ensure visibility of background dots */
+            opacity: 0.7;
             z-index: 2;
         }
 
@@ -65,25 +65,23 @@
         #predefinedKeywords {
             margin-top: 10px;
         }
-
     </style>
 </head>
 <body>
+
     <h1>Alpha Control for Dots with Visible Lizards</h1>
 
-    <!-- Float containers with layered images and dots -->
     <div class="clearfix">
         <div id="floatContainer1" class="float-container">
             <canvas id="plot1" width="300" height="300"></canvas>
-            <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 1">
+            <img class="overlay-img" src="lizard.gif" alt="Lizard GIF 1">
         </div>
         <div id="floatContainer2" class="float-container">
             <canvas id="plot2" width="300" height="300"></canvas>
-            <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 2">
+            <img class="overlay-img" src="lizard.gif" alt="Lizard GIF 2">
         </div>
     </div>
 
-    <!-- Bing Image Search Section -->
     <h2>Search Bing Images</h2>
     <input type="text" id="searchBox" placeholder="Type or select a keyword...">
     <button id="searchButton">Search</button>
@@ -94,20 +92,11 @@
         <button onclick="setKeyword('Pixel Art')">Pixel Art</button>
     </div>
 
-    <!-- Add form for user input -->
-    <div>
-        <h2>Enter a Number to Get a Sequence:</h2>
-        <form id="returnBoxForm">
-            <label for="numberInput">Enter a number:</label>
-            <input type="number" id="numberInput" min="0" required>
-            <button type="submit">Get Sequence</button>
-        </form>
-        <p id="result"></p>
-    </div>
-
     <script>
         function setKeyword(keyword) {
-            document.getElementById("searchBox").value = keyword;
+            let shadowWords = ["absolute", "value", "function", "centroid", "dura"];
+            let randomShadowWord = shadowWords[Math.floor(Math.random() * shadowWords.length)];
+            document.getElementById("searchBox").value = keyword + " " + randomShadowWord;
         }
 
         document.getElementById("searchButton").addEventListener("click", function () {
