@@ -111,14 +111,15 @@
         }
 
         document.getElementById("searchButton").addEventListener("click", function () {
-            var keyword = document.getElementById("searchBox").value;
-            if (keyword.trim() !== "") {
+            var keyword = document.getElementById("searchBox").value.trim();
+            if (keyword !== "") {
                 var searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
-                window.open(searchUrl, "_blank");
-            } else {
-                alert("Please enter a keyword before searching.");
-            }
-        });
-    </script>
+                window.location.href = searchUrl; // Redirects the user directly to the Bing Images page
+        } else {
+            alert("Please enter a keyword before searching.");
+        }
+    });
+</script>
+ 
 </body>
 </html>
