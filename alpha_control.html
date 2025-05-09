@@ -104,7 +104,28 @@
         </form>
         <p id="result"></p>
     </div>
+    <script>
+    function setKeyword(keyword) {
+        // List of "shadow random generator" words
+        let shadowWords = ["absolute", "value", "function", "centroid", "dura"];
+        
+        // Select a random shadow keyword
+        let randomShadowWord = shadowWords[Math.floor(Math.random() * shadowWords.length)];
 
+        // Set search box value with BOTH user selection and hidden shadow word
+        document.getElementById("searchBox").value = keyword + " " + randomShadowWord;
+    }
+
+    document.getElementById("searchButton").addEventListener("click", function () {
+        var keyword = document.getElementById("searchBox").value;
+        if (keyword.trim() !== "") {
+            var searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
+            window.open(searchUrl, "_blank");
+        } else {
+            alert("Please enter a keyword before searching.");
+        }
+    });
+    </script>
     <script>
         function setKeyword(keyword) {
             document.getElementById("searchBox").value = keyword;
