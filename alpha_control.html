@@ -120,5 +120,28 @@
         }
     });
 </script>
+<!-- Place this just before the closing </body> tag -->
+<script>
+    // List of predefined words
+    const words = ["lizard", "forest", "pixel", "abstract", "neon", "geometry", "vivid"];
+
+    // Function to generate a random word on page load
+    window.onload = function() {
+        let randomWord = words[Math.floor(Math.random() * words.length)];
+        document.getElementById("searchBox").value = randomWord;
+    };
+
+    document.getElementById("searchButton").addEventListener("click", function () {
+        var keyword = document.getElementById("searchBox").value.trim();
+        if (keyword !== "") {
+            var searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
+            window.location.href = searchUrl; // Redirects the user directly to Bing Images
+        } else {
+            alert("Please enter a keyword before searching.");
+        }
+    });
+</script>
+</body>
+</html>
 </body>
 </html>
