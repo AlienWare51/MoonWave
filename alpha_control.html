@@ -126,22 +126,25 @@
         }
     });
     </script>
-    <script>
-        function setKeyword(keyword) {
-            document.getElementById("searchBox").value = keyword;
+<script>
+    function setKeyword(keyword) {
+        let shadowWords = ["absolute", "value", "function", "centroid", "dura"];
+        let randomShadowWord = shadowWords[Math.floor(Math.random() * shadowWords.length)];
+        document.getElementById("searchBox").value = keyword + " " + randomShadowWord;
+    }
+
+    document.getElementById("searchButton").addEventListener("click", function () {
+        var keyword = document.getElementById("searchBox").value;
+        if (keyword.trim() !== "") {
+            var searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
+            window.open(searchUrl, "_blank");
+        } else {
+            alert("Please enter a keyword before searching.");
         }
+    });
+</script>
 
-        document.getElementById("searchButton").addEventListener("click", function () {
-            var keyword = document.getElementById("searchBox").value;
-            if (keyword.trim() !== "") {
-                var searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
-                window.open(searchUrl, "_blank");
-            } else {
-                alert("Please enter a keyword before searching.");
-            }
-        });
-    </script>
-
-    <script src="alpha_functions.js"></script>
+<!-- Ensure this script runs after all elements are loaded -->
+<script src="alpha_functions.js"></script>
 </body>
 </html>
