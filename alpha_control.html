@@ -7,12 +7,38 @@
     <style>
         /* Styling for float containers */
         .float-container {
+            position: relative;
             width: 48%;
             float: left;
             margin: 1%;
             border: 2px solid #ccc;
             padding: 10px;
             box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Ensuring dots are layered properly */
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Styling for images */
+        .overlay-img {
+            position: relative;
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 300px;
+            opacity: 0.7; /* Adjust opacity to ensure visibility of background dots */
+            z-index: 2;
         }
 
         /* Clearfix to ensure containers are enclosed */
@@ -21,27 +47,20 @@
             display: table;
             clear: both;
         }
-
-        /* Optional image styling */
-        img {
-            display: block;
-            margin: 0 auto;
-            width: 100%;
-            max-width: 300px;
-            border: 1px solid #ccc;
-        }
     </style>
 </head>
 <body>
     <h1>Alpha Control for Dots with Visible Lizards</h1>
 
-    <!-- Float containers with lizard images -->
+    <!-- Float containers with layered images and dots -->
     <div class="clearfix">
         <div id="floatContainer1" class="float-container">
-            <img src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 1">
+            <canvas id="plot1" width="300" height="300"></canvas>
+            <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 1">
         </div>
         <div id="floatContainer2" class="float-container">
-            <img src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 2">
+            <canvas id="plot2" width="300" height="300"></canvas>
+            <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 2">
         </div>
     </div>
 
