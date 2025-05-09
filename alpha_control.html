@@ -5,104 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpha Math Wizard</title>
     <style>
-        /* Styling for float containers */
-        .float-container {
-            position: relative;
-            width: 48%;
-            float: left;
-            margin: 1%;
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .section {
+            width: 80%;
+            max-width: 800px;
+            padding: 15px;
             border: 2px solid #ccc;
-            padding: 10px;
-            box-sizing: border-box;
+            margin-bottom: 20px;
             text-align: center;
         }
 
-        /* Ensuring dots are layered properly */
-        canvas {
-            display: block;
-            margin: 0 auto;
-            border: 1px solid #ccc;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        /* Styling for images */
         .overlay-img {
-            position: relative;
-            display: block;
-            margin: 0 auto;
             width: 100%;
             max-width: 300px;
             opacity: 0.7;
-            z-index: 2;
-        }
-
-        /* Search section & collector panel */
-        .search-container {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
         }
 
         #collectorPanel {
-            margin-left: 20px;
             padding: 10px;
-            border: 2px solid #ccc;
             background-color: #f9f9f9;
+            border: 2px solid #ccc;
         }
 
-        /* Styling for Bing search */
-        #searchBox {
-            width: 300px;
+        #searchBox, #numberInput {
+            width: 80%;
             padding: 8px;
             font-size: 16px;
+            margin-top: 10px;
         }
 
-        #searchButton {
+        #searchButton, button {
             padding: 8px 12px;
             font-size: 16px;
+            margin-top: 5px;
             cursor: pointer;
         }
+
     </style>
 </head>
 <body>
     <h1>Alpha Control for Dots with Visible Lizards</h1>
 
-    <!-- Float containers with layered images and dots -->
-    <div class="clearfix">
-        <div id="floatContainer1" class="float-container">
-            <canvas id="plot1" width="300" height="300"></canvas>
-            <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 1">
-        </div>
-        <div id="floatContainer2" class="float-container">
-            <canvas id="plot2" width="300" height="300"></canvas>
-            <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 2">
-        </div>
+    <!-- Lizard Images -->
+    <div class="section">
+        <h2>Visual Lizard Overlay</h2>
+        <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 1">
+        <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 2">
     </div>
 
-    <!-- Bing Image Search Section with Collector Panel -->
-    <div class="search-container">
-        <div>
-            <h2>Search Bing Images</h2>
-            <input type="text" id="searchBox" placeholder="Type or select a keyword...">
-            <button id="searchButton">Search</button>
-        </div>
-
-        <div id="collectorPanel">
-            <h3>Collector Panel</h3>
-            <img src="https://www.bing.com/th/id/OGC.639ecef65ef9e35ec637290670bb931d?pid=1.7&rurl=https%3a%2f%2fi.pinimg.com%2foriginals%2fc1%2f7c%2fcf%2fc17ccf3660873f7b133d505c38ed0d3c.gif&ehk=6LwT1GJ%2fbhMNwT7ciitYhXKweOzg59yVaCrlO0zn3j0%3d"
-                 alt="Collector Panel GIF" style="width: 150px;">
-            <p>Tracked Keywords:</p>
-            <ul id="keywordList"></ul>
-        </div>
+    <!-- Search Box -->
+    <div class="section">
+        <h2>Search Bing Images</h2>
+        <input type="text" id="searchBox" placeholder="Type or select a keyword...">
+        <button id="searchButton">Search</button>
     </div>
 
-    <!-- Decimal Place Tracker Form -->
-    <div>
+    <!-- Collector Panel -->
+    <div class="section" id="collectorPanel">
+        <h3>Collector Panel</h3>
+        <img src="https://www.bing.com/th/id/OGC.639ecef65ef9e35ec637290670bb931d?pid=1.7&rurl=https%3a%2f%2fi.pinimg.com%2foriginals%2fc1%2f7c%2fcf%2fc17ccf3660873f7b133d505c38ed0d3c.gif&ehk=6LwT1GJ%2fbhMNwT7ciitYhXKweOzg59yVaCrlO0zn3j0%3d" 
+             alt="Collector Panel GIF" style="width: 150px;">
+        <p>Tracked Keywords:</p>
+        <ul id="keywordList"></ul>
+    </div>
+
+    <!-- Decimal Place Tracker -->
+    <div class="section">
         <h2>Enter a Number to Get Decimal Places:</h2>
         <form id="returnBoxForm">
             <label for="numberInput">Enter a number:</label>
