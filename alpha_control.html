@@ -47,6 +47,25 @@
             display: table;
             clear: both;
         }
+
+        /* Styling for Bing search */
+        #searchBox {
+            width: 300px;
+            padding: 8px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        #searchButton {
+            padding: 8px 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #predefinedKeywords {
+            margin-top: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -64,6 +83,17 @@
         </div>
     </div>
 
+    <!-- Bing Image Search Section -->
+    <h2>Search Bing Images</h2>
+    <input type="text" id="searchBox" placeholder="Type or select a keyword...">
+    <button id="searchButton">Search</button>
+
+    <div id="predefinedKeywords">
+        <button onclick="setKeyword('Lizard')">Lizard</button>
+        <button onclick="setKeyword('Tropical Forest')">Tropical Forest</button>
+        <button onclick="setKeyword('Pixel Art')">Pixel Art</button>
+    </div>
+
     <!-- Add form for user input -->
     <div>
         <h2>Enter a Number to Get a Sequence:</h2>
@@ -74,6 +104,22 @@
         </form>
         <p id="result"></p>
     </div>
+
+    <script>
+        function setKeyword(keyword) {
+            document.getElementById("searchBox").value = keyword;
+        }
+
+        document.getElementById("searchButton").addEventListener("click", function () {
+            var keyword = document.getElementById("searchBox").value;
+            if (keyword.trim() !== "") {
+                var searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
+                window.open(searchUrl, "_blank");
+            } else {
+                alert("Please enter a keyword before searching.");
+            }
+        });
+    </script>
 
     <script src="alpha_functions.js"></script>
 </body>
