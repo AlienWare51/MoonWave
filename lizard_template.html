@@ -103,55 +103,57 @@
     <h2>Lizard Description</h2>
     <div id="lizardDescription"></div>
 
-    <script>
-        // Magnifier Functionality
-        function magnify(imageUrl) {
+<script>
+    // Magnifier Functionality
+    function magnify(imageUrl) {
+        const magnifier = document.getElementById("magnifier");
+        const magnifiedImg = document.getElementById("magnified-img");
+        const signalBox = document.getElementById("signal-box");
+
+        // Show the signal box with a blip effect
+        signalBox.classList.add("blip");
+        setTimeout(() => signalBox.classList.remove("blip"), 500);
+
+        // Display the magnified image
+        magnifiedImg.src = imageUrl;
+        magnifier.style.display = "block";
+
+        // Optional: click anywhere to close
+        magnifier.onclick = () => {
+            magnifier.style.display = "none";
+            magnifiedImg.src = "";
+        };
+    }
+
+    // Close magnifier on 'Escape' key press
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
             const magnifier = document.getElementById("magnifier");
-            const magnifiedImg = document.getElementById("magnified-img");
-            const signalBox = document.getElementById("signal-box");
-
-            // Show the signal box with a blip effect
-            signalBox.classList.add("blip");
-            setTimeout(() => signalBox.classList.remove("blip"), 500); // Remove after 500ms
-
-            // Display the magnified image
-            magnifiedImg.src = imageUrl;
-            magnifier.style.display = "block";
+            magnifier.style.display = "none";
         }
+    });
 
-        // Close magnifier on 'Escape' key press
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") {
-                const magnifier = document.getElementById("magnifier");
-                magnifier.style.display = "none";
+    // Lizard Form Functionality
+    document.getElementById('lizardForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const age = parseInt(document.getElementById('age').value);
+        const length = parseInt(document.getElementById('length').value);
+        const species = document.getElementById('species').value || 'Reptilia';
+
+        const lizard = {
+            name,
+            age,
+            length,
+            species,
+            describe() {
+                return `Meet ${this.name}, a ${this.age}-year-old ${this.species} lizard that is ${this.length} inches long.`;
             }
-        });
+        };
 
-        // Lizard Form Functionality
-        document.getElementById('lizardForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            // Get form values
-            const name = document.getElementById('name').value;
-            const age = parseInt(document.getElementById('age').value);
-            const length = parseInt(document.getElementById('length').value);
-            const species = document.getElementById('species').value || 'Reptilia';
-
-            // Create the Lizard object
-            const lizard = {
-                name: name,
-                age: age,
-                length: length,
-                species: species,
-                describe: function () {
-                    return `Meet ${this.name}, a ${this.age}-year-old ${this.species} lizard that is ${this.length} inches long.`;
-                }
-            };
-
-            // Display the lizard description
-            const description = lizard.describe();
-            document.getElementById('lizardDescription').innerText = description;
-        });
-    </script>
+        document.getElementById('lizardDescription').innerText = lizard.describe();
+    });
+</script>
 </body>
 </html>
