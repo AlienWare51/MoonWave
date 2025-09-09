@@ -104,11 +104,10 @@
 
     function swapCanvasImage() {
       ctx.clearRect(0, 0, 100, 100);
-      if (isFirstImage) {
-        ctx.drawImage(newImageForCanvas, 0, 0, 100, 100);
-        if (newImageForCanvas.src.toLowerCase().includes("putin")) {
-          window.location.href = "https://en.wikipedia.org/wiki/Special:Random";
-        }
+    if (isFirstImage) {
+      ctx.drawImage(newImageForCanvas, 0, 0, 100, 100);
+      window.location.href = "https://en.wikipedia.org/wiki/Special:Random";
+    }
       } else {
         ctx.drawImage(imageForCanvas, 0, 0, 100, 100);
       }
