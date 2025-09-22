@@ -74,7 +74,7 @@
         <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 1">
         <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 2">
     </div>
-
+    <img class="overlay-img" id="lizard-right" src="https://thumbs.dreamstime.com/b/colorful-lizard-perched-tree-next-to-plant-vivid-red-green-hues-colorful-lizard-perched-tree-next-to-plant-vivid-318406389.jpg" alt="ECKO">
     <div id="backgroundLayer"></div>
 
     <!-- Search Box -->
@@ -156,10 +156,63 @@
         }
     });
 
+function handleLizardAction(tag) {
+    const lizards = document.getElementById("lizard-right");
+    if (!lizards.length) return;
+
+    switch (tag) {
+        case "LIZARD_POSE_IDLE":
+            lizards.style.transform = "scale(1)";
+            lizards.style.border = 'none';
+            break;
+        case "LIZARD_POSE_ALERT":
+            lizards.style.border = "3px solid red");
+            break;
+        case "LIZARD_POSE_TILT":
+            lizards.style.transform = "rotate(10deg)");
+            break;
+        case "LIZARD_SPEAK_INIT":
+            alert("Lizard says: Analyzing input stream...");
+            break;
+        default:
+            console.warn("Unhandled tag:", tag);
+    }
+}
+
     window.onload = function () {
         const preload = preloadWords[Math.floor(Math.random() * preloadWords.length)];
         setKeyword(preload);
     };
+
+    document.addEventListener("keydown", (e) => {
+    const hexCode = "0x" + e.keyCode.toString(16).padStart(2, "0");
+    const result = refuteODM(hexCode);
+    console.log("ODM Result:", result);
+
+    if (result.status === "accepted") {
+        handleLizardAction(result.action);
+    }
+});
+    const odmTags = {
+    "0x01": "LIZARD_POSE_IDLE",
+    "0x02": "LIZARD_POSE_ALERT",
+    "0x03": "LIZARD_POSE_TILT",
+    "0x10": "KEY_ANALYSIS_TRIGGER",
+    "0x20": "REFUTE_DECIMAL_STREAM",
+    "0x30": "LIZARD_SPEAK_INIT",
+    "0xFF": "SYSTEM_OVERRIDE"
+};
+
+function refuteODM(code) {
+    const tag = odmTags[code];
+    if (!tag) {
+        return { status: "refuted", reason: "Unknown tag" };
+    }
+    if (tag === "SYSTEM_OVERRIDE") {
+        return { status: "refuted", reason: "System override active" };
+    }
+    return { status: "accepted", action: tag };
+}
 </script>
 </body>
 </html>
