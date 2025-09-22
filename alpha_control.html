@@ -50,6 +50,18 @@
             border: 2px solid #ccc;
         }
 
+        #lizard-right {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            max-width: 250px;
+            opacity: 0.9;
+            z-index: 2;
+            transition: all 0.3s ease-in-out;
+            filter: drop-shadow(0 0 10px #00ffff);
+        }
+
         #searchBox, #numberInput {
             width: 80%;
             padding: 8px;
@@ -157,19 +169,20 @@
     });
 
 function handleLizardAction(tag) {
-    const lizards = document.getElementById("lizard-right");
-    if (!lizards.length) return;
+    const lizard = document.getElementById("lizard-right");
+    if (!lizard) return;
+
+    lizard.className = "overlay-img"; // reset
 
     switch (tag) {
         case "LIZARD_POSE_IDLE":
-            lizards.style.transform = "scale(1)";
-            lizards.style.border = 'none';
+            lizard.classList.add("lizard-idle");
             break;
         case "LIZARD_POSE_ALERT":
-            lizards.style.border = "3px solid red");
+            lizard.classList.add("lizard-alert");
             break;
         case "LIZARD_POSE_TILT":
-            lizards.style.transform = "rotate(10deg)");
+            lizard.classList.add("lizard-tilt");
             break;
         case "LIZARD_SPEAK_INIT":
             alert("Lizard says: Analyzing input stream...");
