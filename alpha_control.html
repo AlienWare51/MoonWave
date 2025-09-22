@@ -5,7 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpha Math Wizard</title>
     <style>
-        body {
+        /* Background atomic layer */
+        #backgroundLayer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://keystagewiki.com/images/thumb/a/ab/Ne-20_WK.PNG/400px-Ne-20_WK.PNG');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center top;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Main content container */
+        #mainContent {
+            position: relative;
+            z-index: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -16,6 +35,7 @@
             width: 80%;
             max-width: 800px;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .overlay-img {
@@ -43,7 +63,6 @@
             margin-top: 5px;
             cursor: pointer;
         }
-
     </style>
 </head>
 <body>
@@ -55,6 +74,8 @@
         <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 1">
         <img class="overlay-img" src="https://th.bing.com/th/id/R.7033cac703e4237dff3e46f11f0078c5?rik=WTKoP1HVgdjXvw&riu=http%3a%2f%2fs4.favim.com%2forig%2f150211%2fgif-lizard-Favim.com-2469514.gif&ehk=s2EwnJYK%2bn%2fv2gM%2fbPl9TP7RNp22EE18OEapR9zlVh0%3d&risl=&pid=ImgRaw&r=0" alt="Lizard GIF 2">
     </div>
+
+    <div id="backgroundLayer"></div>
 
     <!-- Search Box -->
     <div class="section">
