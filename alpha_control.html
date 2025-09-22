@@ -86,60 +86,62 @@
         <p id="result"></p>
     </div>
 
-    <script>
-        function countDecimalPlaces(number) {
-            if (!Number.isFinite(number)) return 0; 
-            let decimalPart = number.toString().split('.')[1];
-            return decimalPart ? decimalPart.length : 0;
-        }
-
-        document.getElementById("returnBoxForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            let numberInput = parseFloat(document.getElementById("numberInput").value);
-            let decimalCount = countDecimalPlaces(numberInput);
-            document.getElementById("result").textContent = `Decimal places: ${decimalCount}`;
-        });
-
-        function setKeyword(keyword) {
-            let shadowWords = ["absolute", "value", "function", "centroid", "dura"];
-            let randomShadowWord = shadowWords[Math.floor(Math.random() * shadowWords.length)];
-            document.getElementById("searchBox").value = keyword + " " + randomShadowWord;
-
-            let listItem = document.createElement("li");
-            listItem.textContent = keyword + " " + randomShadowWord;
-            document.getElementById("keywordList").appendChild(listItem);
-        }
-
-        document.getElementById("searchButton").addEventListener("click", function () {
-            var keyword = document.getElementById("searchBox").value.trim();
-            if (keyword !== "") {
-                var searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
-                window.location.href = searchUrl; // Redirects the user directly to the Bing Images page
-        } else {
-            alert("Please enter a keyword before searching.");
-        }
-    });
-</script>
-<!-- Place this just before the closing </body> tag -->
 <script>
-    // List of predefined words
-    const words = ["lizard", "forest", "pixel", "abstract", "neon", "geometry", "vivid"];
+    const shadowWords = ["absolute", "value", "function", "centroid", "dura"];
+    const preloadWords = ["lizard", "forest", "pixel", "abstract", "neon", "geometry", "vivid"];
 
-    // Function to generate a random word on page load
-    window.onload = function() {
-        let randomWord = words[Math.floor(Math.random() * words.length)];
-        document.getElementById("searchBox").value = randomWord;
-    };
+    function countDecimalPlaces(number) {
+        if (!Number.isFinite(number)) return 0;
+        const decimalPart = number.toString().split('.')[1];
+        return decimalPart ? decimalPart.length : 0;
+    }
+
+    document.getElementById("returnBoxForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const numberInput = parseFloat(document.getElementById("numberInput").value);
+        const decimalCount = countDecimalPlaces(numberInput);
+        document.getElementById("result").textContent = `Decimal places: ${decimalCount}`;
+    });
+
+    function logKeyword(keyword) {
+        const timestamp = new Date().toLocaleTimeString();
+        const entry = `${keyword} @ ${timestamp}`;
+
+        let logs = JSON.parse(localStorage.getItem("searchLogs")) || [];
+        logs.push(entry);
+        localStorage.setItem("searchLogs", JSON.stringify(logs));
+
+        const listItem = document.createElement("li");
+        listItem.textContent = entry;
+        document.getElementById("keywordList").appendChild(listItem);
+    }
+
+    function setKeyword(baseKeyword) {
+        const randomShadow = shadowWords[Math.floor(Math.random() * shadowWords.length)];
+        const fullKeyword = `${baseKeyword} ${randomShadow}`;
+        document.getElementById("searchBox").value = fullKeyword;
+        logKeyword(fullKeyword);
+    }
+
+    function redirectToBing(keyword) {
+        const searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
+        window.open(searchUrl, "_blank");
+    }
 
     document.getElementById("searchButton").addEventListener("click", function () {
-        var keyword = document.getElementById("searchBox").value.trim();
+        const keyword = document.getElementById("searchBox").value.trim();
         if (keyword !== "") {
-            var searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(keyword)}`;
-            window.location.href = searchUrl; // Redirects the user directly to Bing Images
+            logKeyword(keyword);
+            redirectToBing(keyword);
         } else {
             alert("Please enter a keyword before searching.");
         }
     });
+
+    window.onload = function () {
+        const preload = preloadWords[Math.floor(Math.random() * preloadWords.length)];
+        setKeyword(preload);
+    };
 </script>
 </body>
 </html>
