@@ -463,6 +463,90 @@
                     .catch(error => console.error('Error incrementing counter:', error));
             }
         });
+
+      <!DOCTYPE html>
+<html>
+<head>
+    <title>Counter Test</title>
+</head>
+        
+<body>
+
+<div id="json-output">Counter: 0</div>
+
+<script>
+// -------------------------------
+// RUNTIME FLAGS
+// -------------------------------
+let NON_TRACK_MODE = false;   // when true → suppress relay
+let relayBusy = false;        // prevents rapid-fire calls
+const relayCooldown = 500;    // 500ms relay window
+
+
+// -------------------------------
+// RED DOT UPDATE (your existing function)
+// -------------------------------
+function updateRedDot(counter) {
+    // whatever logic you already have here
+    console.log("Red dot updated:", counter);
+}
+
+
+// -------------------------------
+// RELAY‑BALANCED COUNTER INCREMENT
+// -------------------------------
+async function relayIncrement() {
+
+    // NON‑TRACK locale suppression
+    if (NON_TRACK_MODE) {
+        console.log("NON‑TRACK locale active — relay suppressed");
+        return;
+    }
+
+    // Load balancing / throttle
+    if (relayBusy) {
+        console.log("Relay cooling — skipping request");
+        return;
+    }
+
+    relayBusy = true;
+    setTimeout(() => relayBusy = false, relayCooldown);
+
+    try {
+        const response = await fetch('http://localhost:5000/increment_counter');
+
+        // 500s relay behavior
+        if (!response.ok) {
+            console.warn("500s relay triggered — server error");
+            return;
+        }
+
+        const data = await response.json();
+
+        // Update UI
+        const jsonOutputDiv = document.getElementById('json-output');
+        jsonOutputDiv.textContent = `Counter: ${data.counter}`;
+
+        updateRedDot(data.counter);
+
+    } catch (error) {
+        console.error('Error incrementing counter:', error);
+    }
+}
+
+
+// -------------------------------
+// EVENT LISTENER (your original trigger)
+// -------------------------------
+document.addEventListener('keydown', function(event) {
+    if (event.key === ' ') {
+        relayIncrement();
+    }
+});
+</script>
+
+</body>
+</html>
     </script>
 </body>
 </html>
