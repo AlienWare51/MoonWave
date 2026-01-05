@@ -80,6 +80,24 @@
       </p>
       <p>###-\###-\###-\###-\###-\</p>
       <!-- Second text box for Google Scholar Search -->
+      <script>
+      function activateSymbols() {
+    document.querySelectorAll('p').forEach(p => {
+        p.innerHTML = p.innerHTML.replace(/#/g, '<span class="symbol">#</span>');
+    });
+
+    document.querySelectorAll('.symbol').forEach(sym => {
+        sym.addEventListener('click', () => {
+            console.log("Symbol call:", sym.textContent);
+
+            // Your SQL staff function call goes here
+            // staffFunction(sym.textContent);
+        });
+    });
+}
+
+window.onload = activateSymbols;
+      <script>
       <p>
         ###-###-
         <input type="text" class="text-box" id="stem-box">
