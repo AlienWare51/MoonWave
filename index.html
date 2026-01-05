@@ -63,41 +63,73 @@
     }
   </style>
 </head>
+
 <body>
+
   <div class="graph-container">
     <svg id="lineGraph" width="400" height="300"></svg>
   </div>
+
   <div class="container">
     <div class="text-section">
+
       <h1>ALIEN.X</h1>
+
       <p>###-\###-\###-\###-\###-\</p>
-      <!-- First text box for Google Search -->
+
       <p>
         ###-###-
         <input type="text" class="text-box">
-        -###-### 
+        -###-###
+        <button id="search-button">Search</button></p>
+      <p>
+        ###-###-
+        <input type="text" class="text-box">
+        -###-###
         <button id="search-button">Search</button>
       </p>
+
       <p>###-\###-\###-\###-\###-\</p>
+
       <!-- Second text box for Google Scholar Search -->
-      <script>
-      function activateSymbols() {
-    document.querySelectorAll('p').forEach(p => {
+      <p>
+        ###-###-
+        <input type="text" class="text-box" id="stem-box">
+        -###-###
+        <button id="search-button-2">Search</button>
+      </p>
+
+    </div> <!-- end text-section -->
+  </div> <!-- end container -->
+
+  
+  <!-- Symbol activation script -->
+  <script>
+    function activateSymbols() {
+      document.querySelectorAll('p').forEach(p => {
         p.innerHTML = p.innerHTML.replace(/#/g, '<span class="symbol">#</span>');
-    });
+      });
 
-    document.querySelectorAll('.symbol').forEach(sym => {
+      document.querySelectorAll('.symbol').forEach(sym => {
         sym.addEventListener('click', () => {
-            console.log("Symbol call:", sym.textContent);
+          console.log("Symbol call:", sym.textContent);
 
-            // Your SQL staff function call goes here
-            // staffFunction(sym.textContent);
+          // Your SQL staff function call goes here
+          // staffFunction(sym.textContent);
         });
-    });
-}
+      });
+    }
 
-window.onload = activateSymbols;
-      </script>
+    window.onload = activateSymbols;
+  </script>
+
+</body>
+</html>
+
+
+
+
+
       <p>
         ###-###-
         <input type="text" class="text-box" id="stem-box">
