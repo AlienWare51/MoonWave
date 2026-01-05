@@ -296,205 +296,31 @@
 </body>
 </html>
 
-    <script>
-        function updateRedDot(counter) {
-            const redDot = document.getElementById('red-dot');
-            if (counter <= 100 && counter > 0) {
-                redDot.style.display = 'block'; // Show red dot
-            } else {
-                redDot.style.display = 'none'; // Hide red dot
-            }
-        }
-
-        window.onload = function() {
-            const data = {
-                '169 Rabbi Levi': 169,
-                '180 Schiller': 180,
-                '71 Copernicus': 71,
-                '179km': 179,
-                '93km': 93
-            };
-
-            const canvas = document.getElementById('timeline');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const min_val = Math.min(...Object.values(data)) - 10;
-                const max_val = Math.max(...Object.values(data)) + 10;
-                const range = max_val - min_val;
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.beginPath();
-                ctx.moveTo(0, canvas.height / 2);
-                ctx.lineTo(canvas.width, canvas.height / 2);
-                ctx.stroke();
-
-                Object.entries(data).forEach(([label, value]) => {
-                    const x = ((value - min_val) / range) * canvas.width;
-                    ctx.beginPath();
-                    ctx.arc(x, canvas.height / 2, 5, 0, 2 * Math.PI);
-                    ctx.fill();
-                    ctx.fillText(label, x, canvas.height / 2 - 10);
-                });
-            }
-
-            // Fetch and display the content of ink.js
-            fetch('https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js')
-                .then(response => response.text())
-                .then(data => {
-                    const container = document.getElementById('plaintext-container');
-                    container.textContent = data;
-                })
-                .catch(error => console.error('Error fetching ink.js:', error));
-
-            // Fetch and display "MASTER-SPLINTER" from the Python server
-            fetch('http://localhost:5000/hello')
-                .then(response => response.text())
-                .then(data => {
-                    const helloWorldDiv = document.getElementById('MASTER-SPLINTER');
-                    helloWorldDiv.textContent = data;
-                })
-                .catch(error => console.error('Error fetching Hello, World:', error));
-
-            // Fetch and display initial counter value
-            fetch('http://localhost:5000/counter')
-                .then(response => response.json())
-                .then(data => {
-                    const jsonOutputDiv = document.getElementById('json-output');
-                    jsonOutputDiv.textContent = `Counter: ${data.counter}`;
-                    updateRedDot(data.counter);
-                })
-                .catch(error => console.error('Error fetching counter:', error));
-
-            // *** Line graph code starts here ***
-            // Set up SVG for the line graph
-            const lineGraphSvg = document.getElementById('lineGraph');
-            const svgWidth = lineGraphSvg.clientWidth || 400;
-            const svgHeight = lineGraphSvg.clientHeight || 300;
-
-            // Sample data for the line graph
-            const lineGraphData = [
-                { x: 0, y: 0 },
-                { x: 1, y: 3 },
-                { x: 2, y: 6 },
-                { x: 3, y: 8 },
-                { x: 4, y: 10 },
-                { x: 5, y: 7 },
-                { x: 6, y: 5 },
-                { x: 7, y: 2 },
-                { x: 8, y: 1 },
-                { x: 9, y: 4 }
-            ];
-
-            // Set up scales for the line graph
-            const xScale = d3.scaleLinear()
-                .domain([0, d3.max(lineGraphData, d => d.x)])
-                .range([0, svgWidth]);
-            const yScale = d3.scaleLinear()
-                .domain([0, d3.max(lineGraphData, d => d.y)])
-                .range([svgHeight, 0]);
-
-            // Create line generator
-            const line = d3.line()
-                .x(d => xScale(d.x))
-                .y(d => yScale(d.y));
-
-            // Append the path element for the line graph
-            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            path.setAttribute("class", "line");
-            path.setAttribute("d", line(lineGraphData));
-            lineGraphSvg.appendChild(path);
-
-            // Create a tooltip
-            const tooltip = document.createElement('div');
-            tooltip.style.position = 'absolute';
-            tooltip.style.padding = '5px';
-            tooltip.style.background = '#fff';
-            tooltip.style.border = '1px solid #ccc';
-            tooltip.style.display = 'none';
-            document.body.appendChild(tooltip);
-
-            // Add circles for data points in the line graph
-            lineGraphData.forEach(d => {
-                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                circle.setAttribute('cx', xScale(d.x));
-                circle.setAttribute('cy', yScale(d.y));
-                circle.setAttribute('r', 5);
-                circle.setAttribute('fill', 'steelblue');
-
-                // Mouse events for tooltip
-                circle.addEventListener('mouseover', () => {
-                    tooltip.style.display = 'block';
-                    tooltip.innerHTML = `x: ${d.x}, y: ${d.y}`;
-                });
-                circle.addEventListener('mousemove', (event) => {
-                    tooltip.style.left = event.pageX + 'px';
-                    tooltip.style.top = event.pageY + 'px';
-                });
-                circle.addEventListener('mouseout', () => {
-                    tooltip.style.display = 'none';
-                });
-
-                lineGraphSvg.appendChild(circle);
-            });
-            // *** Line graph code ends here ***
-        };
-
-        // Event listener for keyboard inputs
-        window.addEventListener('keydown', function(event) {
-            const key = event.key.toLowerCase();
-            if (['a', 'b', 'c', 'd'].includes(key)) {
-                fetch(`http://localhost:5000/plot?key=${key}`)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = URL.createObjectURL(blob);
-                        const img = document.getElementById('matplotlib-plot');
-                        img.src = url;
-                    })
-                    .catch(error => console.error('Error fetching plot:', error));
-
-                // Increment counter and update JSON output and red dot
-                fetch('http://localhost:5000/increment_counter')
-                    .then(response => response.json())
-                    .then(data => {
-                        const jsonOutputDiv = document.getElementById('json-output');
-                        jsonOutputDiv.textContent = `Counter: ${data.counter}`;
-                        updateRedDot(data.counter);
-                    })
-                    .catch(error => console.error('Error incrementing counter:', error));
-            }
-        });
-
-      <!DOCTYPE html>
-<html>
-<head>
-    <title>Counter Test</title>
-</head>
-        
-<body>
-
-<div id="json-output">Counter: 0</div>
-
 <script>
-// -------------------------------
+// ======================================================
 // RUNTIME FLAGS
-// -------------------------------
+// ======================================================
 let NON_TRACK_MODE = false;   // when true → suppress relay
 let relayBusy = false;        // prevents rapid-fire calls
-const relayCooldown = 500;    // 500ms relay window
+const relayCooldown = 500;    // 500ms throttle window
 
 
-// -------------------------------
-// RED DOT UPDATE (your existing function)
-// -------------------------------
+// ======================================================
+// RED DOT UPDATE
+// ======================================================
 function updateRedDot(counter) {
-    // whatever logic you already have here
-    console.log("Red dot updated:", counter);
+    const redDot = document.getElementById('red-dot');
+    if (counter <= 100 && counter > 0) {
+        redDot.style.display = 'block';
+    } else {
+        redDot.style.display = 'none';
+    }
 }
 
 
-// -------------------------------
+// ======================================================
 // RELAY‑BALANCED COUNTER INCREMENT
-// -------------------------------
+// ======================================================
 async function relayIncrement() {
 
     // NON‑TRACK locale suppression
@@ -535,11 +361,164 @@ async function relayIncrement() {
 }
 
 
-// -------------------------------
-// EVENT LISTENER (your original trigger)
-// -------------------------------
+// ======================================================
+// MAIN ONLOAD INITIALIZATION
+// ======================================================
+window.onload = function() {
+
+    // --------------------------------------------------
+    // TIMELINE CANVAS
+    // --------------------------------------------------
+    const data = {
+        '169 Rabbi Levi': 169,
+        '180 Schiller': 180,
+        '71 Copernicus': 71,
+        '179km': 179,
+        '93km': 93
+    };
+
+    const canvas = document.getElementById('timeline');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        const min_val = Math.min(...Object.values(data)) - 10;
+        const max_val = Math.max(...Object.values(data)) + 10;
+        const range = max_val - min_val;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+
+        Object.entries(data).forEach(([label, value]) => {
+            const x = ((value - min_val) / range) * canvas.width;
+            ctx.beginPath();
+            ctx.arc(x, canvas.height / 2, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillText(label, x, canvas.height / 2 - 10);
+        });
+    }
+
+    // --------------------------------------------------
+    // FETCH ink.js
+    // --------------------------------------------------
+    fetch('https://raw.githubusercontent.com/AlienWare51/MoonWave/main/ink.js')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('plaintext-container').textContent = data;
+        })
+        .catch(error => console.error('Error fetching ink.js:', error));
+
+    // --------------------------------------------------
+    // FETCH MASTER-SPLINTER
+    // --------------------------------------------------
+    fetch('http://localhost:5000/hello')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('MASTER-SPLINTER').textContent = data;
+        })
+        .catch(error => console.error('Error fetching Hello, World:', error));
+
+    // --------------------------------------------------
+    // FETCH INITIAL COUNTER
+    // --------------------------------------------------
+    fetch('http://localhost:5000/counter')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('json-output').textContent = `Counter: ${data.counter}`;
+            updateRedDot(data.counter);
+        })
+        .catch(error => console.error('Error fetching counter:', error));
+
+    // --------------------------------------------------
+    // LINE GRAPH (D3)
+    // --------------------------------------------------
+    const lineGraphSvg = document.getElementById('lineGraph');
+    const svgWidth = lineGraphSvg.clientWidth || 400;
+    const svgHeight = lineGraphSvg.clientHeight || 300;
+
+    const lineGraphData = [
+        { x: 0, y: 0 },
+        { x: 1, y: 3 },
+        { x: 2, y: 6 },
+        { x: 3, y: 8 },
+        { x: 4, y: 10 },
+        { x: 5, y: 7 },
+        { x: 6, y: 5 },
+        { x: 7, y: 2 },
+        { x: 8, y: 1 },
+        { x: 9, y: 4 }
+    ];
+
+    const xScale = d3.scaleLinear()
+        .domain([0, d3.max(lineGraphData, d => d.x)])
+        .range([0, svgWidth]);
+
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(lineGraphData, d => d.y)])
+        .range([svgHeight, 0]);
+
+    const line = d3.line()
+        .x(d => xScale(d.x))
+        .y(d => yScale(d.y));
+
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("class", "line");
+    path.setAttribute("d", line(lineGraphData));
+    path.setAttribute("stroke", "black");
+    path.setAttribute("fill", "none");
+    lineGraphSvg.appendChild(path);
+
+    const tooltip = document.createElement('div');
+    tooltip.style.position = 'absolute';
+    tooltip.style.padding = '5px';
+    tooltip.style.background = '#fff';
+    tooltip.style.border = '1px solid #ccc';
+    tooltip.style.display = 'none';
+    document.body.appendChild(tooltip);
+
+    lineGraphData.forEach(d => {
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute('cx', xScale(d.x));
+        circle.setAttribute('cy', yScale(d.y));
+        circle.setAttribute('r', 5);
+        circle.setAttribute('fill', 'steelblue');
+
+        circle.addEventListener('mouseover', () => {
+            tooltip.style.display = 'block';
+            tooltip.innerHTML = `x: ${d.x}, y: ${d.y}`;
+        });
+        circle.addEventListener('mousemove', (event) => {
+            tooltip.style.left = event.pageX + 'px';
+            tooltip.style.top = event.pageY + 'px';
+        });
+        circle.addEventListener('mouseout', () => {
+            tooltip.style.display = 'none';
+        });
+
+        lineGraphSvg.appendChild(circle);
+    });
+};
+
+
+// ======================================================
+// A/B/C/D KEY HANDLER (merged with relayIncrement)
+// ======================================================
 document.addEventListener('keydown', function(event) {
-    if (event.key === ' ') {
+    const key = event.key.toLowerCase();
+
+    if (['a', 'b', 'c', 'd'].includes(key)) {
+
+        // Fetch plot
+        fetch(`http://localhost:5000/plot?key=${key}`)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                document.getElementById('matplotlib-plot').src = url;
+            })
+            .catch(error => console.error('Error fetching plot:', error));
+
+        // Relay-balanced increment
         relayIncrement();
     }
 });
