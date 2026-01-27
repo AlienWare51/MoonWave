@@ -61,6 +61,7 @@
       height: 100px;
       margin-right: 10px;
     }
+    /* Outer frame: plastic CD player bezel */ .cd-frame { width: 620px; padding: 20px; margin: 40px auto; background: #1a1a1a; border-radius: 12px; border: 4px solid #333; box-shadow: 0 0 25px rgba(0,0,0,0.8); } /* Inner LCD display */ .lcd { background: #b4d38a; border: 3px solid #4a5f3a; padding: 15px; font-family: "Courier New", monospace; font-size: 14px; color: #1a2b0f; line-height: 1.3em; text-shadow: 0 0 2px #d5ffb0; overflow-y: auto; height: 300px; white-space: pre; } /* Blinking cursor */ .cursor { display: inline-block; width: 10px; background: #1a2b0f; animation: blink 0.8s infinite; } @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
   </style>
 </head>
 
@@ -74,6 +75,56 @@
     <div class="text-section">
 
       <h1>ALIEN.X</h1>
+      <div class="cd-frame"> 
+        <div class="lcd">
+    #include &lt;stdint.h&gt;
+    #include &lt;stdbool.h&gt;
+    #include &lt;stdio.h&gt;
+          
+    #define MAX_SPECS 100 
+    #define FIVE_GB (5ULL * 1024ULL * 1024ULL * 1024ULL) 
+    
+    /* DEC‑V Minimalist Locator: =E(index) */ 
+    const char* MakeLocator(int index) { 
+          static char buf[16]; 
+          snprintf(buf, sizeof(buf), "=E(%d)", index); 
+          return buf;
+          } 
+          
+          /* USB Spec Lodge Entry */ 
+          typedef struct _USB_SPEC_ENTRY { 
+              uint8_t id; const char* locator; 
+              const void* descriptor; 
+          } USB_SPEC_ENTRY; 
+          
+          USB_SPEC_ENTRY UsbSpecLodge[MAX_SPECS]; 
+          /* Frequency Buffer (5GB threshold) */ 
+          typedef struct _FREQ_BUFFER { 
+              uint64_t max_bytes; 
+              uint64_t current_bytes; 
+          } FREQ_BUFFER; 
+          
+          FREQ_BUFFER freqbuf = { 
+              .max_bytes = FIVE_GB, 
+              .current_bytes = 0 
+          }; 
+          /* Reset the 100‑spec lodge */ 
+          void ResetUsbSpecLodge(void) { 
+               for (int i = 0; i &lt; MAX_SPECS; i++) { 
+                    UsbSpecLodge[i].id = i; 
+                    UsbSpecLodge[i].locator = MakeLocator(i); 
+                    UsbSpecLodge[i].descriptor = NULL; 
+                } 
+                freqbuf.current_bytes = 0; 
+          
+          } 
+          
+          /* Add a spec to the lodge (size‑checked) */ 
+          bool AddSpecToBuffer(int index, uint64_t spec_size) { 
+              if (index &lt; 0 || index &gt;= MAX_SPECS) 
+                  return false; 
+          
+              if (freqbuf.current_bytes + spec_size &gt; freqbuf.max_bytes) return false; freqbuf.current_bytes += spec_size; UsbSpecLodge[index].locator = MakeLocator(index); return true; } /* CD‑R Copy Gate */ bool AllowCopyToCDR(uint64_t data_size) { return (data_size &lt;= freqbuf.max_bytes); } /* Page‑open counter → triggers reset at 100 */ static int page_counter = 0; void OnPageOpened(void) { if (++page_counter &gt;= 100) { ResetUsbSpecLodge(); page_counter = 0; } } <span class="cursor"></span> </div> </div>
 
       <p>###-\###-\###-\###-\###-\</p>
 
